@@ -15,7 +15,16 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class UserDto {
+    /**
+     * Идентификационный номер пользователя.
+     */
     private Long id;
+    /**
+     * Имя пользователя.
+     */
     private String name;
+    /**
+     * Электронная почта пользователя.
+     */
     private String email;
 }
