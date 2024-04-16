@@ -6,6 +6,11 @@ import ru.practicum.shareit.user.service.UserService;
 
 import java.util.List;
 
+/**
+ * Реализация интерфейса {@link UserService}.
+ *
+ * @author Nikolay Radzivon.
+ */
 public class UserServiceImpl implements UserService {
     /**
      * Метод добавления нового пользователя.
