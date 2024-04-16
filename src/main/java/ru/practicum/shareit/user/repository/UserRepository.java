@@ -9,4 +9,6 @@ public interface UserRepository {
     UserDto update(User user, long userId);
 
     UserDto findById(long userId);
+
+    void deleteById(long userId);
 }
