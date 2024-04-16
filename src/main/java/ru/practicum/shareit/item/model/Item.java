@@ -33,5 +33,6 @@ public class Item {
      * Идентификационный номер пользователя владельца вещи.
      */
     @NotNull
-    private Long userId;
+    @Builder.Default
+    private Long userId = 0L;
 }
