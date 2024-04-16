@@ -1,5 +1,9 @@
 package ru.practicum.shareit.user.service.impl;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
@@ -11,7 +15,11 @@ import java.util.List;
  *
  * @author Nikolay Radzivon.
  */
+@Service
+@RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
+    private final UserRepository userRepository;
     /**
      * Метод добавления нового пользователя.
      *
@@ -20,7 +28,8 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserDto addNewUser(User user) {
-        return null;
+        log.info("Добавление нового пользователя {}", user);
+        return userRepository.save(user);
     }
 
     /**
