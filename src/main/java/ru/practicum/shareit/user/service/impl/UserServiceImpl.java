@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserDto updateUser(User user, long userId) {
-        log.info("Обновление пользователя с id {} новые данные {}", userId, user);
+        log.info("Обновление пользователя с id {}, новые данные {}", userId, user);
         return userRepository.update(user, userId);
     }
 
@@ -53,7 +53,8 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserDto getUser(long userId) {
-        return null;
+        log.info("Получение пользователя с id {}", userId);
+        return userRepository.findById(userId);
     }
 
     /**
