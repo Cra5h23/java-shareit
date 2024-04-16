@@ -9,6 +9,7 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Контроллер для работы с эндпоинтами /users
@@ -48,5 +49,12 @@ public class UserController {
     public void deleteUser(@PathVariable long userId) {
         log.info("DELETE /users/{}", userId);
         userService.deleteUser(userId);
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<UserDto> getAllUsers() {
+        log.info("GET /users");
+        return userService.getAllUsers();
     }
 }
