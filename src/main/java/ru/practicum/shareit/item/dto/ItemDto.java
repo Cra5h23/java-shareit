@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
+ * DTO для класса {@link ru.practicum.shareit.item.model.Item}
+ *
  * @author Nikolay Radzivon
  */
 @Data
