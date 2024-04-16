@@ -75,6 +75,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public List<UserDto> getAllUsers() {
-        return List.of();
+        log.info("Получение списка всех пользователей");
+        return userRepository.findAll();
     }
 }
