@@ -1,6 +1,9 @@
 package ru.practicum.shareit.item.model;
 
-import lombok.Data;
+import lombok.*;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * Класс вещь
@@ -16,10 +19,12 @@ public class Item {
     /**
      * Уникальный идентификационный номер вещи.
      */
-    private Long id;
+    @Builder.Default
+    private Long id = 0L;
     /**
      * Имя вещи.
      */
+    @NotBlank(message = "Название вещи не может быть пустым")
     private String name;
     /**
      * Описание вещи.
@@ -32,5 +37,6 @@ public class Item {
     /**
      * Идентификационный номер пользователя владельца вещи.
      */
+    @NotNull
     private Long userId;
 }
