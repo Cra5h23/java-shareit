@@ -41,7 +41,8 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public UserDto updateUser(User user, long userId) {
-        return null;
+        log.info("Обновление пользователя с id {} новые данные {}", userId, user);
+        return userRepository.update(user, userId);
     }
 
     /**
