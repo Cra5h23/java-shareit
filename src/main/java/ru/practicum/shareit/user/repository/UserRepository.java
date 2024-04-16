@@ -4,6 +4,7 @@ import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Интерфейс {@link UserRepository}.
@@ -34,7 +35,7 @@ public interface UserRepository {
      * @param userId идентификационный номер пользователя.
      * @return объект класса {@link UserDto}.
      */
-    UserDto findById(long userId);
+    Optional<UserDto> findById(long userId);
 
     /**
      * Метод удаления пользователя по id из репозитория.
