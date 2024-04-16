@@ -6,7 +6,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
- * Класс вещь
+ * Модель вещь.
  *
  * @author Nikolay Radzivon
  */
