@@ -69,7 +69,8 @@ public class InMemoryUserRepository implements UserRepository {
         var user = userMap.get(userId);
 
         log.info("Запрошен пользователь с id {}, данные {}", userId, user);
-        return Optional.of(userMapper.toUserDto(user, userId));
+
+        return user != null ? Optional.of(userMapper.toUserDto(user, userId)) : Optional.empty();
     }
 
     /**
