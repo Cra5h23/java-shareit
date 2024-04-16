@@ -10,6 +10,7 @@ import ru.practicum.shareit.user.repository.UserRepository;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Реализация интерфейса {@link UserRepository} для хранения пользователей в памяти компьютера.
@@ -63,8 +64,11 @@ public class InMemoryUserRepository implements UserRepository {
      * @return объект класса {@link UserDto}.
      */
     @Override
-    public UserDto findById(long userId) {
-        return null;
+    public Optional<UserDto> findById(long userId) {
+        var user = userMap.get(userId);
+
+        log.info("Запрошен пользователь с id {}, данные {}", userId, user);
+        return Optional.of(userMapper.toUserDto(user, userId));
     }
 
     /**
