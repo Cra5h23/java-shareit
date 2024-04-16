@@ -47,7 +47,13 @@ public class InMemoryUserRepository implements UserRepository {
      */
     @Override
     public UserDto update(User user, long userId) {
-        return null;
+        var updateUser = userMap.get(userId);
+
+        log.info("Обновлён пользователь с id {} , старые данные {} новые данные {}", userId, updateUser, user);
+        updateUser.setName(user.getName());
+        updateUser.setEmail(user.getEmail());
+
+        return userMapper.toUserDto(updateUser, userId);
     }
 
     /**
