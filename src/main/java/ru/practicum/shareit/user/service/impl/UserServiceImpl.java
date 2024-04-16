@@ -3,6 +3,7 @@ package ru.practicum.shareit.user.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.user.exeption.UserServiceException;
 import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.model.User;
@@ -20,6 +21,7 @@ import java.util.List;
 @Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+
     /**
      * Метод добавления нового пользователя.
      *
@@ -42,6 +44,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto updateUser(User user, long userId) {
         log.info("Обновление пользователя с id {}, новые данные {}", userId, user);
+        checkUser(userId, String.format("Попытка обновить пользователя с несуществующим id %d", userId));
         return userRepository.update(user, userId);
     }
 
@@ -54,7 +57,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUser(long userId) {
         log.info("Получение пользователя с id {}", userId);
-        return userRepository.findById(userId);
+        return checkUser(userId, String.format("Попытка получить пользователя с несуществующим id %d", userId));
     }
 
     /**
@@ -65,6 +68,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(long userId) {
         log.info("Удаление пользователя с id {}", userId);
+        checkUser(userId, String.format("Попытка удалть пользователя с несуществующим id %d", userId));
         userRepository.deleteById(userId);
     }
 
@@ -77,5 +81,16 @@ public class UserServiceImpl implements UserService {
     public List<UserDto> getAllUsers() {
         log.info("Получение списка всех пользователей");
         return userRepository.findAll();
+    }
+
+    /**
+     * Метод для проверки существования пользователя.
+     *
+     * @param userId  идентификационный номер пользователя.
+     * @param message сообщение ошибки если пользователь не существует.
+     * @return объект класса {@link UserDto}
+     */
+    private UserDto checkUser(long userId, String message) {
+        return userRepository.findById(userId).orElseThrow(() -> new UserServiceException(message));
     }
 }
