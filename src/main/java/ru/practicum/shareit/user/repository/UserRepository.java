@@ -7,4 +7,6 @@ public interface UserRepository {
     UserDto save(User user);
 
     UserDto update(User user, long userId);
+
+    UserDto findById(long userId);
 }
