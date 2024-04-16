@@ -38,8 +38,15 @@ public class UserController {
 
     @GetMapping("/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public UserDto getUser(@PathVariable long userId) {
+    public UserDto getUser(@PathVariable(required = false) long userId) {
         log.info("GET /users/{}", userId);
         return userService.getUser(userId);
+    }
+
+    @DeleteMapping("/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteUser(@PathVariable long userId) {
+        log.info("DELETE /users/{}", userId);
+        userService.deleteUser(userId);
     }
 }
