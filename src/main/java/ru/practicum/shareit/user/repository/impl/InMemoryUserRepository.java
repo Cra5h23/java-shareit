@@ -78,7 +78,8 @@ public class InMemoryUserRepository implements UserRepository {
      */
     @Override
     public void deleteById(long userId) {
-
+        userMap.remove(userId);
+        log.info("Удалён пользователь с id {}", userId);
     }
 
     /**
