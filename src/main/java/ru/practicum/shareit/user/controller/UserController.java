@@ -35,4 +35,11 @@ public class UserController {
         log.info("PATCH /users/{} body= {}", userId, user);
         return userService.updateUser(user, userId);
     }
+
+    @GetMapping("/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public UserDto getUser(@PathVariable long userId) {
+        log.info("GET /users/{}", userId);
+        return userService.getUser(userId);
+    }
 }
