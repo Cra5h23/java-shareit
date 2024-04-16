@@ -6,4 +6,5 @@ import ru.practicum.shareit.user.model.User;
 public interface UserRepository {
     UserDto save(User user);
 
+    UserDto update(User user, long userId);
 }
