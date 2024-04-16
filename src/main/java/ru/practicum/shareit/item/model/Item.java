@@ -9,6 +9,9 @@ import lombok.Data;
  */
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
 public class Item {
     /**
      * Уникальный идентификационный номер вещи.
