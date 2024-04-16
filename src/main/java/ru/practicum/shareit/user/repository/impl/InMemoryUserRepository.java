@@ -21,6 +21,8 @@ import java.util.Map;
 public class InMemoryUserRepository implements UserRepository {
     private final Map<Long, User> userMap = new HashMap<>();
     private final UserMapper userMapper = new UserMapper();
+    private Long generatorId = 0L;
+
     /**
      * Метод добавления нового пользователя в репозиторий.
      *
@@ -29,7 +31,11 @@ public class InMemoryUserRepository implements UserRepository {
      */
     @Override
     public UserDto save(User user) {
-        return null;
+        var id = ++generatorId;
+
+        userMap.put(id, user);
+        log.info("В репозиторий добавлен новый пользователь {} и присвоен id {}", user, id);
+        return userMapper.toUserDto(user, id);
     }
 
     /**
