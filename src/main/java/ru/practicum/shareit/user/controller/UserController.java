@@ -25,12 +25,14 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserDto addNewUser(@Valid @RequestBody User user) {
+        log.info("POST /users body= {}", user);
         return userService.addNewUser(user);
     }
 
     @PatchMapping("/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public UserDto updateUser(@Valid @RequestBody User user, @PathVariable long userId) {
+        log.info("PATCH /users/{} body= {}", userId, user);
         return userService.updateUser(user, userId);
     }
 }
