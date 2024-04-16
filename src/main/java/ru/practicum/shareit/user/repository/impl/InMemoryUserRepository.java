@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Реализация интерфейса {@link UserRepository} для хранения пользователей в памяти компьютера.
@@ -89,6 +90,9 @@ public class InMemoryUserRepository implements UserRepository {
      */
     @Override
     public List<UserDto> findAll() {
-        return List.of();
+        log.info("Запрошен список всех пользователей");
+        return userMap.entrySet().stream()
+                .map(e -> userMapper.toUserDto(e.getValue(), e.getKey()))
+                .collect(Collectors.toList());
     }
 }
