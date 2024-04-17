@@ -9,6 +9,7 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Контроллер для работы с эндпоинтами /items
@@ -52,6 +53,13 @@ public class ItemController {
     public void deleteItemByItemId(@PathVariable Long itemId, @RequestHeader(value = X_SHARER_USER_ID) Long userId) {
         log.info("DELETE /items/{} , header \"{}\" = {}", itemId, X_SHARER_USER_ID, userId);
         itemService.deleteItemByItemId(itemId, userId);
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<ItemDto> getAllItemByUser(@RequestHeader(value = X_SHARER_USER_ID) Long userId) {
+        log.info("GET /items , header \"{}\" = {}", X_SHARER_USER_ID, userId);
+        return itemService.getAllItemByUser(userId);
     }
 
 }
