@@ -47,4 +47,11 @@ public class ItemController {
         return itemService.getItemByItemId(itemId, userId);
     }
 
+    @DeleteMapping("/{itemId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteItemByItemId(@PathVariable Long itemId, @RequestHeader(value = X_SHARER_USER_ID) Long userId) {
+        log.info("DELETE /items/{} , header \"{}\" = {}", itemId, X_SHARER_USER_ID, userId);
+        itemService.deleteItemByItemId(itemId, userId);
+    }
+
 }
