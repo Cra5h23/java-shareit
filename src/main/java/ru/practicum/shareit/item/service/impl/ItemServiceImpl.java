@@ -118,6 +118,8 @@ public class ItemServiceImpl implements ItemService {
      */
     @Override
     public void deleteAllItemByUser(Long userId) {
-
+        checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE, "удалить все", "ы", userId));
+        log.info("Удаление всех предметов для пользователя с id {}", userId);
+        itemRepository.deleteAll(userId);
     }
 }
