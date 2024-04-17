@@ -65,4 +65,10 @@ public interface ItemService {
      */
     List<ItemDto> searchItemByText(String text, Long userId);
 
+    /**
+     * Метод удаления всех предметов пользователя.
+     *
+     * @param userId идентификационный номер пользователя.
+     */
+    void deleteAllItemByUser(Long userId);
 }
