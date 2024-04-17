@@ -56,4 +56,13 @@ public interface ItemService {
      */
     List<ItemDto> getAllItemByUser(Long userId);
 
+    /**
+     * Метод поиска предметов по тексту для пользователя.
+     *
+     * @param text   текст по которому будет осуществлён поиск.
+     * @param userId идентификационный номер пользователя у которого будет производится поиск.
+     * @return {@link List} объектов {@link ItemDto}.
+     */
+    List<ItemDto> searchItemByText(String text, Long userId);
+
 }
