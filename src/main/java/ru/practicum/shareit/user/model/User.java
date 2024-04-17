@@ -21,12 +21,12 @@ public class User {
     /**
      * Имя пользователя.
      */
-    @NotBlank
+    @NotBlank(message = "Поле name не должно быть пустым")
     private String name;
     /**
      * Электронная почта пользователя
      */
-    @Email
+    @Email(message = "Поле email должно иметь формат адреса электронной почты")
     @NotBlank
     private String email;
 }
