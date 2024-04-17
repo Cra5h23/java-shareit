@@ -92,7 +92,9 @@ public class ItemServiceImpl implements ItemService {
      */
     @Override
     public List<ItemDto> getAllItemByUser(Long userId) {
-        return List.of();
+        checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE, "получить список", "ов", userId));
+        log.info("Получение списка всех предметов для пользователя с id {}", userId);
+        return itemRepository.findAllById(userId);
     }
 
     /**
