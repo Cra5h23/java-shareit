@@ -17,6 +17,11 @@ import javax.validation.constraints.NotNull;
 @Builder(toBuilder = true)
 public class Item {
     /**
+     * Уникальный идентификационный номер вещи
+     */
+    @Builder.Default
+    private Long id = 0L;
+    /**
      * Имя вещи.
      */
     @NotBlank(message = "Название вещи не может быть пустым")
