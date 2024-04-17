@@ -106,7 +106,9 @@ public class ItemServiceImpl implements ItemService {
      */
     @Override
     public List<ItemDto> searchItemByText(String text, Long userId) {
-        return List.of();
+        checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE, "найти список", "ов с параметром поиска" + text, userId));
+        log.info("Поиск предметов для пользователя с id {} с параметром поиска {}", userId, text);
+        return text != null ? itemRepository.search(text, userId) : List.of();
     }
 
     /**
