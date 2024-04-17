@@ -55,6 +55,13 @@ public class ItemController {
         itemService.deleteItemByItemId(itemId, userId);
     }
 
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteAllItemByUser(@RequestHeader(value = X_SHARER_USER_ID) Long userId) {
+        log.info("DELETE /items , header \"{}\" = {}", X_SHARER_USER_ID, userId);
+        itemService.deleteAllItemByUser(userId);
+    }
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<ItemDto> getAllItemByUser(@RequestHeader(value = X_SHARER_USER_ID) Long userId) {
@@ -65,7 +72,7 @@ public class ItemController {
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
     public List<ItemDto> searchItemByText(@RequestParam String text, @RequestHeader(value = X_SHARER_USER_ID) Long userId) {
-        log.info("GET /items/search?text={} , header \"{}\" = {}",text,  X_SHARER_USER_ID, userId);
+        log.info("GET /items/search?text={} , header \"{}\" = {}", text, X_SHARER_USER_ID, userId);
         return itemService.searchItemByText(text, userId);
     }
 }
