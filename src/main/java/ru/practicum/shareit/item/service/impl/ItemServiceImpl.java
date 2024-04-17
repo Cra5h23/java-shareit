@@ -1,16 +1,32 @@
 package ru.practicum.shareit.item.service.impl;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.exception.ItemServiceException;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.item.service.ItemService;
+import ru.practicum.shareit.user.repository.UserRepository;
 
 import java.util.List;
 
 /**
+ * Реализация интерфейса {@link ItemService}
+ *
  * @author Nikolay Radzivon
  * @Date 17.04.2024
  */
+@Service
+@RequiredArgsConstructor
+@Slf4j
 public class ItemServiceImpl implements ItemService {
+    private final ItemRepository itemRepository;
+    private final UserRepository userRepository;
+    private final String CHECK_USER_ERROR_MESSAGE = "Нельзя %s предмет%s для не существующего пользователя с id %d";
+    private final String CHECK_ITEM_ERROR_MESSAGE = "Предмет с id %d не существует у пользователя с id %d";
+
     /**
      * Метод добавления нового предмета.
      *
@@ -20,7 +36,9 @@ public class ItemServiceImpl implements ItemService {
      */
     @Override
     public ItemDto addNewItem(Item item, Long userId) {
-        return null;
+        checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE, "создать новый", "", userId));
+        log.info("Создание нового предмета {} для пользователя с id {}", item, userId);
+        return itemRepository.save(item, userId);
     }
 
     /**
