@@ -101,7 +101,7 @@ public class ItemServiceImpl implements ItemService {
      * Метод поиска предметов по тексту для пользователя.
      *
      * @param text   текст по которому будет осуществлён поиск.
-     * @param userId идентификационный номер пользователя у которого будет производится поиск.
+     * @param userId идентификационный номер пользователя у которого будет производиться поиск.
      * @return {@link List} объектов {@link ItemDto}.
      */
     @Override
@@ -132,4 +132,14 @@ public class ItemServiceImpl implements ItemService {
         userRepository.findById(userId).orElseThrow(() -> new ItemServiceException(message));
     }
 
+    /**
+     * Метод проверки, что предмет существует.
+     * @param itemId идентификатор предмета.
+     * @param userId идентификатор пользователя владельца предмета.
+     * @param message текст сообщения ошибки.
+     * @return объект класса {@link ItemDto}.
+     */
+    private ItemDto checkItem(Long itemId, Long userId, String message) {
+        return itemRepository.findById(itemId, userId).orElseThrow(() -> new ItemServiceException(message));
+    }
 }
