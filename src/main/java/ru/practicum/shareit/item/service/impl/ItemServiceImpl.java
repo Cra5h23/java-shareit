@@ -122,4 +122,14 @@ public class ItemServiceImpl implements ItemService {
         log.info("Удаление всех предметов для пользователя с id {}", userId);
         itemRepository.deleteAll(userId);
     }
+
+    /**
+     * Метод проверки, что пользователь существует.
+     * @param userId идентификатор пользователя владельца предмета.
+     * @param message текст сообщения ошибки.
+     */
+    private void checkUser(Long userId, String message) {
+        userRepository.findById(userId).orElseThrow(() -> new ItemServiceException(message));
+    }
+
 }
