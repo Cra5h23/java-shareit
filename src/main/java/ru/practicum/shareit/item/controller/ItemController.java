@@ -26,8 +26,8 @@ public class ItemController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ItemDto addNewItem(@Valid @RequestBody Item item, @RequestHeader("X-Sharer-User-Id") Long userId) {
-        log.info("POST /items body = {}, header \"X-Sharer-User-Id\" = {}", item, userId);
+    public ItemDto addNewItem(@Valid @RequestBody Item item, @RequestHeader(value = X_SHARER_USER_ID) Long userId) {
+        log.info("POST /items , body = {}, header \"{}\" = {}", item, X_SHARER_USER_ID, userId);
         return itemService.addNewItem(item, userId);
     }
 }
