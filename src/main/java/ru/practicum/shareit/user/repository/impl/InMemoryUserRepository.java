@@ -3,6 +3,7 @@ package ru.practicum.shareit.user.repository.impl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.exeption.UserRepositoryException;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
