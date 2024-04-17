@@ -65,7 +65,9 @@ public class ItemServiceImpl implements ItemService {
      */
     @Override
     public ItemDto getItemByItemId(Long itemId, Long userId) {
-        return null;
+        checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE, "Получить", " c id " + itemId, userId));
+        log.info("Получение предмета с id {} для пользователя с id {}", itemId, userId);
+        return checkItem(itemId, userId, String.format(CHECK_ITEM_ERROR_MESSAGE, itemId, userId));
     }
 
     /**
