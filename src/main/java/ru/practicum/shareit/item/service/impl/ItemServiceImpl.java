@@ -78,7 +78,10 @@ public class ItemServiceImpl implements ItemService {
      */
     @Override
     public void deleteItemByItemId(Long itemId, Long userId) {
-
+        checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE, "удалить", " c id " + itemId, userId));
+        checkItem(itemId, userId, String.format(CHECK_ITEM_ERROR_MESSAGE, itemId, userId));
+        log.info("Удаление предмета с id {} для пользователя с id {}", itemId, userId);
+        itemRepository.deleteById(itemId, userId);
     }
 
     /**
