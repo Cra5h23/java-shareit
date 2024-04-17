@@ -33,6 +33,8 @@ public class InMemoryUserRepository implements UserRepository {
      */
     @Override
     public UserDto save(User user) {
+        checkEmail(user, String.format(
+                "Нельзя добавить нового пользователя, Пользователь с email %s уже существует", user.getEmail()));
         var id = ++generatorId;
 
         userMap.put(id, user);
@@ -50,10 +52,24 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public UserDto update(User user, long userId) {
         var updateUser = userMap.get(userId);
+        if (updateUser == null) {
+            throw new UserRepositoryException(String.format("Не существует пользователя с id %d", userId));
+        }
 
         log.info("Обновлён пользователь с id {} , старые данные {} новые данные {}", userId, updateUser, user);
-        updateUser.setName(user.getName());
-        updateUser.setEmail(user.getEmail());
+
+        if (user.getEmail() != null) {
+            if (!updateUser.getEmail().equals(user.getEmail())) {
+                checkEmail(user, String.format(
+                        "Нельзя обновить пользователя с id %d, пользователь с email %s уже существует", userId, user.getEmail()));
+                updateUser.setEmail(user.getEmail());
+            }
+        }
+
+        if (user.getName() != null) {
+            updateUser.setName(user.getName());
+        }
+
 
         return userMapper.toUserDto(updateUser, userId);
     }
@@ -95,5 +111,14 @@ public class InMemoryUserRepository implements UserRepository {
         return userMap.entrySet().stream()
                 .map(e -> userMapper.toUserDto(e.getValue(), e.getKey()))
                 .collect(Collectors.toList());
+    }
+
+    private void checkEmail(User user, String message) {
+        Optional<User> first = userMap.values().stream()
+                .filter(u -> u.getEmail().equals(user.getEmail()))
+                .findFirst();
+        if (first.isPresent()) {
+            throw new UserRepositoryException(message);
+        }
     }
 }
