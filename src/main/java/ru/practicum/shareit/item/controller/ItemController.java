@@ -30,4 +30,14 @@ public class ItemController {
         log.info("POST /items , body = {}, header \"{}\" = {}", item, X_SHARER_USER_ID, userId);
         return itemService.addNewItem(item, userId);
     }
+
+    @PatchMapping("/{itemId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ItemDto updateItem(@RequestBody Item item,
+                              @PathVariable Long itemId,
+                              @RequestHeader(value = X_SHARER_USER_ID) Long userId) {
+        log.info("PATCH /items/{} , body = {}, header \"{}\" = {}", itemId, item, X_SHARER_USER_ID, userId);
+        return itemService.updateItem(item, userId, itemId);
+    }
+
 }
