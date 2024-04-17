@@ -27,6 +27,6 @@ public class User {
      * Электронная почта пользователя
      */
     @Email(message = "Поле email должно иметь формат адреса электронной почты")
-    @NotBlank
+    @NotBlank(message = "Полу email не должно быть пустым")
     private String email;
 }
