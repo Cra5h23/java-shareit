@@ -38,4 +38,12 @@ public interface ItemService {
      */
     ItemDto getItemByItemId(Long itemId, Long userId);
 
+    /**
+     * Метод удаления предмета по его id для указанного пользователя.
+     *
+     * @param itemId идентификационный номер предмета.
+     * @param userId идентификационный номер пользователя владельца предмета.
+     */
+    void deleteItemByItemId(Long itemId, Long userId);
+
 }
