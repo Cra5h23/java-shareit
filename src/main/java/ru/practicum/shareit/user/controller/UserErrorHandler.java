@@ -41,4 +41,16 @@ public class UserErrorHandler {
                         "status", HttpStatus.NO_CONTENT.value(),
                         "Ошибка работы с пользователями", e.getMessage()));
     }
+
+    @ExceptionHandler
+    public ResponseEntity<?> handlerMethodArgumentNotValidException(final MethodArgumentNotValidException e) {
+        log.warn("Ошибка ввода данных пользователя", e);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("timestamp", LocalDateTime.now(),
+                        "status", HttpStatus.BAD_REQUEST.value(),
+                        "Ошибка ввода данных пользователя", e.getFieldErrors().stream()
+                                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                                .collect(Collectors.toList())));
+    }
 }
