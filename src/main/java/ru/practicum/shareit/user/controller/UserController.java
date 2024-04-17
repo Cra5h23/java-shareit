@@ -32,7 +32,7 @@ public class UserController {
 
     @PatchMapping("/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public UserDto updateUser(@Valid @RequestBody User user, @PathVariable long userId) {
+    public UserDto updateUser(@RequestBody User user, @PathVariable long userId) {
         log.info("PATCH /users/{} body= {}", userId, user);
         return userService.updateUser(user, userId);
     }
