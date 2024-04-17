@@ -31,4 +31,14 @@ public class UserErrorHandler {
                         "status", HttpStatus.CONFLICT.value(),
                         "Ошибка работы с пользователями", e.getMessage()));
     }
+
+    @ExceptionHandler
+    public ResponseEntity<?> handlerUserServiceException(final UserServiceException e) {
+        log.warn("Ошибка работы с пользователями", e);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .body(Map.of("timestamp", LocalDateTime.now(),
+                        "status", HttpStatus.NO_CONTENT.value(),
+                        "Ошибка работы с пользователями", e.getMessage()));
+    }
 }
