@@ -15,6 +15,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
+ * Класс {@link UserErrorHandler} для обработки исключений {@link UserRepositoryException}, {@link UserServiceException}, {@link MethodArgumentNotValidException} в пакете
+ *
  * @author Nikolay Radzivon
  * @Date 17.04.2024
  */
