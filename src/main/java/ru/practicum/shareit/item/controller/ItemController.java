@@ -62,4 +62,10 @@ public class ItemController {
         return itemService.getAllItemByUser(userId);
     }
 
+    @GetMapping("/search")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ItemDto> searchItemByText(@RequestParam String text, @RequestHeader(value = X_SHARER_USER_ID) Long userId) {
+        log.info("GET /items/search?text={} , header \"{}\" = {}",text,  X_SHARER_USER_ID, userId);
+        return itemService.searchItemByText(text, userId);
+    }
 }
