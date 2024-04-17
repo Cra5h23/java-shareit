@@ -51,7 +51,9 @@ public class ItemServiceImpl implements ItemService {
      */
     @Override
     public ItemDto updateItem(Item item, Long userId, Long itemId) {
-        return null;
+        checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE, "обновить", "", userId));
+        log.info("Обновление предмета c id {} для пользователя с id {}, новые данные {}", itemId, userId, item);
+        return itemRepository.update(item, userId, itemId);
     }
 
     /**
