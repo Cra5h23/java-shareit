@@ -29,4 +29,13 @@ public interface ItemService {
      */
     ItemDto updateItem(Item item, Long userId, Long itemId);
 
+    /**
+     * Метод получения предмета по его id для определённого пользователя.
+     *
+     * @param itemId идентификационный номер предмета.
+     * @param userId идентификационный номер пользователя владельца предмета.
+     * @return объект класса {@link ItemDto}
+     */
+    ItemDto getItemByItemId(Long itemId, Long userId);
+
 }
