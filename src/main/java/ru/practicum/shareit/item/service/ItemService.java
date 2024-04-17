@@ -3,6 +3,8 @@ package ru.practicum.shareit.item.service;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
 
+import java.util.List;
+
 /**
  * Интерфейс {@link ItemService}
  *
@@ -45,5 +47,13 @@ public interface ItemService {
      * @param userId идентификационный номер пользователя владельца предмета.
      */
     void deleteItemByItemId(Long itemId, Long userId);
+
+    /**
+     * Метод получения списка всех предметов пользователя.
+     *
+     * @param userId идентификационный номер пользователя владельца предметов.
+     * @return {@link List} объектов {@link ItemDto}.
+     */
+    List<ItemDto> getAllItemByUser(Long userId);
 
 }
