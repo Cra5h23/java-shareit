@@ -22,6 +22,7 @@ import javax.validation.Valid;
 @Slf4j
 public class ItemController {
     private final ItemService itemService;
+    private final String X_SHARER_USER_ID = "X-Sharer-User-Id";
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
