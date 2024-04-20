@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * DTO для класса {@link ru.practicum.shareit.item.model.Item}
+ * Модель для возвращения данных о предмете в ответ.
  *
  * @author Nikolay Radzivon
  */
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
-public class ItemDto {
+public class ItemResponseDto {
     /**
      * Уникальный идентификационный номер вещи.
      */
