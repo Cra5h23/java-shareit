@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.practicum.shareit.Marker;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -21,12 +22,12 @@ public class User {
     /**
      * Имя пользователя.
      */
-    @NotBlank(message = "Поле name не должно быть пустым")
+    @NotBlank(groups = Marker.OnCreate.class, message = "Поле name не должно быть пустым")
     private String name;
     /**
      * Электронная почта пользователя
      */
-    @Email(message = "Поле email должно иметь формат адреса электронной почты")
-    @NotBlank(message = "Полу email не должно быть пустым")
+    @Email(groups = {Marker.OnCreate.class, Marker.OnUpdate.class}, message = "Поле email должно иметь формат адреса электронной почты")
+    @NotBlank(groups = {Marker.OnCreate.class}, message = "Поле email не должно быть пустым")
     private String email;
 }
