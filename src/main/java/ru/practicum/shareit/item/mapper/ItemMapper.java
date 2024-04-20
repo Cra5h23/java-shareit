@@ -1,26 +1,26 @@
 package ru.practicum.shareit.item.mapper;
 
-import org.springframework.stereotype.Component;
-import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemRequestDto;
+import ru.practicum.shareit.item.dto.ItemResponseDto;
 import ru.practicum.shareit.item.model.Item;
 
 /**
- * Маппер для классов {@link ru.practicum.shareit.item.model.Item} и {@link ru.practicum.shareit.item.dto.ItemDto}.
+ * Маппер для классов {@link Item}, {@link ItemRequestDto} и {@link ItemResponseDto}.
  * <p>
- * Предназначен для преобразования объекта класса {@link Item} в объект класса {@link ItemDto} и наоборот.
+ * Предназначен для преобразования объекта класса {@link Item} в объект класса {@link ItemResponseDto}
+ * и объект класса {@link ItemRequestDto} в объект класса {@link Item}.
  *
  * @author Nikolay Radzivon.
  */
-@Component
 public class ItemMapper {
     /**
-     * Метод для преобразования объекта {@link Item} в объект {@link ItemDto}.
+     * Метод для преобразования объекта {@link Item} в объект {@link ItemResponseDto}.
      *
-     * @param item
-     * @return объект класса {@link ItemDto}.
+     * @param item объект класса {@link Item}
+     * @return объект класса {@link ItemResponseDto}.
      */
-    public ItemDto toItemDto(Item item) {
-        return ItemDto.builder()
+    public static ItemResponseDto toItemResponseDto(Item item) {
+        return ItemResponseDto.builder()
                 .id(item.getId())
                 .name(item.getName())
                 .description(item.getDescription())
@@ -29,13 +29,13 @@ public class ItemMapper {
     }
 
     /**
-     * Метод для преобразования объекта класса {@link ItemDto} в объект класса {@link Item}.
+     * Метод для преобразования объекта класса {@link ItemResponseDto} в объект класса {@link Item}.
      *
-     * @param itemDto
-     * @param userId
+     * @param itemDto объект класса {@link ItemResponseDto}
+     * @param userId идентификационный номер пользователя владельца предмета.
      * @return объект класса {@link Item}.
      */
-    public Item toItem(ItemDto itemDto, Long userId) {
+    public static Item toItem(ItemRequestDto itemDto, Long userId) {
         return Item.builder()
                 .name(itemDto.getName())
                 .description(itemDto.getDescription())
@@ -43,5 +43,4 @@ public class ItemMapper {
                 .userId(userId)
                 .build();
     }
-
 }
