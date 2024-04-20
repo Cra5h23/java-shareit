@@ -1,6 +1,7 @@
 package ru.practicum.shareit.user.repository.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.exeption.UserRepositoryException;
@@ -8,6 +9,9 @@ import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
+import javax.validation.Valid;
+import javax.validation.constraints.AssertTrue;
+import javax.validation.constraints.Email;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +56,7 @@ public class InMemoryUserRepository implements UserRepository {
      */
     @Override
     public UserDto update(User user, long userId) {
-        var updateUser = userMap.get(userId);
+        User updateUser = userMap.get(userId);
         if (updateUser == null) {
             throw new UserRepositoryException(String.format("Не существует пользователя с id %d", userId));
         }
