@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import ru.practicum.shareit.item.exception.ItemRepositoryException;
+import ru.practicum.shareit.item.exception.ItemServiceException;
+
 import static ru.practicum.shareit.ErrorResponse.*;
+
 /**
  * Класс {@link ItemErrorHandler} для обработки исключений {@link ItemRepositoryException}, {@link ItemServiceException},
  * {@link MissingRequestHeaderException}, {@link ConstraintViolationException} в пакете {@link ru.practicum.shareit.item}
@@ -22,6 +25,12 @@ import static ru.practicum.shareit.ErrorResponse.*;
 public class ItemErrorHandler {
     @ExceptionHandler
     public ResponseEntity<?> handlerItemRepositoryException(final ItemRepositoryException e, WebRequest webRequest) {
+        log.warn("Ошибка работы с предметами", e);
+        return makeErrorResponse(webRequest, HttpStatus.NOT_FOUND, "Ошибка работы с предметами");
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<?> handlerItemServiceException(final ItemServiceException e, WebRequest webRequest) {
         log.warn("Ошибка работы с предметами", e);
         return makeErrorResponse(webRequest, HttpStatus.NOT_FOUND, "Ошибка работы с предметами");
     }
