@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.repository;
 
-import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemRequestDto;
+import ru.practicum.shareit.item.dto.ItemResponseDto;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.List;
@@ -14,62 +15,62 @@ import java.util.Optional;
  */
 public interface ItemRepository {
     /**
-     * Метод добавления нового предмета в репозиторий.
+     * Метод добавления новой вещи в репозиторий.
      *
      * @param item   объект класса {@link Item}
-     * @param userId идентификационный номер пользователя владельца предмета.
-     * @return объект класса {@link ItemDto} созданный предмет.
+     * @param userId идентификационный номер пользователя владельца вещи.
+     * @return объект класса {@link ItemResponseDto} созданная вещь.
      */
-    ItemDto save(Item item, Long userId);
+    ItemResponseDto save(ItemRequestDto item, Long userId);
 
     /**
-     * Метод обновления предмета.
+     * Метод обновления вещи.
      *
      * @param item   объект класса {@link Item} данные для обновления.
-     * @param userId идентификационный номер пользователя владельца предмета.
-     * @param itemId идентификационный номер предмета.
-     * @return объект класса {@link ItemDto} обновлённый предмет.
+     * @param userId идентификационный номер пользователя владельца вещи.
+     * @param itemId идентификационный номер вещи.
+     * @return объект класса {@link ItemResponseDto} обновлённый вещи.
      */
-    ItemDto update(Item item, Long userId, Long itemId);
+    ItemResponseDto update(ItemRequestDto item, Long userId, Long itemId);
 
     /**
-     * Метод получения предмета по id.
+     * Метод получения вещи по id.
      *
-     * @param itemId идентификационный номер предмета.
-     * @param userId идентификационный номер пользователя владельца предмета.
-     * @return объект класса {@link ItemDto} запрошенный предмет.
+     * @param itemId идентификационный номер вещи.
+     * @param userId идентификационный номер пользователя владельца вещи.
+     * @return объект класса {@link ItemResponseDto} запрошенный вещь.
      */
-    Optional<ItemDto> findById(Long itemId, Long userId);
+    Optional<ItemResponseDto> findById(Long itemId, Long userId);
 
     /**
-     * Метод удаления предмета по id.
+     * Метод удаления вещи по id.
      *
-     * @param itemId идентификационный номер предмета.
-     * @param userId идентификационный номер пользователя владельца предмета.
+     * @param itemId идентификационный номер вещи.
+     * @param userId идентификационный номер пользователя владельца вещи.
      */
     void deleteById(Long itemId, Long userId);
 
     /**
-     * Метод получения списка всех предметов для указанного пользователя.
+     * Метод получения списка всех вещей для указанного пользователя.
      *
-     * @param userId идентификатор пользователя владельца предметов.
-     * @return {@link List} объектов {@link ItemDto} список предметов для указанного пользователя.
+     * @param userId идентификатор пользователя владельца вещей.
+     * @return {@link List} объектов {@link ItemResponseDto} список вещей для указанного пользователя.
      */
-    List<ItemDto> findAllById(Long userId);
+    List<ItemResponseDto> findAllById(Long userId);
 
     /**
-     * Метод поиска предметов для указанного пользователя по указанному тексту.
+     * Метод поиска вещей для указанного пользователя по указанному тексту.
      *
      * @param text   текс поиска.
-     * @param userId идентификатор пользователя владельца предметов.
-     * @return {@link List} объектов {@link ItemDto} список предметов для указанного пользователя удовлетворяющих параметрам поиска.
+     * @param userId идентификатор пользователя владельца вещей.
+     * @return {@link List} объектов {@link ItemResponseDto} список вещей удовлетворяющих параметрам поиска.
      */
-    List<ItemDto> search(String text, Long userId);
+    List<ItemResponseDto> search(String text, Long userId);
 
     /**
-     * Метод удаления всех предметов для указанного пользователя.
+     * Метод удаления всех вещей для указанного пользователя.
      *
-     * @param userId идентификатор пользователя владельца предметов.
+     * @param userId идентификатор пользователя владельца вещей.
      */
     void deleteAll(Long userId);
 }
