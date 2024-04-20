@@ -3,9 +3,11 @@ package ru.practicum.shareit.item.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.Marker;
+import ru.practicum.shareit.item.dto.ItemRequestDto;
+import ru.practicum.shareit.item.dto.ItemResponseDto;
 import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.Valid;
@@ -21,29 +23,33 @@ import java.util.List;
 @RequestMapping("/items")
 @RequiredArgsConstructor
 @Slf4j
+@Validated
 public class ItemController {
     private final ItemService itemService;
     private final String X_SHARER_USER_ID = "X-Sharer-User-Id";
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ItemDto addNewItem(@Valid @RequestBody Item item, @RequestHeader(value = X_SHARER_USER_ID) Long userId) {
+    @Validated(Marker.OnCreate.class)
+    public ItemResponseDto addNewItem(@Valid @RequestBody ItemRequestDto item,
+                                      @RequestHeader(value = X_SHARER_USER_ID) Long userId) {
         log.info("POST /items , body = {}, header \"{}\" = {}", item, X_SHARER_USER_ID, userId);
         return itemService.addNewItem(item, userId);
     }
 
     @PatchMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
-    public ItemDto updateItem(@RequestBody Item item,
-                              @PathVariable Long itemId,
-                              @RequestHeader(value = X_SHARER_USER_ID) Long userId) {
+    public ItemResponseDto updateItem(@RequestBody ItemRequestDto item,
+                                      @PathVariable Long itemId,
+                                      @RequestHeader(value = X_SHARER_USER_ID) Long userId) {
         log.info("PATCH /items/{} , body = {}, header \"{}\" = {}", itemId, item, X_SHARER_USER_ID, userId);
         return itemService.updateItem(item, userId, itemId);
     }
 
     @GetMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
-    public ItemDto getItemById(@PathVariable Long itemId, @RequestHeader(value = X_SHARER_USER_ID) Long userId) {
+    public ItemResponseDto getItemById(@PathVariable Long itemId,
+                                       @RequestHeader(value = X_SHARER_USER_ID) Long userId) {
         log.info("GET /items/{} , header \"{}\" = {}", itemId, X_SHARER_USER_ID, userId);
         return itemService.getItemByItemId(itemId, userId);
     }
@@ -64,14 +70,15 @@ public class ItemController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ItemDto> getAllItemByUser(@RequestHeader(value = X_SHARER_USER_ID) Long userId) {
+    public List<ItemResponseDto> getAllItemByUser(@RequestHeader(value = X_SHARER_USER_ID) Long userId) {
         log.info("GET /items , header \"{}\" = {}", X_SHARER_USER_ID, userId);
         return itemService.getAllItemByUser(userId);
     }
 
     @GetMapping("/search")
     @ResponseStatus(HttpStatus.OK)
-    public List<ItemDto> searchItemByText(@RequestParam String text, @RequestHeader(value = X_SHARER_USER_ID) Long userId) {
+    public List<ItemResponseDto> searchItemByText(@RequestParam String text,
+                                                  @RequestHeader(value = X_SHARER_USER_ID) Long userId) {
         log.info("GET /items/search?text={} , header \"{}\" = {}", text, X_SHARER_USER_ID, userId);
         return itemService.searchItemByText(text, userId);
     }
