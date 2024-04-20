@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.service;
 
-import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemRequestDto;
+import ru.practicum.shareit.item.dto.ItemResponseDto;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.List;
@@ -13,60 +14,60 @@ import java.util.List;
  */
 public interface ItemService {
     /**
-     * Метод добавления нового предмета.
+     * Метод добавления новой вещи.
      *
      * @param item   объект класса {@link Item}.
      * @param userId идентификационный номер пользователя владельца вещи.
-     * @return объект класса {@link ItemDto}.
+     * @return объект класса {@link ItemResponseDto}.
      */
-    ItemDto addNewItem(Item item, Long userId);
+    ItemResponseDto addNewItem(ItemRequestDto item, Long userId);
 
     /**
-     * Метод обновления предмета.
+     * Метод обновления вещи.
      *
      * @param item   объект класса {@link Item}.
-     * @param userId идентификационный номер пользователя владельца предмета.
-     * @param itemId идентификационный номер предмета.
-     * @return объект класса {@link ItemDto}
+     * @param userId идентификационный номер пользователя владельца вещи.
+     * @param itemId идентификационный номер вещи.
+     * @return объект класса {@link ItemResponseDto}
      */
-    ItemDto updateItem(Item item, Long userId, Long itemId);
+    ItemResponseDto updateItem(ItemRequestDto item, Long userId, Long itemId);
 
     /**
-     * Метод получения предмета по его id для определённого пользователя.
+     * Метод получения вещи по его id для определённого пользователя.
      *
-     * @param itemId идентификационный номер предмета.
-     * @param userId идентификационный номер пользователя владельца предмета.
-     * @return объект класса {@link ItemDto}
+     * @param itemId идентификационный номер вещи.
+     * @param userId идентификационный номер пользователя владельца вещи.
+     * @return объект класса {@link ItemResponseDto}
      */
-    ItemDto getItemByItemId(Long itemId, Long userId);
+    ItemResponseDto getItemByItemId(Long itemId, Long userId);
 
     /**
-     * Метод удаления предмета по его id для указанного пользователя.
+     * Метод удаления вещи по его id для указанного пользователя.
      *
-     * @param itemId идентификационный номер предмета.
-     * @param userId идентификационный номер пользователя владельца предмета.
+     * @param itemId идентификационный номер вещи.
+     * @param userId идентификационный номер пользователя владельца вещи.
      */
     void deleteItemByItemId(Long itemId, Long userId);
 
     /**
-     * Метод получения списка всех предметов пользователя.
+     * Метод получения списка всех вещей пользователя.
      *
-     * @param userId идентификационный номер пользователя владельца предметов.
-     * @return {@link List} объектов {@link ItemDto}.
+     * @param userId идентификационный номер пользователя владельца вещей.
+     * @return {@link List} объектов {@link ItemResponseDto}.
      */
-    List<ItemDto> getAllItemByUser(Long userId);
+    List<ItemResponseDto> getAllItemByUser(Long userId);
 
     /**
-     * Метод поиска предметов по тексту для пользователя.
+     * Метод поиска вещей по тексту.
      *
      * @param text   текст по которому будет осуществлён поиск.
-     * @param userId идентификационный номер пользователя у которого будет производится поиск.
-     * @return {@link List} объектов {@link ItemDto}.
+     * @param userId идентификационный номер пользователя у которого будет производиться поиск.
+     * @return {@link List} объектов {@link ItemResponseDto}.
      */
-    List<ItemDto> searchItemByText(String text, Long userId);
+    List<ItemResponseDto> searchItemByText(String text, Long userId);
 
     /**
-     * Метод удаления всех предметов пользователя.
+     * Метод удаления всех вещей пользователя.
      *
      * @param userId идентификационный номер пользователя.
      */
