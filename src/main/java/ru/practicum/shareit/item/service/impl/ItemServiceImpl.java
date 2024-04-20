@@ -3,7 +3,8 @@ package ru.practicum.shareit.item.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemRequestDto;
+import ru.practicum.shareit.item.dto.ItemResponseDto;
 import ru.practicum.shareit.item.exception.ItemServiceException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
@@ -24,108 +25,108 @@ import java.util.List;
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
-    private final String CHECK_USER_ERROR_MESSAGE = "Нельзя %s предмет%s для не существующего пользователя с id %d";
-    private final String CHECK_ITEM_ERROR_MESSAGE = "Предмет с id %d не существует у пользователя с id %d";
+    private final String CHECK_USER_ERROR_MESSAGE = "Нельзя %s вещ%s для не существующего пользователя с id %d";
+    private final String CHECK_ITEM_ERROR_MESSAGE = "Вещь с id %d не существует у пользователя с id %d";
 
     /**
-     * Метод добавления нового предмета.
+     * Метод добавления новой вещи.
      *
      * @param item   объект класса {@link Item}.
      * @param userId идентификационный номер пользователя владельца вещи.
-     * @return объект класса {@link ItemDto}.
+     * @return объект класса {@link ItemResponseDto}.
      */
     @Override
-    public ItemDto addNewItem(Item item, Long userId) {
-        checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE, "создать новый", "", userId));
-        log.info("Создание нового предмета {} для пользователя с id {}", item, userId);
+    public ItemResponseDto addNewItem(ItemRequestDto item, Long userId) {
+        checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE, "создать новую", "ь", userId));
+        log.info("Создание новой вещи {} для пользователя с id {}", item, userId);
         return itemRepository.save(item, userId);
     }
 
     /**
-     * Метод обновления предмета.
+     * Метод обновления вещи.
      *
      * @param item   объект класса {@link Item}.
-     * @param userId идентификационный номер пользователя владельца предмета.
-     * @param itemId идентификационный номер предмета.
-     * @return объект класса {@link ItemDto}
+     * @param userId идентификационный номер пользователя владельца вещи.
+     * @param itemId идентификационный номер вещи.
+     * @return объект класса {@link ItemResponseDto}
      */
     @Override
-    public ItemDto updateItem(Item item, Long userId, Long itemId) {
-        checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE, "обновить", "", userId));
-        log.info("Обновление предмета c id {} для пользователя с id {}, новые данные {}", itemId, userId, item);
+    public ItemResponseDto updateItem(ItemRequestDto item, Long userId, Long itemId) {
+        checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE, "обновить", "ь", userId));
+        log.info("Обновление вещи c id {} для пользователя с id {}, новые данные {}", itemId, userId, item);
         return itemRepository.update(item, userId, itemId);
     }
 
     /**
-     * Метод получения предмета по его id для определённого пользователя.
+     * Метод получения вещи по его id для определённого пользователя.
      *
-     * @param itemId идентификационный номер предмета.
-     * @param userId идентификационный номер пользователя владельца предмета.
-     * @return объект класса {@link ItemDto}
+     * @param itemId идентификационный номер вещи.
+     * @param userId идентификационный номер пользователя владельца вещи.
+     * @return объект класса {@link ItemResponseDto}
      */
     @Override
-    public ItemDto getItemByItemId(Long itemId, Long userId) {
-        checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE, "Получить", " c id " + itemId, userId));
-        log.info("Получение предмета с id {} для пользователя с id {}", itemId, userId);
+    public ItemResponseDto getItemByItemId(Long itemId, Long userId) {
+        checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE, "Получить", "ь c id " + itemId, userId));
+        log.info("Получение вещи с id {} для пользователя с id {}", itemId, userId);
         return checkItem(itemId, userId, String.format(CHECK_ITEM_ERROR_MESSAGE, itemId, userId));
     }
 
     /**
-     * Метод удаления предмета по его id для указанного пользователя.
+     * Метод удаления вещи по её id для указанного пользователя.
      *
-     * @param itemId идентификационный номер предмета.
-     * @param userId идентификационный номер пользователя владельца предмета.
+     * @param itemId идентификационный номер вещи.
+     * @param userId идентификационный номер пользователя владельца вещи.
      */
     @Override
     public void deleteItemByItemId(Long itemId, Long userId) {
-        checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE, "удалить", " c id " + itemId, userId));
+        checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE, "удалить", "ь c id " + itemId, userId));
         checkItem(itemId, userId, String.format(CHECK_ITEM_ERROR_MESSAGE, itemId, userId));
-        log.info("Удаление предмета с id {} для пользователя с id {}", itemId, userId);
+        log.info("Удаление вещи с id {} для пользователя с id {}", itemId, userId);
         itemRepository.deleteById(itemId, userId);
     }
 
     /**
-     * Метод получения списка всех предметов пользователя.
+     * Метод получения списка всех вещей пользователя.
      *
-     * @param userId идентификационный номер пользователя владельца предметов.
-     * @return {@link List} объектов {@link ItemDto}.
+     * @param userId идентификационный номер пользователя владельца вещей.
+     * @return {@link List} объектов {@link ItemResponseDto}.
      */
     @Override
-    public List<ItemDto> getAllItemByUser(Long userId) {
-        checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE, "получить список", "ов", userId));
-        log.info("Получение списка всех предметов для пользователя с id {}", userId);
+    public List<ItemResponseDto> getAllItemByUser(Long userId) {
+        checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE, "получить список", "ей", userId));
+        log.info("Получение списка всех вещей для пользователя с id {}", userId);
         return itemRepository.findAllById(userId);
     }
 
     /**
-     * Метод поиска предметов по тексту для пользователя.
+     * Метод поиска вещей по тексту.
      *
      * @param text   текст по которому будет осуществлён поиск.
      * @param userId идентификационный номер пользователя у которого будет производиться поиск.
-     * @return {@link List} объектов {@link ItemDto}.
+     * @return {@link List} объектов {@link ItemResponseDto}.
      */
     @Override
-    public List<ItemDto> searchItemByText(String text, Long userId) {
-        checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE, "найти список", "ов с параметром поиска" + text, userId));
-        log.info("Поиск предметов для пользователя с id {} с параметром поиска {}", userId, text);
+    public List<ItemResponseDto> searchItemByText(String text, Long userId) {
+        checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE, "найти список", "ей с параметром поиска" + text, userId));
+        log.info("Поиск вещей для пользователя с id {} с параметром поиска {}", userId, text);
         return text != null ? itemRepository.search(text, userId) : List.of();
     }
 
     /**
-     * Метод удаления всех предметов пользователя.
+     * Метод удаления всех вещей пользователя.
      *
      * @param userId идентификационный номер пользователя.
      */
     @Override
     public void deleteAllItemByUser(Long userId) {
-        checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE, "удалить все", "ы", userId));
-        log.info("Удаление всех предметов для пользователя с id {}", userId);
+        checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE, "удалить все", "и", userId));
+        log.info("Удаление всех вещей для пользователя с id {}", userId);
         itemRepository.deleteAll(userId);
     }
 
     /**
      * Метод проверки, что пользователь существует.
-     * @param userId идентификатор пользователя владельца предмета.
+     * @param userId идентификатор пользователя владельца вещи.
      * @param message текст сообщения ошибки.
      */
     private void checkUser(Long userId, String message) {
@@ -133,13 +134,13 @@ public class ItemServiceImpl implements ItemService {
     }
 
     /**
-     * Метод проверки, что предмет существует.
-     * @param itemId идентификатор предмета.
-     * @param userId идентификатор пользователя владельца предмета.
+     * Метод проверки, что вещь существует.
+     * @param itemId идентификатор вещи.
+     * @param userId идентификатор пользователя владельца вещи.
      * @param message текст сообщения ошибки.
-     * @return объект класса {@link ItemDto}.
+     * @return объект класса {@link ItemResponseDto}.
      */
-    private ItemDto checkItem(Long itemId, Long userId, String message) {
+    private ItemResponseDto checkItem(Long itemId, Long userId, String message) {
         return itemRepository.findById(itemId, userId).orElseThrow(() -> new ItemServiceException(message));
     }
 }
