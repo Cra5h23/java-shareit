@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -42,5 +43,12 @@ public class ItemErrorHandler {
                                                                  WebRequest webRequest) {
         log.warn("Ошибка ввода данных предмета", e);
         return makeErrorResponse(webRequest, HttpStatus.BAD_REQUEST, "Ошибка ввода данных предмета");
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<?> handlerMissingRequestHeaderException(final MissingRequestHeaderException e,
+                                                                  WebRequest webRequest) {
+        log.warn("Не указан пользователь владелец предмета", e);
+        return makeErrorResponse(webRequest, HttpStatus.BAD_REQUEST, "Не указан пользователь владелец предмета");
     }
 }
