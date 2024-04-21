@@ -1,21 +1,15 @@
 package ru.practicum.shareit.user.repository.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
 import org.springframework.stereotype.Repository;
-import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.dto.UserRequestDto;
+import ru.practicum.shareit.user.dto.UserResponseDto;
 import ru.practicum.shareit.user.exeption.UserRepositoryException;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
-import javax.validation.Valid;
-import javax.validation.constraints.AssertTrue;
-import javax.validation.constraints.Email;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -26,25 +20,26 @@ import java.util.stream.Collectors;
 @Repository
 @Slf4j
 public class InMemoryUserRepository implements UserRepository {
-    private final Map<Long, User> userMap = new HashMap<>();
-    private final UserMapper userMapper = new UserMapper();
     private Long generatorId = 0L;
+    private final List<User> userList = new ArrayList<>();
 
     /**
      * Метод добавления нового пользователя в репозиторий.
      *
      * @param user объект класса {@link User} для добавления.
-     * @return объект класса {@link UserDto}.
+     * @return объект класса {@link UserResponseDto}.
      */
     @Override
-    public UserDto save(User user) {
+    public UserResponseDto save(UserRequestDto user) {
         checkEmail(user, String.format(
                 "Нельзя добавить нового пользователя, Пользователь с email %s уже существует", user.getEmail()));
-        var id = ++generatorId;
 
-        userMap.put(id, user);
-        log.info("В репозиторий добавлен новый пользователь {} и присвоен id {}", user, id);
-        return userMapper.toUserDto(user, id);
+        var id = ++generatorId;
+        User u = UserMapper.toUser(user, id);
+
+        userList.add(u);
+        log.info("В репозиторий добавлен новый пользователь {} и присвоен id {}", u, id);
+        return UserMapper.toUserResponseDto(u);
     }
 
     /**
@@ -52,14 +47,15 @@ public class InMemoryUserRepository implements UserRepository {
      *
      * @param user   объект класса {@link User} для обновления.
      * @param userId идентификационный номер пользователя.
-     * @return объект класса {@link UserDto}.
+     * @return объект класса {@link UserResponseDto}.
      */
     @Override
-    public UserDto update(User user, long userId) {
-        User updateUser = userMap.get(userId);
-        if (updateUser == null) {
-            throw new UserRepositoryException(String.format("Не существует пользователя с id %d", userId));
-        }
+    public UserResponseDto update(UserRequestDto user, long userId) {
+        User updateUser = userList.stream()
+                .filter(u -> u.getId().equals(userId))
+                .findFirst()
+                .orElseThrow(() -> new UserRepositoryException(
+                        String.format("Не существует пользователя с id %d", userId)));
 
         log.info("Обновлён пользователь с id {} , старые данные {} новые данные {}", userId, updateUser, user);
 
@@ -75,23 +71,22 @@ public class InMemoryUserRepository implements UserRepository {
             updateUser.setName(user.getName());
         }
 
-
-        return userMapper.toUserDto(updateUser, userId);
+        return UserMapper.toUserResponseDto(updateUser);
     }
 
     /**
      * Метод получения пользователя по id из репозитория.
      *
      * @param userId идентификационный номер пользователя.
-     * @return объект класса {@link UserDto}.
+     * @return объект класса {@link UserResponseDto}.
      */
     @Override
-    public Optional<UserDto> findById(long userId) {
-        var user = userMap.get(userId);
-
-        log.info("Запрошен пользователь с id {}, данные {}", userId, user);
-
-        return user != null ? Optional.of(userMapper.toUserDto(user, userId)) : Optional.empty();
+    public Optional<UserResponseDto> findById(long userId) {
+        log.info("Запрошен пользователь с id {}", userId);
+        return userList.stream()
+                .filter(user -> user.getId().equals(userId))
+                .map(UserMapper::toUserResponseDto)
+                .findFirst();
     }
 
     /**
@@ -101,25 +96,28 @@ public class InMemoryUserRepository implements UserRepository {
      */
     @Override
     public void deleteById(long userId) {
-        userMap.remove(userId);
+        userList.stream().filter(user -> user.getId().equals(userId)).findFirst().map(userList::remove);
         log.info("Удалён пользователь с id {}", userId);
     }
 
     /**
      * Метод получения списка всех пользователей из репозитория.
      *
-     * @return {@link List} объектов {@link UserDto}.
+     * @return {@link List} объектов {@link UserResponseDto}.
      */
     @Override
-    public List<UserDto> findAll() {
+    public List<UserResponseDto> findAll() {
         log.info("Запрошен список всех пользователей");
-        return userMap.entrySet().stream()
-                .map(e -> userMapper.toUserDto(e.getValue(), e.getKey()))
-                .collect(Collectors.toList());
+        return userList.stream().map(UserMapper::toUserResponseDto).collect(Collectors.toList());
     }
 
-    private void checkEmail(User user, String message) {
-        Optional<User> first = userMap.values().stream()
+    /**
+     * Метод проверки, что email не зарегистрирован.
+     * @param user объект класса {@link UserRequestDto}.
+     * @param message Сообщение ошибки.
+     */
+    private void checkEmail(UserRequestDto user, String message) {
+        Optional<User> first = userList.stream()
                 .filter(u -> u.getEmail().equals(user.getEmail()))
                 .findFirst();
         if (first.isPresent()) {
