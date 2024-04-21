@@ -3,9 +3,10 @@ package ru.practicum.shareit.user.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.user.dto.UserRequestDto;
 import ru.practicum.shareit.user.exeption.UserServiceException;
 import ru.practicum.shareit.user.repository.UserRepository;
-import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.dto.UserResponseDto;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
@@ -27,10 +28,10 @@ public class UserServiceImpl implements UserService {
      * Метод добавления нового пользователя.
      *
      * @param user объект класса {@link User}.
-     * @return объект класса {@link UserDto}.
+     * @return объект класса {@link UserResponseDto}.
      */
     @Override
-    public UserDto addNewUser(User user) {
+    public UserResponseDto addNewUser(UserRequestDto user) {
         log.info("Создание нового пользователя {}", user);
         return userRepository.save(user);
     }
@@ -40,10 +41,10 @@ public class UserServiceImpl implements UserService {
      *
      * @param user   объект класса {@link User}.
      * @param userId идентификационный номер пользователя.
-     * @return обновлённый объект класса {@link UserDto}.
+     * @return обновлённый объект класса {@link UserResponseDto}.
      */
     @Override
-    public UserDto updateUser(User user, long userId) {
+    public UserResponseDto updateUser(UserRequestDto user, long userId) {
         log.info("Обновление пользователя с id {}, новые данные {}", userId, user);
         checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE,"обновить", userId));
         return userRepository.update(user, userId);
@@ -53,10 +54,10 @@ public class UserServiceImpl implements UserService {
      * Метод получения пользователя по его id.
      *
      * @param userId идентификационный номер пользователя.
-     * @return объект класса {@link UserDto}.
+     * @return объект класса {@link UserResponseDto}.
      */
     @Override
-    public UserDto getUser(long userId) {
+    public UserResponseDto getUser(long userId) {
         log.info("Получение пользователя с id {}", userId);
         return checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE,"получить", userId));
     }
@@ -76,10 +77,10 @@ public class UserServiceImpl implements UserService {
     /**
      * Метод получения списка всех пользователей.
      *
-     * @return {@link List} объектов {@link UserDto}.
+     * @return {@link List} объектов {@link UserResponseDto}.
      */
     @Override
-    public List<UserDto> getAllUsers() {
+    public List<UserResponseDto> getAllUsers() {
         log.info("Получение списка всех пользователей");
         return userRepository.findAll();
     }
@@ -89,9 +90,9 @@ public class UserServiceImpl implements UserService {
      *
      * @param userId  идентификационный номер пользователя.
      * @param message сообщение ошибки если пользователь не существует.
-     * @return объект класса {@link UserDto}
+     * @return объект класса {@link UserResponseDto}
      */
-    private UserDto checkUser(long userId, String message) {
+    private UserResponseDto checkUser(long userId, String message) {
         return userRepository.findById(userId).orElseThrow(() -> new UserServiceException(message));
     }
 }
