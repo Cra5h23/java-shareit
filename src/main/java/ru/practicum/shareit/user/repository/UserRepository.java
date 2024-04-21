@@ -1,6 +1,7 @@
 package ru.practicum.shareit.user.repository;
 
-import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.dto.UserRequestDto;
+import ru.practicum.shareit.user.dto.UserResponseDto;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
@@ -16,26 +17,26 @@ public interface UserRepository {
      * Метод добавления нового пользователя в репозиторий.
      *
      * @param user объект класса {@link User} для добавления.
-     * @return объект класса {@link UserDto}.
+     * @return объект класса {@link UserResponseDto}.
      */
-    UserDto save(User user);
+    UserResponseDto save(UserRequestDto user);
 
     /**
      * Метод обновления пользователя по id в репозитории.
      *
      * @param user   объект класса {@link User} для обновления.
      * @param userId идентификационный номер пользователя.
-     * @return объект класса {@link UserDto}.
+     * @return объект класса {@link UserResponseDto}.
      */
-    UserDto update(User user, long userId);
+    UserResponseDto update(UserRequestDto user, long userId);
 
     /**
      * Метод получения пользователя по id из репозитория.
      *
      * @param userId идентификационный номер пользователя.
-     * @return объект класса {@link UserDto}.
+     * @return объект класса {@link UserResponseDto}.
      */
-    Optional<UserDto> findById(long userId);
+    Optional<UserResponseDto> findById(long userId);
 
     /**
      * Метод удаления пользователя по id из репозитория.
@@ -47,7 +48,7 @@ public interface UserRepository {
     /**
      * Метод получения списка всех пользователей из репозитория.
      *
-     * @return {@link List} объектов {@link UserDto}.
+     * @return {@link List} объектов {@link UserResponseDto}.
      */
-    List<UserDto> findAll();
+    List<UserResponseDto> findAll();
 }
