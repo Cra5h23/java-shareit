@@ -15,17 +15,21 @@ import javax.validation.constraints.NotBlank;
  * @author Nikolay Radzivon
  */
 @Data
-@Builder
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
+    /**
+     * Идентификационный номер пользователя.
+     */
+    private Long id;
     /**
      * Имя пользователя.
      */
     @NotBlank(groups = Marker.OnCreate.class, message = "Поле name не должно быть пустым")
     private String name;
     /**
-     * Электронная почта пользователя
+     * Электронная почта пользователя.
      */
     @Email(groups = {Marker.OnCreate.class, Marker.OnUpdate.class}, message = "Поле email должно иметь формат адреса электронной почты")
     @NotBlank(groups = {Marker.OnCreate.class}, message = "Поле email не должно быть пустым")
