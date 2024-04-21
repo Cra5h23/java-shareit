@@ -25,8 +25,8 @@ import java.util.List;
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
-    private final String CHECK_USER_ERROR_MESSAGE = "Нельзя %s вещ%s для не существующего пользователя с id %d";
-    private final String CHECK_ITEM_ERROR_MESSAGE = "Вещь с id %d не существует%s";
+    private final String checkUserErrorMessage = "Нельзя %s вещ%s для не существующего пользователя с id %d";
+    private final String checkItemErrorMessage = "Вещь с id %d не существует%s";
     /**
      * Метод добавления новой вещи.
      *
@@ -36,7 +36,7 @@ public class ItemServiceImpl implements ItemService {
      */
     @Override
     public ItemResponseDto addNewItem(ItemRequestDto item, Long userId) {
-        checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE, "создать новую", "ь", userId));
+        checkUser(userId, String.format(checkUserErrorMessage, "создать новую", "ь", userId));
         log.info("Создание новой вещи {} для пользователя с id {}", item, userId);
         return itemRepository.save(item, userId);
     }
@@ -51,7 +51,7 @@ public class ItemServiceImpl implements ItemService {
      */
     @Override
     public ItemResponseDto updateItem(ItemRequestDto item, Long userId, Long itemId) {
-        checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE, "обновить", "ь", userId));
+        checkUser(userId, String.format(checkUserErrorMessage, "обновить", "ь", userId));
         log.info("Обновление вещи c id {} для пользователя с id {}, новые данные {}", itemId, userId, item);
         return itemRepository.update(item, userId, itemId);
     }
@@ -66,7 +66,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemResponseDto getItemByItemId(Long itemId, Long userId) {
         log.info("Получение вещи с id {}",itemId);
-        return checkItem(itemId, userId, String.format(CHECK_ITEM_ERROR_MESSAGE, itemId,""));
+        return checkItem(itemId, userId, String.format(checkItemErrorMessage, itemId,""));
     }
 
     /**
@@ -77,9 +77,9 @@ public class ItemServiceImpl implements ItemService {
      */
     @Override
     public void deleteItemByItemId(Long itemId, Long userId) {
-        checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE, "удалить", "ь c id " + itemId, userId));
+        checkUser(userId, String.format(checkUserErrorMessage, "удалить", "ь c id " + itemId, userId));
         checkItem(itemId, userId, String.format(
-                CHECK_ITEM_ERROR_MESSAGE, itemId, String.format(" у пользователя с id %d", userId)));
+                checkItemErrorMessage, itemId, String.format(" у пользователя с id %d", userId)));
         log.info("Удаление вещи с id {} для пользователя с id {}", itemId, userId);
         itemRepository.deleteById(itemId, userId);
     }
@@ -92,7 +92,7 @@ public class ItemServiceImpl implements ItemService {
      */
     @Override
     public List<ItemResponseDto> getAllItemByUser(Long userId) {
-        checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE, "получить список", "ей", userId));
+        checkUser(userId, String.format(checkUserErrorMessage, "получить список", "ей", userId));
         log.info("Получение списка всех вещей для пользователя с id {}", userId);
         return itemRepository.findAllById(userId);
     }
@@ -107,7 +107,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemResponseDto> searchItemByText(String text, Long userId) {
         checkUser(userId, String.format(
-                CHECK_USER_ERROR_MESSAGE, "найти список", "ей с параметром поиска" + text, userId));
+                checkUserErrorMessage, "найти список", "ей с параметром поиска" + text, userId));
         log.info("Поиск вещей для пользователя с id {} с параметром поиска {}", userId, text);
         return text != null ? itemRepository.search(text, userId) : List.of();
     }
@@ -119,7 +119,7 @@ public class ItemServiceImpl implements ItemService {
      */
     @Override
     public void deleteAllItemByUser(Long userId) {
-        checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE, "удалить все", "и", userId));
+        checkUser(userId, String.format(checkUserErrorMessage, "удалить все", "и", userId));
         log.info("Удаление всех вещей для пользователя с id {}", userId);
         itemRepository.deleteAll(userId);
     }

@@ -22,7 +22,7 @@ import java.util.List;
 @Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final String CHECK_USER_ERROR_MESSAGE = "Попытка %s пользователя с не существующим id %d";
+    private final String checkUserErrorMessage = "Попытка %s пользователя с не существующим id %d";
 
     /**
      * Метод добавления нового пользователя.
@@ -46,7 +46,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto updateUser(UserRequestDto user, long userId) {
         log.info("Обновление пользователя с id {}, новые данные {}", userId, user);
-        checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE,"обновить", userId));
+        checkUser(userId, String.format(checkUserErrorMessage,"обновить", userId));
         return userRepository.update(user, userId);
     }
 
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto getUser(long userId) {
         log.info("Получение пользователя с id {}", userId);
-        return checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE,"получить", userId));
+        return checkUser(userId, String.format(checkUserErrorMessage,"получить", userId));
     }
 
     /**
@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(long userId) {
         log.info("Удаление пользователя с id {}", userId);
-                checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE,"удалить", userId));
+                checkUser(userId, String.format(checkUserErrorMessage,"удалить", userId));
         userRepository.deleteById(userId);
     }
 

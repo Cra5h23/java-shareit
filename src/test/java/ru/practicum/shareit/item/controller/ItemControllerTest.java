@@ -34,7 +34,7 @@ class ItemControllerTest {
     @MockBean
     ItemService itemService;
 
-    private final String X_SHARER_USER_ID = "X-Sharer-User-Id";
+    private final String xSharerUserId = "X-Sharer-User-Id";
 
     @Test
     @DisplayName("POST /items не создаёт новую вещь если не указан заголовок X-Sharer-User-Id")
@@ -61,7 +61,7 @@ class ItemControllerTest {
     void addNewItemTest_Valid() throws Exception {
         var request = MockMvcRequestBuilders
                 .post("/items")
-                .header(X_SHARER_USER_ID, 1L)
+                .header(xSharerUserId, 1L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\": \"testName1\"," +
                         "\"description\": \"testDescription1\"," +
@@ -85,7 +85,7 @@ class ItemControllerTest {
     void addNewItemTest_NotValidName() throws Exception {
         var request = MockMvcRequestBuilders
                 .post("/items")
-                .header(X_SHARER_USER_ID, 1L)
+                .header(xSharerUserId, 1L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"description\": \"testDescription1\"," +
                         "\"available\": true}");
@@ -105,7 +105,7 @@ class ItemControllerTest {
     void addNewItemTest_NotValidAvailable() throws Exception {
         var request = MockMvcRequestBuilders
                 .post("/items")
-                .header(X_SHARER_USER_ID, 1L)
+                .header(xSharerUserId, 1L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\": \"testName1\"," +
                         "\"description\": \"testDescription1\"" +
@@ -126,7 +126,7 @@ class ItemControllerTest {
     void addNewItemTest_NotValidDescription() throws Exception {
         var request = MockMvcRequestBuilders
                 .post("/items")
-                .header(X_SHARER_USER_ID, 1L)
+                .header(xSharerUserId, 1L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\": \"testName1\"," +
                         "\"available\": true}");
@@ -146,7 +146,7 @@ class ItemControllerTest {
     void addNewItemTest_NotValidUserId() throws Exception {
         var request = MockMvcRequestBuilders
                 .post("/items")
-                .header(X_SHARER_USER_ID, 10L)
+                .header(xSharerUserId, 10L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\": \"testName1\"," +
                         "\"description\": \"testDescription1\"," +
@@ -171,7 +171,7 @@ class ItemControllerTest {
     void updateItem_Valid() throws Exception {
         var request = MockMvcRequestBuilders
                 .patch("/items/1")
-                .header(X_SHARER_USER_ID, 1L)
+                .header(xSharerUserId, 1L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\": \"testName1update\"," +
                         "\"description\": \"testDescription1update\"," +
@@ -216,7 +216,7 @@ class ItemControllerTest {
     void updateItem_NotValid_ItemNotExists() throws Exception {
         var request = MockMvcRequestBuilders
                 .patch("/items/10")
-                .header(X_SHARER_USER_ID, 1L)
+                .header(xSharerUserId, 1L)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\": \"testName1update\"," +
                         "\"description\": \"testDescription1update\"," +
@@ -241,7 +241,7 @@ class ItemControllerTest {
     void updateItem_NotValid_UserNotExists() throws Exception {
         var request = MockMvcRequestBuilders
                 .patch("/items/1")
-                .header(X_SHARER_USER_ID, 10)
+                .header(xSharerUserId, 10)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\": \"testName1update\"," +
                         "\"description\": \"testDescription1update\"," +
@@ -265,7 +265,7 @@ class ItemControllerTest {
     @DisplayName("GET /items/1 возвращает вещь")
     void getItemById_Valid() throws Exception {
         var request = MockMvcRequestBuilders.get("/items/1")
-                .header(X_SHARER_USER_ID, 1);
+                .header(xSharerUserId, 1);
 
         Mockito.when(itemService.getItemByItemId(Mockito.any(), Mockito.any()))
                 .thenReturn(new ItemResponseDto(1L, "testName1", "testDescription1", true));
@@ -284,7 +284,7 @@ class ItemControllerTest {
     @DisplayName("GET /items/1 не возвращает вещь если она не существует")
     void getItemById_NotValid_ItemNotExists() throws Exception {
         var request = MockMvcRequestBuilders.get("/items/1")
-                .header(X_SHARER_USER_ID, 1);
+                .header(xSharerUserId, 1);
 
         Mockito.when(itemService.getItemByItemId(Mockito.any(), Mockito.any()))
                 .thenThrow(new ItemServiceException("Вещь с id 1 не существует"));
@@ -304,7 +304,7 @@ class ItemControllerTest {
     @DisplayName("DELETE /items/1 удаляет вещь")
     void deleteItemByItemId_Valid() throws Exception {
         var request = MockMvcRequestBuilders.delete("/items/1")
-                .header(X_SHARER_USER_ID, 1);
+                .header(xSharerUserId, 1);
 
         this.mockMvc.perform(request).andExpectAll(
                 status().isOk()
@@ -316,7 +316,7 @@ class ItemControllerTest {
     @DisplayName("DELETE /items/1 не удаляет вещь если пользователь не существует")
     void deleteItemByItemId_NotValid_UserNotExists() throws Exception {
         var request = MockMvcRequestBuilders.delete("/items/1")
-                .header(X_SHARER_USER_ID, 1);
+                .header(xSharerUserId, 1);
 
         Mockito.doThrow(new ItemServiceException("Нельзя удалить вещь для не существующего пользователя с id 1"))
                 .when(itemService).deleteItemByItemId(Mockito.any(), Mockito.any());
@@ -337,7 +337,7 @@ class ItemControllerTest {
     @DisplayName("DELETE /items/1 не удаляет вещь если у пользователя её нет")
     void deleteItemByItemId_NotValid_ItemNotExists() throws Exception {
         var request = MockMvcRequestBuilders.delete("/items/1")
-                .header(X_SHARER_USER_ID, 1);
+                .header(xSharerUserId, 1);
 
         Mockito.doThrow(new ItemServiceException("Вещь с id 1 не существует у пользователя с id 1"))
                 .when(itemService).deleteItemByItemId(Mockito.any(), Mockito.any());
@@ -374,7 +374,7 @@ class ItemControllerTest {
     @DisplayName("DELETE /items удаляет все предметы у указанного пользователя")
     void deleteAllItemByUser_Valid() throws Exception {
         var request = MockMvcRequestBuilders.delete("/items")
-                .header(X_SHARER_USER_ID, 1);
+                .header(xSharerUserId, 1);
 
         this.mockMvc.perform(request).andExpectAll(
                 status().isOk()
@@ -386,7 +386,7 @@ class ItemControllerTest {
     @DisplayName("DELETE /items не удаляет все предметы у указанного пользователя если он не существует")
     void deleteAllItemByUser_NotValid_User_NotExists() throws Exception {
         var request = MockMvcRequestBuilders.delete("/items")
-                .header(X_SHARER_USER_ID, 1);
+                .header(xSharerUserId, 1);
 
         Mockito.doThrow(new ItemServiceException("Нельзя удалить вещи для не существующего пользователя с id 1"))
                 .when(itemService).deleteAllItemByUser(Mockito.any());
@@ -423,7 +423,7 @@ class ItemControllerTest {
     void getAllItemByUser_Valid() throws Exception {
         var request = MockMvcRequestBuilders
                 .get("/items")
-                .header(X_SHARER_USER_ID, 1);
+                .header(xSharerUserId, 1);
 
         Mockito.when(itemService.getAllItemByUser(Mockito.any()))
                 .thenReturn(List.of(
@@ -444,7 +444,7 @@ class ItemControllerTest {
     void getAllItemByUser_NotValid() throws Exception {
         var request = MockMvcRequestBuilders
                 .get("/items")
-                .header(X_SHARER_USER_ID, 1);
+                .header(xSharerUserId, 1);
 
         Mockito.when(itemService.getAllItemByUser(Mockito.any()))
                 .thenThrow(new ItemServiceException("Нельзя получить список вещей для не существующего пользователя с id 1"));
@@ -481,7 +481,7 @@ class ItemControllerTest {
     void searchItemByTextValid() throws Exception {
         var request = MockMvcRequestBuilders
                 .get("/items/search?text=test")
-                .header(X_SHARER_USER_ID, 1);
+                .header(xSharerUserId, 1);
 
         Mockito.when(itemService.searchItemByText(Mockito.any(), Mockito.any()))
                 .thenReturn(List.of(
@@ -502,7 +502,7 @@ class ItemControllerTest {
     void searchItemByText_Text_Empty() throws Exception {
         var request = MockMvcRequestBuilders
                 .get("/items/search?text=")
-                .header(X_SHARER_USER_ID, 1);
+                .header(xSharerUserId, 1);
 
         Mockito.when(itemService.searchItemByText(Mockito.any(), Mockito.any()))
                 .thenReturn(List.of());
