@@ -1,0 +1,380 @@
+openapi: 3.0.1
+info:
+  title: Java-Shareit Api
+  description: Api для приложения Java-Shareit
+  contact:
+    name: Nikolay Radzivon
+  version: 1.0.0
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+tags:
+- name: Взаимодействие с пользователями
+  description: Контроллер для взаимодействия с пользователями
+- name: Взаимодействие с вещами
+  description: Контроллер для взаимодействия с вещами
+paths:
+  /users:
+    get:
+      tags:
+      - Взаимодействие с пользователями
+      summary: Получение списка всех пользователей
+      description: Позволяет запросить список всех пользователей
+      operationId: getAllUsers
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Пользователь для ответа'
+    post:
+      tags:
+      - Взаимодействие с пользователями
+      summary: Добавление нового пользователя
+      description: Позволяет добавить нового пользователя
+      operationId: addNewUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Пользователь для запроса'
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Пользователь для ответа'
+  /items:
+    get:
+      tags:
+      - Взаимодействие с вещами
+      summary: Получение всех вещей пользователя
+      description: Получение всех вещей пользователя (может запросить только пользователь
+        владелец вещей)
+      operationId: getAllItemByUser
+      parameters:
+      - name: X-Sharer-User-Id
+        in: header
+        description: Идентификационный номер пользователя владельца вещей
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Вещь для ответа'
+    post:
+      tags:
+      - Взаимодействие с вещами
+      summary: Добавление новой вещи
+      description: Позволяет добавить новую вещь
+      operationId: addNewItem
+      parameters:
+      - name: X-Sharer-User-Id
+        in: header
+        description: Идентификационный номер пользователя владельца вещи
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Вещь для запроса'
+        required: true
+      responses:
+        "201":
+          description: Created
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Вещь для ответа'
+    delete:
+      tags:
+      - Взаимодействие с вещами
+      summary: Удаление всех вещей пользователя
+      description: Удаление всех вещей (Может удалить только пользователь владелец
+        вещей)
+      operationId: deleteAllItemByUser
+      parameters:
+      - name: X-Sharer-User-Id
+        in: header
+        description: Идентификационный номер пользователя владельца вещи
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+  /users/{userId}:
+    get:
+      tags:
+      - Взаимодействие с пользователями
+      summary: Получение пользователя по id
+      description: Позволяет получить пользователя по его id
+      operationId: getUser
+      parameters:
+      - name: userId
+        in: path
+        description: Идентификатор пользователя
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Пользователь для ответа'
+    delete:
+      tags:
+      - Взаимодействие с пользователями
+      summary: Удаление пользователя по id
+      description: Позволяет удалить пользователя по его id
+      operationId: deleteUser
+      parameters:
+      - name: userId
+        in: path
+        description: Идентификатор пользователя
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+    patch:
+      tags:
+      - Взаимодействие с пользователями
+      summary: Обновление пользователя
+      description: Позволяет обновить пользователя
+      operationId: updateUser
+      parameters:
+      - name: userId
+        in: path
+        description: Идентификатор пользователя для обновления
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Пользователь для запроса'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Пользователь для ответа'
+  /items/{itemId}:
+    get:
+      tags:
+      - Взаимодействие с вещами
+      summary: Получение вещи по id
+      description: Просмотр информации о вещи может запросить любой пользователь
+      operationId: getItemById
+      parameters:
+      - name: itemId
+        in: path
+        description: Идентификационный номер вещи
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: X-Sharer-User-Id
+        in: header
+        description: Идентификационный номер пользователя
+        required: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Вещь для ответа'
+    delete:
+      tags:
+      - Взаимодействие с вещами
+      summary: Удаление вещи по id
+      description: Удаление вещи (может удалить только пользователь владелец вещи
+      operationId: deleteItemByItemId
+      parameters:
+      - name: itemId
+        in: path
+        description: Идентификационный номер вещи
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: X-Sharer-User-Id
+        in: header
+        description: Идентификационный номер пользователя владельца вещи
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+    patch:
+      tags:
+      - Взаимодействие с вещами
+      summary: Обновление вещи
+      description: Позволяет обновить вещь (может обновить только владелец вещи)
+      operationId: updateItem
+      parameters:
+      - name: itemId
+        in: path
+        description: Идентификационный номер вещи
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: X-Sharer-User-Id
+        in: header
+        description: Идентификационный номер пользователя владельца вещи
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Вещь для запроса'
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/Вещь для ответа'
+  /items/search:
+    get:
+      tags:
+      - Взаимодействие с вещами
+      summary: Поиск вещей
+      description: Поиск вещей по указанному тексту. Поиск происходит по названию
+        или описанию вещи. Выводятся только вещи доступные для аренды
+      operationId: searchItemByText
+      parameters:
+      - name: text
+        in: query
+        description: Текст для поиска
+        required: true
+        schema:
+          type: string
+      - name: X-Sharer-User-Id
+        in: header
+        description: Идентификационный номер пользователя
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Вещь для ответа'
+components:
+  schemas:
+    Пользователь для запроса:
+      required:
+      - email
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: Имя пользователя
+          example: exampleUserName
+        email:
+          type: string
+          description: Электронная почта пользователя
+          example: exampleEmail@example.com
+      description: Данные пользователя
+    Пользователь для ответа:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Идентификационный номер пользователя
+          format: int64
+          example: 1
+        name:
+          type: string
+          description: Имя пользователя
+          example: exampleUserName
+        email:
+          type: string
+          description: Электронная почта пользователя
+          example: exampleEmail@example.com
+      description: Данные пользователя для ответа
+    Вещь для запроса:
+      required:
+      - available
+      - description
+      - name
+      type: object
+      properties:
+        name:
+          type: string
+          description: Название вещи
+          example: exampleName
+        description:
+          type: string
+          description: Описание вещи
+          example: exampleDescription
+        available:
+          type: boolean
+          description: Доступность для аренды
+          example: true
+      description: Данные вещи
+    Вещь для ответа:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Идентификационный номер вещи
+          format: int64
+          example: 1
+        name:
+          type: string
+          description: Название вещи
+          example: exampleName
+        description:
+          type: string
+          description: Описание вещи
+          example: exampleDescription
+        available:
+          type: boolean
+          description: Доступность для аренды
+          example: true
+      description: Сущность вещи для ответа

@@ -1,5 +1,6 @@
 package ru.practicum.shareit.item.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,20 +20,24 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder(toBuilder = true)
+@Schema(name = "Вещь для запроса", description = "Сущность вещи для запроса")
 public class ItemRequestDto {
     /**
      * Название вещи.
      */
     @NotBlank(groups = Marker.OnCreate.class, message = "Название предмета не может быть пустым")
+    @Schema(description = "Название вещи", example = "exampleName")
     private String name;
     /**
      * Описание вещи.
      */
     @NotBlank(groups = Marker.OnCreate.class, message = "Описание предмета не может быть пустым")
+    @Schema(description = "Описание вещи", example = "exampleDescription")
     private String description;
     /**
      * Возможность аренды вещи.
      */
     @NotNull(groups = Marker.OnCreate.class, message = "Возможность аренды должна быть указана")
+    @Schema(description = "Доступность для аренды", example = "true")
     private Boolean available;
 }
