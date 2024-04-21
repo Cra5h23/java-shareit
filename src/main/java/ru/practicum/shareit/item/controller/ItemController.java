@@ -30,17 +30,17 @@ import java.util.List;
 @Tag(name = "Взаимодействие с вещами", description = "Контроллер для взаимодействия с вещами")
 public class ItemController {
     private final ItemService itemService;
-    private final String X_SHARER_USER_ID = "X-Sharer-User-Id";
+    private final String xSharerUserId = "X-Sharer-User-Id";
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Validated(Marker.OnCreate.class)
     @Operation(summary = "Добавление новой вещи", description = "Позволяет добавить новую вещь")
     public ItemResponseDto addNewItem(@Valid @RequestBody @Parameter(description = "Данные вещи") ItemRequestDto item,
-                                      @RequestHeader(value = X_SHARER_USER_ID)
+                                      @RequestHeader(value = xSharerUserId)
                                       @Parameter(description = "Идентификационный номер пользователя владельца вещи")
                                       Long userId) {
-        log.info("POST /items , body = {}, header \"{}\" = {}", item, X_SHARER_USER_ID, userId);
+        log.info("POST /items , body = {}, header \"{}\" = {}", item, xSharerUserId, userId);
         return itemService.addNewItem(item, userId);
     }
 
@@ -49,10 +49,10 @@ public class ItemController {
     @Operation(summary = "Обновление вещи", description = "Позволяет обновить вещь (может обновить только владелец вещи)")
     public ItemResponseDto updateItem(@RequestBody @Parameter(description = "Данные вещи") ItemRequestDto item,
                                       @PathVariable @Parameter(description = "Идентификационный номер вещи") Long itemId,
-                                      @RequestHeader(value = X_SHARER_USER_ID)
+                                      @RequestHeader(value = xSharerUserId)
                                       @Parameter(description = "Идентификационный номер пользователя владельца вещи")
                                       Long userId) {
-        log.info("PATCH /items/{} , body = {}, header \"{}\" = {}", itemId, item, X_SHARER_USER_ID, userId);
+        log.info("PATCH /items/{} , body = {}, header \"{}\" = {}", itemId, item, xSharerUserId, userId);
         return itemService.updateItem(item, userId, itemId);
     }
 
@@ -60,10 +60,10 @@ public class ItemController {
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Получение вещи по id", description = "Просмотр информации о вещи может запросить любой пользователь")
     public ItemResponseDto getItemById(@PathVariable @Parameter(description = "Идентификационный номер вещи") Long itemId,
-                                       @RequestHeader(value = X_SHARER_USER_ID, required = false)
+                                       @RequestHeader(value = xSharerUserId, required = false)
                                        @Parameter(description = "Идентификационный номер пользователя")
                                        Long userId) {
-        log.info("GET /items/{} , header \"{}\" = {}", itemId, X_SHARER_USER_ID, userId);
+        log.info("GET /items/{} , header \"{}\" = {}", itemId, xSharerUserId, userId);
         return itemService.getItemByItemId(itemId, userId);
     }
 
@@ -71,10 +71,10 @@ public class ItemController {
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Удаление вещи по id", description = "Удаление вещи (может удалить только пользователь владелец вещи")
     public void deleteItemByItemId(@PathVariable @Parameter(description = "Идентификационный номер вещи") Long itemId,
-                                   @RequestHeader(value = X_SHARER_USER_ID)
+                                   @RequestHeader(value = xSharerUserId)
                                    @Parameter(description = "Идентификационный номер пользователя владельца вещи")
                                    Long userId) {
-        log.info("DELETE /items/{} , header \"{}\" = {}", itemId, X_SHARER_USER_ID, userId);
+        log.info("DELETE /items/{} , header \"{}\" = {}", itemId, xSharerUserId, userId);
         itemService.deleteItemByItemId(itemId, userId);
     }
 
@@ -82,10 +82,10 @@ public class ItemController {
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Удаление всех вещей пользователя",
             description = "Удаление всех вещей (Может удалить только пользователь владелец вещей)")
-    public void deleteAllItemByUser(@RequestHeader(value = X_SHARER_USER_ID)
+    public void deleteAllItemByUser(@RequestHeader(value = xSharerUserId)
                                     @Parameter(description = "Идентификационный номер пользователя владельца вещи")
                                     Long userId) {
-        log.info("DELETE /items , header \"{}\" = {}", X_SHARER_USER_ID, userId);
+        log.info("DELETE /items , header \"{}\" = {}", xSharerUserId, userId);
         itemService.deleteAllItemByUser(userId);
     }
 
@@ -93,9 +93,9 @@ public class ItemController {
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Получение всех вещей пользователя",
             description = "Получение всех вещей пользователя (может запросить только пользователь владелец вещей)")
-    public List<ItemResponseDto> getAllItemByUser(@RequestHeader(value = X_SHARER_USER_ID) @Parameter(
+    public List<ItemResponseDto> getAllItemByUser(@RequestHeader(value = xSharerUserId) @Parameter(
             description = "Идентификационный номер пользователя владельца вещей") Long userId) {
-        log.info("GET /items , header \"{}\" = {}", X_SHARER_USER_ID, userId);
+        log.info("GET /items , header \"{}\" = {}", xSharerUserId, userId);
         return itemService.getAllItemByUser(userId);
     }
 
@@ -104,10 +104,10 @@ public class ItemController {
     @Operation(summary = "Поиск вещей", description = ("Поиск вещей по указанному тексту. " +
             "Поиск происходит по названию или описанию вещи. Выводятся только вещи доступные для аренды"))
     public List<ItemResponseDto> searchItemByText(@RequestParam @Parameter(description = "Текст для поиска") String text,
-                                                  @RequestHeader(value = X_SHARER_USER_ID)
+                                                  @RequestHeader(value = xSharerUserId)
                                                   @Parameter(description = "Идентификационный номер пользователя")
                                                   Long userId) {
-        log.info("GET /items/search?text={} , header \"{}\" = {}", text, X_SHARER_USER_ID, userId);
+        log.info("GET /items/search?text={} , header \"{}\" = {}", text, xSharerUserId, userId);
         return itemService.searchItemByText(text, userId);
     }
 }
