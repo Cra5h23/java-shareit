@@ -6,8 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.Marker;
-import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.dto.UserRequestDto;
+import ru.practicum.shareit.user.dto.UserResponseDto;
 import ru.practicum.shareit.user.service.UserService;
 
 import javax.validation.Valid;
@@ -29,7 +29,7 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Validated(Marker.OnCreate.class)
-    public UserDto addNewUser(@RequestBody @Valid User user) {
+    public UserResponseDto addNewUser(@RequestBody @Valid UserRequestDto user) {
         log.info("POST /users body= {}", user);
         return userService.addNewUser(user);
     }
@@ -37,14 +37,14 @@ public class UserController {
     @PatchMapping("/{userId}")
     @ResponseStatus(HttpStatus.OK)
     @Validated({Marker.OnUpdate.class})
-    public UserDto updateUser(@RequestBody @Valid User user, @PathVariable long userId) {
+    public UserResponseDto updateUser(@RequestBody @Valid UserRequestDto user, @PathVariable long userId) {
         log.info("PATCH /users/{} body= {}", userId, user);
         return userService.updateUser(user, userId);
     }
 
     @GetMapping("/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public UserDto getUser(@PathVariable(required = false) long userId) {
+    public UserResponseDto getUser(@PathVariable(required = false) long userId) {
         log.info("GET /users/{}", userId);
         return userService.getUser(userId);
     }
@@ -58,7 +58,7 @@ public class UserController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<UserDto> getAllUsers() {
+    public List<UserResponseDto> getAllUsers() {
         log.info("GET /users");
         return userService.getAllUsers();
     }
