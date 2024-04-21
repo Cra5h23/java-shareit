@@ -34,7 +34,7 @@ public class UserErrorHandler {
     @ExceptionHandler
     public ResponseEntity<?> handlerUserServiceException(final UserServiceException e, WebRequest webRequest) {
         log.warn("Ошибка работы с пользователями", e);
-        return makeErrorResponse(webRequest, HttpStatus.NO_CONTENT, "Ошибка работы с пользователями");
+        return makeErrorResponse(webRequest, HttpStatus.NOT_FOUND, "Ошибка работы с пользователями");
     }
 
     @ExceptionHandler
