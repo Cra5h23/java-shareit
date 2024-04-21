@@ -49,7 +49,7 @@ public class ItemController {
     @GetMapping("/{itemId}")
     @ResponseStatus(HttpStatus.OK)
     public ItemResponseDto getItemById(@PathVariable Long itemId,
-                                       @RequestHeader(value = X_SHARER_USER_ID) Long userId) {
+                                       @RequestHeader(value = X_SHARER_USER_ID, required = false) Long userId) {
         log.info("GET /items/{} , header \"{}\" = {}", itemId, X_SHARER_USER_ID, userId);
         return itemService.getItemByItemId(itemId, userId);
     }
