@@ -26,8 +26,7 @@ public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
     private final String CHECK_USER_ERROR_MESSAGE = "Нельзя %s вещ%s для не существующего пользователя с id %d";
-    private final String CHECK_ITEM_ERROR_MESSAGE = "Вещь с id %d не существует у пользователя с id %d";
-
+    private final String CHECK_ITEM_ERROR_MESSAGE = "Вещь с id %d не существует%s";
     /**
      * Метод добавления новой вещи.
      *
@@ -66,9 +65,8 @@ public class ItemServiceImpl implements ItemService {
      */
     @Override
     public ItemResponseDto getItemByItemId(Long itemId, Long userId) {
-        checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE, "Получить", "ь c id " + itemId, userId));
-        log.info("Получение вещи с id {} для пользователя с id {}", itemId, userId);
-        return checkItem(itemId, userId, String.format(CHECK_ITEM_ERROR_MESSAGE, itemId, userId));
+        log.info("Получение вещи с id {}",itemId);
+        return checkItem(itemId, userId, String.format(CHECK_ITEM_ERROR_MESSAGE, itemId,""));
     }
 
     /**
@@ -80,7 +78,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public void deleteItemByItemId(Long itemId, Long userId) {
         checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE, "удалить", "ь c id " + itemId, userId));
-        checkItem(itemId, userId, String.format(CHECK_ITEM_ERROR_MESSAGE, itemId, userId));
+        checkItem(itemId, userId, String.format(
+                CHECK_ITEM_ERROR_MESSAGE, itemId, String.format(" у пользователя с id %d", userId)));
         log.info("Удаление вещи с id {} для пользователя с id {}", itemId, userId);
         itemRepository.deleteById(itemId, userId);
     }
@@ -107,7 +106,8 @@ public class ItemServiceImpl implements ItemService {
      */
     @Override
     public List<ItemResponseDto> searchItemByText(String text, Long userId) {
-        checkUser(userId, String.format(CHECK_USER_ERROR_MESSAGE, "найти список", "ей с параметром поиска" + text, userId));
+        checkUser(userId, String.format(
+                CHECK_USER_ERROR_MESSAGE, "найти список", "ей с параметром поиска" + text, userId));
         log.info("Поиск вещей для пользователя с id {} с параметром поиска {}", userId, text);
         return text != null ? itemRepository.search(text, userId) : List.of();
     }
@@ -135,12 +135,13 @@ public class ItemServiceImpl implements ItemService {
 
     /**
      * Метод проверки, что вещь существует.
-     * @param itemId идентификатор вещи.
-     * @param userId идентификатор пользователя владельца вещи.
+     *
+     * @param itemId  идентификатор вещи.
+     * @param userId  идентификатор пользователя владельца вещи.
      * @param message текст сообщения ошибки.
-     * @return объект класса {@link ItemResponseDto}.
+     * @return
      */
     private ItemResponseDto checkItem(Long itemId, Long userId, String message) {
-        return itemRepository.findById(itemId, userId).orElseThrow(() -> new ItemServiceException(message));
+      return itemRepository.findById(itemId, userId).orElseThrow(() -> new ItemServiceException(message));
     }
 }
