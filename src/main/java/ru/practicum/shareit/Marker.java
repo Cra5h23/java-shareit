@@ -5,6 +5,9 @@ package ru.practicum.shareit;
  * @Date 19.04.2024
  */
 public interface Marker {
-    interface OnCreate{}
-    interface OnUpdate{}
+    interface OnCreate {
+    }
+
+    interface OnUpdate {
+    }
 }

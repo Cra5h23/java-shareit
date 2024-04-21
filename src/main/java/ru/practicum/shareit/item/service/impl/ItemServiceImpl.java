@@ -27,6 +27,7 @@ public class ItemServiceImpl implements ItemService {
     private final UserRepository userRepository;
     private final String checkUserErrorMessage = "Нельзя %s вещ%s для не существующего пользователя с id %d";
     private final String checkItemErrorMessage = "Вещь с id %d не существует%s";
+
     /**
      * Метод добавления новой вещи.
      *
@@ -65,8 +66,8 @@ public class ItemServiceImpl implements ItemService {
      */
     @Override
     public ItemResponseDto getItemByItemId(Long itemId, Long userId) {
-        log.info("Получение вещи с id {}",itemId);
-        return checkItem(itemId, userId, String.format(checkItemErrorMessage, itemId,""));
+        log.info("Получение вещи с id {}", itemId);
+        return checkItem(itemId, userId, String.format(checkItemErrorMessage, itemId, ""));
     }
 
     /**
@@ -126,7 +127,8 @@ public class ItemServiceImpl implements ItemService {
 
     /**
      * Метод проверки, что пользователь существует.
-     * @param userId идентификатор пользователя владельца вещи.
+     *
+     * @param userId  идентификатор пользователя владельца вещи.
      * @param message текст сообщения ошибки.
      */
     private void checkUser(Long userId, String message) {
@@ -142,6 +144,6 @@ public class ItemServiceImpl implements ItemService {
      * @return
      */
     private ItemResponseDto checkItem(Long itemId, Long userId, String message) {
-      return itemRepository.findById(itemId, userId).orElseThrow(() -> new ItemServiceException(message));
+        return itemRepository.findById(itemId, userId).orElseThrow(() -> new ItemServiceException(message));
     }
 }
