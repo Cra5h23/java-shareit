@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class UserDto {
+public class UserResponseDto {
     /**
      * Идентификационный номер пользователя.
      */
