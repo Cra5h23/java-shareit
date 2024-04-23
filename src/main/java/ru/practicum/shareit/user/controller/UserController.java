@@ -36,7 +36,7 @@ public class UserController {
     @Operation(summary = "Добавление нового пользователя", description = "Позволяет добавить нового пользователя")
     public UserResponseDto addNewUser(@RequestBody @Parameter(description = "Данные пользователя") @Valid
                                       UserRequestDto user) {
-        log.info("POST /users body= {}", user);
+        log.info("POST /users body = {}", user);
         return userService.addNewUser(user);
     }
 
@@ -48,7 +48,7 @@ public class UserController {
                                       UserRequestDto user,
                                       @PathVariable @Parameter(description = "Идентификатор пользователя для обновления")
                                       long userId) {
-        log.info("PATCH /users/{} body= {}", userId, user);
+        log.info("PATCH /users/{} body = {}", userId, user);
         return userService.updateUser(user, userId);
     }
 
