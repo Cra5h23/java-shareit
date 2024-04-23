@@ -1,7 +1,5 @@
 package ru.practicum.shareit.item.repository;
 
-import ru.practicum.shareit.item.dto.ItemRequestDto;
-import ru.practicum.shareit.item.dto.ItemResponseDto;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.List;
@@ -15,57 +13,43 @@ import java.util.Optional;
  */
 public interface ItemRepository {
     /**
-     * Метод добавления новой вещи в репозиторий.
+     * Метод добавления новой вещи в репозиторий и обновления существующей.
      *
      * @param item   объект класса {@link Item}
-     * @param userId идентификационный номер пользователя владельца вещи.
-     * @return объект класса {@link ItemResponseDto} созданная вещь.
+     * @return объект класса {@link Item} созданная вещь.
      */
-    ItemResponseDto save(ItemRequestDto item, Long userId);
-
-    /**
-     * Метод обновления вещи.
-     *
-     * @param item   объект класса {@link Item} данные для обновления.
-     * @param userId идентификационный номер пользователя владельца вещи.
-     * @param itemId идентификационный номер вещи.
-     * @return объект класса {@link ItemResponseDto} обновлённый вещи.
-     */
-    ItemResponseDto update(ItemRequestDto item, Long userId, Long itemId);
+    Item save(Item item);
 
     /**
      * Метод получения вещи по id.
      *
      * @param itemId идентификационный номер вещи.
-     * @param userId идентификационный номер пользователя владельца вещи.
-     * @return объект класса {@link ItemResponseDto} запрошенный вещь.
+     * @return объект класса {@link Item} запрошенный вещь.
      */
-    Optional<ItemResponseDto> findById(Long itemId, Long userId);
+    Optional<Item> findById(Long itemId);
 
     /**
      * Метод удаления вещи по id.
      *
      * @param itemId идентификационный номер вещи.
-     * @param userId идентификационный номер пользователя владельца вещи.
      */
-    void deleteById(Long itemId, Long userId);
+    void deleteById(Long itemId);
 
     /**
      * Метод получения списка всех вещей для указанного пользователя.
      *
      * @param userId идентификатор пользователя владельца вещей.
-     * @return {@link List} объектов {@link ItemResponseDto} список вещей для указанного пользователя.
+     * @return {@link List} объектов {@link Item} список вещей для указанного пользователя.
      */
-    List<ItemResponseDto> findAllById(Long userId);
+    List<Item> findAllById(Long userId);
 
     /**
-     * Метод поиска вещей для указанного пользователя по указанному тексту.
+     * Метод поиска вещей указанному тексту.
      *
      * @param text   текс поиска.
-     * @param userId идентификатор пользователя владельца вещей.
-     * @return {@link List} объектов {@link ItemResponseDto} список вещей удовлетворяющих параметрам поиска.
+     * @return {@link List} объектов {@link Item} список вещей удовлетворяющих параметрам поиска.
      */
-    List<ItemResponseDto> search(String text, Long userId);
+    List<Item> search(String text);
 
     /**
      * Метод удаления всех вещей для указанного пользователя.
