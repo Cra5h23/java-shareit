@@ -1,10 +1,8 @@
 package ru.practicum.shareit.item.model;
 
 import lombok.*;
-import ru.practicum.shareit.Marker;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import ru.practicum.shareit.user.model.User;
 
 /**
  * Модель вещь.
@@ -21,26 +19,23 @@ public class Item {
      * Уникальный идентификационный номер вещи
      */
     @Builder.Default
-    private Long id = 0L;
+    private Long id = null;
     /**
      * Имя вещи.
      */
-    @NotBlank(groups = Marker.OnCreate.class, message = "Название вещи не может быть пустым")
+
     private String name;
     /**
      * Описание вещи.
      */
-    @NotBlank(groups = Marker.OnCreate.class, message = "Описание предмета не может быть пустым")
     private String description;
     /**
      * Доступность вещи для аренды.
      */
-    @NotNull(groups = Marker.OnCreate.class, message = "Возможность аренды должна быть указана")
     private Boolean available;
     /**
-     * Идентификационный номер пользователя владельца вещи.
+     * Пользователь владелец вещи.
      */
-    @NotNull(groups = Marker.OnCreate.class, message = "Пользователь владелец предмета должен быть указан")
     @Builder.Default
-    private Long userId = 0L;
+    private User owner = null;
 }
