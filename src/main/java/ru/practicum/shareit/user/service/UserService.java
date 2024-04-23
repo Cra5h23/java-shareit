@@ -14,14 +14,14 @@ import java.util.List;
 public interface UserService {
     /**
      * Метод добавления нового пользователя.
-     * @param user объект класса {@link User}.
+     * @param user объект класса {@link UserRequestDto}.
      * @return объект класса {@link UserResponseDto}.
      */
     UserResponseDto addNewUser(UserRequestDto user);
 
     /**
      * Метод для обновления данных пользователей по id.
-     * @param user объект класса {@link User}.
+     * @param user объект класса {@link UserRequestDto}.
      * @param userId идентификационный номер пользователя.
      * @return обновлённый объект класса {@link UserResponseDto}.
      */
