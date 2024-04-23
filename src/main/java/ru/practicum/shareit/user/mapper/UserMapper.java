@@ -33,9 +33,8 @@ public class UserMapper {
      * @param userRequestDto объект класса {@link UserRequestDto}
      * @return объект класса {@link User}.
      */
-    public static User toUser(UserRequestDto userRequestDto, Long id) {
+    public static User toUser(UserRequestDto userRequestDto) {
         return User.builder()
-                .id(id)
                 .name(userRequestDto.getName())
                 .email(userRequestDto.getEmail())
                 .build();
