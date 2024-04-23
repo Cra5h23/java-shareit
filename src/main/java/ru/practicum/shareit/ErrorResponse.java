@@ -18,6 +18,7 @@ import java.util.Objects;
 public class ErrorResponse {
     /**
      * Метод для создания форматированного ответа в случае ошибки.
+     *
      * @param webRequest
      * @param status
      * @param message

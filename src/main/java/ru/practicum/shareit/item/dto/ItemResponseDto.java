@@ -25,7 +25,7 @@ public class ItemResponseDto {
     /**
      * Название вещи.
      */
-    @Schema(description = "Название вещи",example = "exampleName")
+    @Schema(description = "Название вещи", example = "exampleName")
     private String name;
     /**
      * Описание вещи.
