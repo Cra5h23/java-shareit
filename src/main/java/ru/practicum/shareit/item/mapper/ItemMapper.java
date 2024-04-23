@@ -3,6 +3,7 @@ package ru.practicum.shareit.item.mapper;
 import ru.practicum.shareit.item.dto.ItemRequestDto;
 import ru.practicum.shareit.item.dto.ItemResponseDto;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.model.User;
 
 /**
  * Маппер для классов {@link Item}, {@link ItemRequestDto} и {@link ItemResponseDto}.
@@ -32,15 +33,15 @@ public class ItemMapper {
      * Метод для преобразования объекта класса {@link ItemResponseDto} в объект класса {@link Item}.
      *
      * @param itemDto объект класса {@link ItemResponseDto}
-     * @param userId идентификационный номер пользователя владельца предмета.
+     * @param user Пользователь владелец вещи.
      * @return объект класса {@link Item}.
      */
-    public static Item toItem(ItemRequestDto itemDto, Long userId) {
+    public static Item toItem(ItemRequestDto itemDto, User user) {
         return Item.builder()
                 .name(itemDto.getName())
                 .description(itemDto.getDescription())
                 .available(itemDto.getAvailable())
-                .userId(userId)
+                .owner(user)
                 .build();
     }
 }
