@@ -22,16 +22,14 @@ public class User {
     /**
      * Идентификационный номер пользователя.
      */
-    private Long id;
+    @Builder.Default
+    private Long id = null;
     /**
      * Имя пользователя.
      */
-    @NotBlank(groups = Marker.OnCreate.class, message = "Поле name не должно быть пустым")
     private String name;
     /**
      * Электронная почта пользователя.
      */
-    @Email(groups = {Marker.OnCreate.class, Marker.OnUpdate.class}, message = "Поле email должно иметь формат адреса электронной почты")
-    @NotBlank(groups = {Marker.OnCreate.class}, message = "Поле email не должно быть пустым")
     private String email;
 }
