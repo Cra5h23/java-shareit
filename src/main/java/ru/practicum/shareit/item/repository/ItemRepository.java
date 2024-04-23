@@ -15,7 +15,7 @@ public interface ItemRepository {
     /**
      * Метод добавления новой вещи в репозиторий и обновления существующей.
      *
-     * @param item   объект класса {@link Item}
+     * @param item объект класса {@link Item}
      * @return объект класса {@link Item} созданная вещь.
      */
     Item save(Item item);
@@ -46,7 +46,7 @@ public interface ItemRepository {
     /**
      * Метод поиска вещей указанному тексту.
      *
-     * @param text   текс поиска.
+     * @param text текс поиска.
      * @return {@link List} объектов {@link Item} список вещей удовлетворяющих параметрам поиска.
      */
     List<Item> search(String text);

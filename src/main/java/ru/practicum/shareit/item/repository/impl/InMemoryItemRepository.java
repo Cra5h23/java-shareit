@@ -90,7 +90,7 @@ public class InMemoryItemRepository implements ItemRepository {
     /**
      * Метод поиска вещей по указанному тексту.
      *
-     * @param text   текс поиска.
+     * @param text текс поиска.
      * @return {@link List} объектов {@link Item} список вещей удовлетворяющих параметрам поиска.
      */
     @Override

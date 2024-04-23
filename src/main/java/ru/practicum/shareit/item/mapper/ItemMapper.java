@@ -33,7 +33,7 @@ public class ItemMapper {
      * Метод для преобразования объекта класса {@link ItemResponseDto} в объект класса {@link Item}.
      *
      * @param itemDto объект класса {@link ItemResponseDto}
-     * @param user Пользователь владелец вещи.
+     * @param user    Пользователь владелец вещи.
      * @return объект класса {@link Item}.
      */
     public static Item toItem(ItemRequestDto itemDto, User user) {

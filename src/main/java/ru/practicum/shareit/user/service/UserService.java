@@ -2,7 +2,6 @@ package ru.practicum.shareit.user.service;
 
 import ru.practicum.shareit.user.dto.UserRequestDto;
 import ru.practicum.shareit.user.dto.UserResponseDto;
-import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
 
@@ -14,6 +13,7 @@ import java.util.List;
 public interface UserService {
     /**
      * Метод добавления нового пользователя.
+     *
      * @param user объект класса {@link UserRequestDto}.
      * @return объект класса {@link UserResponseDto}.
      */
@@ -21,7 +21,8 @@ public interface UserService {
 
     /**
      * Метод для обновления данных пользователей по id.
-     * @param user объект класса {@link UserRequestDto}.
+     *
+     * @param user   объект класса {@link UserRequestDto}.
      * @param userId идентификационный номер пользователя.
      * @return обновлённый объект класса {@link UserResponseDto}.
      */
@@ -29,6 +30,7 @@ public interface UserService {
 
     /**
      * Метод получения пользователя по его id.
+     *
      * @param userId идентификационный номер пользователя.
      * @return объект класса {@link UserResponseDto}.
      */
@@ -36,12 +38,14 @@ public interface UserService {
 
     /**
      * Метод удаления пользователя по его id.
+     *
      * @param userId идентификационный номер пользователя.
      */
     void deleteUser(long userId);
 
     /**
      * Метод получения списка всех пользователей.
+     *
      * @return {@link List} объектов {@link UserResponseDto}.
      */
     List<UserResponseDto> getAllUsers();
