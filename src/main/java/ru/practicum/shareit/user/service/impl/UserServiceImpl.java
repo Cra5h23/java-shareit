@@ -5,12 +5,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.user.dto.UserRequestDto;
 import ru.practicum.shareit.user.exeption.UserServiceException;
+import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.dto.UserResponseDto;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Реализация интерфейса {@link UserService}.
@@ -27,27 +30,45 @@ public class UserServiceImpl implements UserService {
     /**
      * Метод добавления нового пользователя.
      *
-     * @param user объект класса {@link User}.
+     * @param user объект класса {@link UserRequestDto}.
      * @return объект класса {@link UserResponseDto}.
      */
     @Override
     public UserResponseDto addNewUser(UserRequestDto user) {
+        User u = UserMapper.toUser(user);
+
         log.info("Создание нового пользователя {}", user);
-        return userRepository.save(user);
+        User save = userRepository.save(u);
+
+        return UserMapper.toUserResponseDto(save);
     }
 
     /**
      * Метод для обновления данных пользователей по id.
      *
-     * @param user   объект класса {@link User}.
+     * @param user   объект класса {@link UserRequestDto}.
      * @param userId идентификационный номер пользователя.
      * @return обновлённый объект класса {@link UserResponseDto}.
      */
     @Override
     public UserResponseDto updateUser(UserRequestDto user, long userId) {
-        log.info("Обновление пользователя с id {}, новые данные {}", userId, user);
-        checkUser(userId, String.format(checkUserErrorMessage,"обновить", userId));
-        return userRepository.update(user, userId);
+        User u = checkUser(userId, String.format(checkUserErrorMessage, "обновить", userId));
+
+        String email = user.getEmail();
+
+        if (email != null) {
+            u.setEmail(email);
+        }
+
+        String name = user.getName();
+
+        if (name != null) {
+            u.setName(name);
+        }
+
+        User save = userRepository.save(u);
+
+        return UserMapper.toUserResponseDto(save);
     }
 
     /**
@@ -59,7 +80,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto getUser(long userId) {
         log.info("Получение пользователя с id {}", userId);
-        return checkUser(userId, String.format(checkUserErrorMessage,"получить", userId));
+        User user = checkUser(userId, String.format(checkUserErrorMessage, "получить", userId));
+
+        return UserMapper.toUserResponseDto(user);
     }
 
     /**
@@ -70,7 +93,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(long userId) {
         log.info("Удаление пользователя с id {}", userId);
-                checkUser(userId, String.format(checkUserErrorMessage,"удалить", userId));
+        checkUser(userId, String.format(checkUserErrorMessage, "удалить", userId));
         userRepository.deleteById(userId);
     }
 
@@ -82,7 +105,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserResponseDto> getAllUsers() {
         log.info("Получение списка всех пользователей");
-        return userRepository.findAll();
+        Collection<User> all = userRepository.findAll();
+
+        return all.stream().map(UserMapper::toUserResponseDto).collect(Collectors.toList());
     }
 
     /**
@@ -92,7 +117,7 @@ public class UserServiceImpl implements UserService {
      * @param message сообщение ошибки если пользователь не существует.
      * @return объект класса {@link UserResponseDto}
      */
-    private UserResponseDto checkUser(long userId, String message) {
+    private User checkUser(long userId, String message) {
         return userRepository.findById(userId).orElseThrow(() -> new UserServiceException(message));
     }
 }
