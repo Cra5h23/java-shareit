@@ -70,7 +70,7 @@ public class InMemoryItemRepository implements ItemRepository {
     @Override
     public void deleteById(Long itemId) {
         itemMap.remove(itemId);
-        log.info("Удалёна вещь с id {}", itemId);
+        log.info("Удалена вещь с id {}", itemId);
     }
 
     /**
