@@ -40,13 +40,14 @@ public class Item {
     /**
      * Доступность вещи для аренды.
      */
-    @Column(name = "available", nullable = false)
+    @Column(name = "is_available", nullable = false)
     private Boolean available;
     /**
      * Пользователь владелец вещи.
      */
     @Builder.Default
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, targetEntity = User.class)
+    @JoinColumn(name = "user_id")
     @ToString.Exclude
     private User owner = null;
 
