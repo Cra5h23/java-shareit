@@ -28,12 +28,12 @@ public class User {
     /**
      * Имя пользователя.
      */
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
     /**
      * Электронная почта пользователя.
      */
-    @Column(name = "email", unique = true, length = 512)
+    @Column(name = "email", unique = true, length = 512, nullable = false)
     private String email;
 
     @Override
