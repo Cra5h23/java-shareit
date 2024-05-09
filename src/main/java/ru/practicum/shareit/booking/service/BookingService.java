@@ -24,4 +24,14 @@ public interface BookingService {
      * @return объект класса {@link BookingResponseDto}.
      */
     BookingResponseDto addNewBooking(BookingRequestDto booking, Long userId, TimeZone timeZone);
+
+    /**
+     * Метод подтверждения или отклонения бронирования, пользователем владельцем вещи.
+     *
+     * @param bookingId объект класса {@link Long} идентификационный номер бронирования.
+     * @param userId    объект класса {@link Long} идентификационный номер пользователя.
+     * @param approved  объект класса {@link Boolean} подтверждение бронирования.
+     * @return объект класса {@link BookingResponseDto}.
+     */
+    BookingResponseDto bookingConfirmation(Long bookingId, Long userId, Boolean approved);
 }
