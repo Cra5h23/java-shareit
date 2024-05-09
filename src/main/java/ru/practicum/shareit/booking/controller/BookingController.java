@@ -111,5 +111,16 @@ public class BookingController {
                 .status(HttpStatus.OK)
                 .body(bookingService.getBookingsByBooker(userId, state, timeZone));
     }
+
+    @GetMapping("/owner")
+    public ResponseEntity<?> getBookingByOwner(
+            @RequestParam(required = false, name = "state", defaultValue = "ALL") BookingState state,
+            @RequestHeader(value = xSharerUserId) Long userId,
+            TimeZone timeZone,
+        log.info("GET /bookings/owner?state={} , header \"{}\" = {}", state, xSharerUserId, userId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(bookingService.getBookingByOwner(userId, state, timeZone));
     }
 }
