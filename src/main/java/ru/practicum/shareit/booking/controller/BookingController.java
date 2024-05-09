@@ -69,5 +69,25 @@ public class BookingController {
                 .body(bookingService.bookingConfirmation(bookingId, userId, approved, timeZone));
     }
 
+    /**
+     * Метод для эндпоинта GET /bookings/{bookingId} получение бронирования для пользователя.
+     *
+     * @param bookingId {@link Long} идентификационный номер блокирования.
+     * @param userId    {@link Long} идентификационный номер пользователя букера вещи.
+     * @param timeZone  {@link TimeZone} часовой пояс пользователя.
+     * @return {@link ResponseEntity}
+     */
+    @GetMapping("/{bookingId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<?> getBooking(
+            @PathVariable Long bookingId,
+            @RequestHeader(value = xSharerUserId) Long userId,
+            TimeZone timeZone) {
+        log.info("GET /bookings/{} , header \"{}\" = {}", bookingId, xSharerUserId, userId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(bookingService.getBooking(bookingId, userId, timeZone));
+    }
     }
 }
