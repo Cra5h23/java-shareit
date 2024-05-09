@@ -52,4 +52,13 @@ public interface BookingService {
      * @return {@link List} объектов класса {@link BookingResponseDto}.
      */
     List<BookingResponseDto> getBookingsByBooker(Long userId, BookingState state);
+
+    /**
+     * Метод получения списка бронирований для владельца вещей.
+     *
+     * @param userId объект класса  {@link Long} идентификационный номер пользователя владельца вещей.
+     * @param state  объект класса {@link BookingState} состояние бронирования по которому запросить список.
+     * @return {@link List} объектов класса {@link BookingResponseDto}.
+     */
+    List<BookingResponseDto> getBookingByOwner(Long userId, BookingState state);
 }
