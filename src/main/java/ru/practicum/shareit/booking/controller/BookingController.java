@@ -122,7 +122,7 @@ public class BookingController {
      * @param timeZone {@link TimeZone} часовой пояс пользователя.
      * @param page
      * @param Size
-     * @return
+     * @return {@link ResponseEntity}
      */
     @GetMapping("/owner")
     public ResponseEntity<?> getBookingByOwner(
