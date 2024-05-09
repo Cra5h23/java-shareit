@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.Marker;
-import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingRequestDto;
 import ru.practicum.shareit.booking.model.BookingState;
 import ru.practicum.shareit.booking.service.BookingService;
@@ -112,11 +111,23 @@ public class BookingController {
                 .body(bookingService.getBookingsByBooker(userId, state, timeZone));
     }
 
+    /**
+     * Метод для эндпоинта GET /booking/owner получение бронирования для пользователя букера.
+     *
+     * @param state    {@link BookingState} параметр сортировки.
+     * @param userId   {@link Long} идентификационный номер пользователя владельца вещей.
+     * @param timeZone {@link TimeZone} часовой пояс пользователя.
+     * @param page
+     * @param Size
+     * @return
+     */
     @GetMapping("/owner")
     public ResponseEntity<?> getBookingByOwner(
             @RequestParam(required = false, name = "state", defaultValue = "ALL") BookingState state,
             @RequestHeader(value = xSharerUserId) Long userId,
             TimeZone timeZone,
+            @RequestParam(required = false, name = "page", defaultValue = "1") long page, //todo
+            @RequestParam(required = false, name = "size", defaultValue = "10") @Min(1) @Max(100) long Size) {
         log.info("GET /bookings/owner?state={} , header \"{}\" = {}", state, xSharerUserId, userId);
 
         return ResponseEntity
