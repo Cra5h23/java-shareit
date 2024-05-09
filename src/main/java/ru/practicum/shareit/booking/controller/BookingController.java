@@ -41,11 +41,33 @@ public class BookingController {
             @RequestHeader(value = xSharerUserId) Long userId,
             TimeZone timeZone) {
         log.info("POST /bookings, body = {}, header \"{}\" = {}", booking, xSharerUserId, userId);
-        return bookingService.addNewBooKing(booking, userId);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(bookingService.addNewBooking(booking, userId, timeZone));
     }
+
+    /**
+     * Метод для эндпоинта PATCH /bookings/{bookingId} подтверждение бронирования пользователем владельцем вещи.
+     *
+     * @param bookingId {@link Long} идентификационный номер блокирования.
+     * @param approved  {@link Boolean} подтверждение бронирования.
+     * @param userId    {@link Long} идентификационный номер пользователя владельца вещи.
+     * @param timeZone  {@link TimeZone} часовой пояс пользователя.
+     * @return {@link ResponseEntity}
+     */
+    @PatchMapping("/{bookingId}")
+    public ResponseEntity<?> bookingConfirmation(
+            @PathVariable Long bookingId,
+            @RequestParam @NotNull Boolean approved,
+            @RequestHeader(value = xSharerUserId) Long userId,
+            TimeZone timeZone) {
+        log.info("PATCH /bookings/{}?approved={} , header \"{}\" = {}", bookingId, approved, xSharerUserId, userId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(bookingService.bookingConfirmation(bookingId, userId, approved, timeZone));
+    }
+
     }
 }
