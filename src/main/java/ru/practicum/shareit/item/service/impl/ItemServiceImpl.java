@@ -11,6 +11,7 @@ import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.NotFoundBookingException;
 import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.exception.ItemServiceException;
+import ru.practicum.shareit.item.exception.NotFoundCommentException;
 import ru.practicum.shareit.item.mapper.CommentMapper;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Comment;
@@ -301,6 +302,21 @@ public class ItemServiceImpl implements ItemService {
         Comment save = commentRepository.save(c);
 
         return CommentMapper.toCommentResponseDto(save);
+    }
+
+    @Override
+    public void deleteComment(Long commentId, Long userId) {
+        checkUser(userId, String.format(
+                "Нельзя удалить коментарий для не существующего пользователя с id %d", userId));
+        Optional<Comment> byId = commentRepository.findById(commentId);
+        Comment comment = byId.orElseThrow(() -> new NotFoundCommentException(
+                String.format("Нельзя удалить не существующий комментарий с id %d", commentId)));
+        if (!comment.getAuthor().getId().equals(userId)) {
+            throw new NotFoundCommentException(String.format(
+                    "У пользователя с id %d нет комментария с id %d", userId, commentId));
+        }
+        log.info("Удалён комментарий с id {} для пользователя с id {}", commentId, userId);
+        commentRepository.deleteById(commentId);
     }
 
     /**
