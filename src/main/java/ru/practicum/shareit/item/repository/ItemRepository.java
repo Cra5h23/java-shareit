@@ -1,9 +1,11 @@
 package ru.practicum.shareit.item.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Интерфейс {@link ItemRepository}
@@ -11,51 +13,30 @@ import java.util.Optional;
  * @author Nikolay Radzivon
  * @Date 17.04.2024
  */
-public interface ItemRepository {
+public interface ItemRepository extends JpaRepository<Item, Long> {
     /**
-     * Метод добавления новой вещи в репозиторий и обновления существующей.
+     * Метод получения списка вещей для пользователя владельца вещей.
      *
-     * @param item объект класса {@link Item}
-     * @return объект класса {@link Item} созданная вещь.
+     * @param userId идентификационный номер пользователя.
+     * @return {@link List} {@link Item}.
      */
-    Item save(Item item);
+    @Query("select i " +
+            "from Item as i " +
+            "join fetch i.owner as ow " +
+            "where ow.id = :user_id")
+    List<Item> findItemsByUserId(@Param("user_id") Long userId);
 
     /**
-     * Метод получения вещи по id.
-     *
-     * @param itemId идентификационный номер вещи.
-     * @return объект класса {@link Item} запрошенный вещь.
-     */
-    Optional<Item> findById(Long itemId);
-
-    /**
-     * Метод удаления вещи по id.
-     *
-     * @param itemId идентификационный номер вещи.
-     */
-    void deleteById(Long itemId);
-
-    /**
-     * Метод получения списка всех вещей для указанного пользователя.
-     *
-     * @param userId идентификатор пользователя владельца вещей.
-     * @return {@link List} объектов {@link Item} список вещей для указанного пользователя.
-     */
-    List<Item> findAllById(Long userId);
-
-    /**
-     * Метод поиска вещей указанному тексту.
+     * Метод поиска вещи по её названию или описанию
      *
      * @param text текс поиска.
-     * @return {@link List} объектов {@link Item} список вещей удовлетворяющих параметрам поиска.
+     * @return {@link List} {@link Item}.
      */
-    List<Item> search(String text);
-
-    /**
-     * Метод удаления всех вещей для указанного пользователя.
-     *
-     * @param userId идентификатор пользователя владельца вещей.
-     */
-    void deleteAll(Long userId);
+    @Query("select i " +
+            "from Item as i " +
+            "where (upper (i.name) like upper(concat('%', :text, '%')) " +
+            "or upper(i.description) like upper(concat('%', :text, '%')) " +
+            "and i.available = true ")
+    List<Item> searchItem(@Param("text") String text);
 }
 
