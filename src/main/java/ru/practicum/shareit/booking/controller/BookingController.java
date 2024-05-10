@@ -12,8 +12,6 @@ import ru.practicum.shareit.booking.model.BookingState;
 import ru.practicum.shareit.booking.service.BookingService;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.TimeZone;
 
@@ -120,17 +118,13 @@ public class BookingController {
      * @param state    {@link BookingState} параметр сортировки.
      * @param userId   {@link Long} идентификационный номер пользователя владельца вещей.
      * @param timeZone {@link TimeZone} часовой пояс пользователя.
-     * @param page
-     * @param Size
      * @return {@link ResponseEntity}
      */
     @GetMapping("/owner")
     public ResponseEntity<?> getBookingByOwner(
             @RequestParam(required = false, name = "state", defaultValue = "ALL") BookingState state,
             @RequestHeader(value = xSharerUserId) Long userId,
-            TimeZone timeZone,
-            @RequestParam(required = false, name = "page", defaultValue = "1") long page, //todo
-            @RequestParam(required = false, name = "size", defaultValue = "10") @Min(1) @Max(100) long size) {
+            TimeZone timeZone) {
         log.info("GET /bookings/owner?state={} , header \"{}\" = {}", state, xSharerUserId, userId);
 
         return ResponseEntity
