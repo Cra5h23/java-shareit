@@ -15,7 +15,7 @@ description VARCHAR(512) NOT NULL,
 is_available BOOLEAN NOT NULL,
 user_id BIGINT,
 CONSTRAINT pk_item PRIMARY KEY (id),
-CONSTRAINT fk_items_to_users FOREIGN KEY(user_id) REFERENCES users (id)
+CONSTRAINT fk_items_to_users FOREIGN KEY(user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
 -- Бронирование
@@ -27,8 +27,8 @@ item_id BIGINT,
 user_id BIGINT,
 status VARCHAR,
 CONSTRAINT pk_booking PRIMARY KEY (id),
-CONSTRAINT fk_bookings_to_items FOREIGN KEY (item_id) REFERENCES items (id),
-CONSTRAINT fk_bookings_to_users FOREIGN KEY (user_id) REFERENCES users (id)
+CONSTRAINT fk_bookings_to_items FOREIGN KEY (item_id) REFERENCES items (id) ON DELETE CASCADE,
+CONSTRAINT fk_bookings_to_users FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 );
 
 -- Комментарии
@@ -39,6 +39,6 @@ item_id BIGINT,
 user_id BIGINT,
 created TIMESTAMP WITHOUT TIME ZONE NOT NULL,
 CONSTRAINT pk_comment PRIMARY KEY (id),
-CONSTRAINT fk_comments_to_items FOREIGN KEY (item_id) REFERENCES items (id),
-CONSTRAINT fk_comments_to_users FOREIGN KEY (user_id) REFERENCES users (id)
+CONSTRAINT fk_comments_to_items FOREIGN KEY (item_id) REFERENCES items (id) ON DELETE CASCADE,
+CONSTRAINT fk_comments_to_users FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE
 )
