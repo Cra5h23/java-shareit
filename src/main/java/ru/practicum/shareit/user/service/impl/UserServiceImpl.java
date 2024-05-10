@@ -2,15 +2,19 @@ package ru.practicum.shareit.user.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.user.dto.UserRequestDto;
+import ru.practicum.shareit.user.dto.UserResponseDto;
 import ru.practicum.shareit.user.exeption.UserRepositoryException;
 import ru.practicum.shareit.user.exeption.UserServiceException;
 import ru.practicum.shareit.user.mapper.UserMapper;
-import ru.practicum.shareit.user.repository.UserRepository;
-import ru.practicum.shareit.user.dto.UserResponseDto;
 import ru.practicum.shareit.user.model.User;
+import ru.practicum.shareit.user.model.UserSort;
+import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.service.UserService;
 
 import java.util.Collection;
@@ -126,6 +130,42 @@ public class UserServiceImpl implements UserService {
         Collection<User> all = userRepository.findAll();
 
         return all.stream().map(UserMapper::toUserResponseDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<?> getAllUsers(int page, int size, UserSort sort) {
+        log.info("Получение {} страницы списка всех пользователей размером {} записей и сортировкой {}", page, size, sort.name());
+        Sort.TypedSort<User> s = Sort.sort(User.class);
+        Sort a = s;
+        switch (sort) {
+            case NONE:
+                break;
+            case ID_ASC:
+                a = s.by(User::getId).ascending();
+                break;
+            case ID_DESC:
+                a = s.by(User::getId).descending();
+                break;
+            case NAME_DESC:
+                a = s.by(User::getName).descending();
+                break;
+            case NAME_ASC:
+                a = s.by(User::getName).ascending();
+                break;
+            case EMAIL_DESC:
+                a = s.by(User::getEmail).descending();
+                break;
+            case EMAIL_ASC:
+                a = s.by(User::getEmail).ascending();
+                break;
+        }
+
+        Pageable pageable = PageRequest.of(page - 1, size, a);
+
+        return userRepository.findAll(pageable)
+                .map(UserMapper::toUserResponseDto)
+                .stream()
+                .collect(Collectors.toList());
     }
 
     /**
