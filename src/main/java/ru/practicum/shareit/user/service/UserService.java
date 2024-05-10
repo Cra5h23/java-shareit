@@ -51,5 +51,5 @@ public interface UserService {
      */
     List<UserResponseDto> getAllUsers();
 
-    List<?> getAllUsers(int page, int size, UserSort sort);
+    List<UserResponseDto> getAllUsers(int page, int size, UserSort sort);
 }

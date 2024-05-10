@@ -133,7 +133,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<?> getAllUsers(int page, int size, UserSort sort) {
+    public List<UserResponseDto> getAllUsers(int page, int size, UserSort sort) {
         log.info("Получение {} страницы списка всех пользователей размером {} записей и сортировкой {}", page, size, sort.name());
         Sort.TypedSort<User> s = Sort.sort(User.class);
         Sort a = s;
