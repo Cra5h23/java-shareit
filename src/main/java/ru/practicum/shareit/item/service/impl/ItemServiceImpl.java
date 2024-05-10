@@ -184,7 +184,7 @@ public class ItemServiceImpl implements ItemService {
         List<Booking> bookingsByItems = bookingRepository.getBookingsByItems(collect);
         ZonedDateTime now = ZonedDateTime.now();
         List<OwnerItemResponseDto> dtoList = new ArrayList<>();
-        log.info("{}", bookingsByItems);
+
         for (Item item : allByUserId) {
             BookingShort lastBooking = null;
             BookingShort nextBooking = null;
@@ -271,7 +271,6 @@ public class ItemServiceImpl implements ItemService {
                 "Нельзя оставить комментарий от не существующего пользователя с id %d", userId));
         ZonedDateTime zonedDateTime = LocalDateTime.now().atZone(timeZone.toZoneId());
         List<Booking> byBookerId = bookingRepository.findByItem_IdAndBooker_Id(itemId, userId, zonedDateTime);
-        log.info("{}", byBookerId);
 
         if (byBookerId.isEmpty()) {
             throw new NotFoundBookingException(String.format(
@@ -281,6 +280,7 @@ public class ItemServiceImpl implements ItemService {
         Comment comment = CommentMapper.toComment(text, item, user, timeZone);
 
         Comment save = commentRepository.save(comment);
+        log.info("Добавлен новый комментарий для предмета с id {} от пользователя с id {} ,{}", itemId, userId, save);
         return CommentMapper.toCommentResponseDto(save);
     }
 
