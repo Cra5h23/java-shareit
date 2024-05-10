@@ -83,4 +83,7 @@ public interface ItemService {
      * @return {@link CommentResponseDto}
      */
     CommentResponseDto addComment(Long itemId, Long userId, TimeZone timeZone, CommentRequestDto text);
+
+    CommentResponseDto updateComment(CommentRequestDto comment, Long userId, Long commentId);
+
 }
