@@ -283,6 +283,26 @@ public class ItemServiceImpl implements ItemService {
         return CommentMapper.toCommentResponseDto(save);
     }
 
+    @Override
+    public CommentResponseDto updateComment(CommentRequestDto comment, Long userId, Long commentId) {
+        log.info("Обновление комментария с id {} для пользователя с id {}", commentId, userId);
+        checkUser(userId, String.format("Нельзя обновить комментарий для не существующего пользователя с id %d", userId));
+        Optional<Comment> commentOptional = commentRepository.findById(commentId);
+
+        Comment c = commentOptional.orElseThrow(
+                () -> new NotFoundCommentException(String.format("Нет комментария с id %d", commentId)));
+
+        if (!c.getAuthor().getId().equals(userId)) {
+            throw new NotFoundCommentException(String.format(
+                    "У пользователя с id %d нет комментария с id %d", userId, commentId));
+        }
+        log.info("Новые данные {} , старые данные {}", comment, c);
+        c.setText(comment.getText());
+        Comment save = commentRepository.save(c);
+
+        return CommentMapper.toCommentResponseDto(save);
+    }
+
     /**
      * Метод проверки, что пользователь существует.
      *
