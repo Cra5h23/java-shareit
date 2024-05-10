@@ -86,4 +86,5 @@ public interface ItemService {
 
     CommentResponseDto updateComment(CommentRequestDto comment, Long userId, Long commentId);
 
+    void deleteComment(Long commentId, Long userId);
 }
