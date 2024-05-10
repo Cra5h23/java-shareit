@@ -1,10 +1,10 @@
 package ru.practicum.shareit.item.service;
 
-import ru.practicum.shareit.item.dto.ItemRequestDto;
-import ru.practicum.shareit.item.dto.ItemResponseDto;
+import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Интерфейс {@link ItemService}
@@ -39,7 +39,7 @@ public interface ItemService {
      * @param userId идентификационный номер пользователя владельца вещи.
      * @return объект класса {@link ItemResponseDto}
      */
-    ItemResponseDto getItemByItemId(Long itemId, Long userId);
+    OwnerItemResponseDto getItemByItemId(Long itemId, Long userId);
 
     /**
      * Метод удаления вещи по его id для указанного пользователя.
@@ -55,7 +55,7 @@ public interface ItemService {
      * @param userId идентификационный номер пользователя владельца вещей.
      * @return {@link List} объектов {@link ItemResponseDto}.
      */
-    List<ItemResponseDto> getAllItemByUser(Long userId);
+    List<OwnerItemResponseDto> getAllItemByUser(Long userId);
 
     /**
      * Метод поиска вещей по тексту.
@@ -72,4 +72,15 @@ public interface ItemService {
      * @param userId идентификационный номер пользователя.
      */
     void deleteAllItemByUser(Long userId);
+
+    /**
+     * Метод добавления комментария вещи.
+     *
+     * @param itemId   идентификационный номер вещи.
+     * @param userId   идентификационный номер пользователя.
+     * @param timeZone часовой пояс пользователя.
+     * @param text     текст комментария.
+     * @return {@link CommentResponseDto}
+     */
+    CommentResponseDto addComment(Long itemId, Long userId, TimeZone timeZone, CommentRequestDto text);
 }
