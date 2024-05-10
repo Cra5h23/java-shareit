@@ -1,4 +1,4 @@
-package ru.practicum.shareit;
+package ru.practicum.shareit.configuration;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Contact;
