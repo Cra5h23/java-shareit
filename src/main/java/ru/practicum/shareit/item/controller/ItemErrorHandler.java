@@ -10,6 +10,7 @@ import org.springframework.web.context.request.WebRequest;
 import ru.practicum.shareit.exception.NotFoundBookingException;
 import ru.practicum.shareit.item.exception.ItemRepositoryException;
 import ru.practicum.shareit.item.exception.ItemServiceException;
+import ru.practicum.shareit.item.exception.NotFoundCommentException;
 
 import javax.validation.ConstraintViolationException;
 
@@ -55,5 +56,11 @@ public class ItemErrorHandler {
     public ResponseEntity<?> handlerBookingNotFoundException(final NotFoundBookingException e, WebRequest webRequest) {
         log.warn("Ошибка работы с бронированиями", e);
         return makeErrorResponse(webRequest, HttpStatus.BAD_REQUEST, "Ошибка работы с бронированиями: ");
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<?> handlerNotFoundCommentException(final NotFoundCommentException e, WebRequest webRequest) {
+        log.warn("Ошибка работы с комментариями", e);
+        return makeErrorResponse(webRequest, HttpStatus.BAD_REQUEST, "Ошибка работы с комментариями: ");
     }
 }
