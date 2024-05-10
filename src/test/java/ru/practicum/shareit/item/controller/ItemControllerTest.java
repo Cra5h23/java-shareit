@@ -11,7 +11,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ru.practicum.shareit.booking.dto.BookingShort;
 import ru.practicum.shareit.item.dto.ItemResponseDto;
+import ru.practicum.shareit.item.dto.OwnerItemResponseDto;
 import ru.practicum.shareit.item.exception.ItemRepositoryException;
 import ru.practicum.shareit.item.exception.ItemServiceException;
 import ru.practicum.shareit.item.service.ItemService;
@@ -50,8 +52,7 @@ class ItemControllerTest {
                 status().isBadRequest(),
                 jsonPath("$.timestamp").exists(),
                 jsonPath("$.status").value(400),
-                jsonPath("$.error").value("Не указан пользователь владелец предмета"),
-                jsonPath("$.message").value("Required request header 'X-Sharer-User-Id' for method parameter type Long is not present"),
+                jsonPath("$.error").value("Не указан пользователь владелец предмета: Required request header 'X-Sharer-User-Id' for method parameter type Long is not present"),
                 jsonPath("$.path").value("/items")
         );
     }
@@ -94,8 +95,7 @@ class ItemControllerTest {
                 status().isBadRequest(),
                 jsonPath("$.timestamp").exists(),
                 jsonPath("$.status").value(400),
-                jsonPath("$.error").value("Ошибка ввода данных предмета"),
-                jsonPath("$.message").value("Название предмета не может быть пустым"),
+                jsonPath("$.error").value("Ошибка ввода данных предмета: Название предмета не может быть пустым"),
                 jsonPath("$.path").value("/items")
         );
     }
@@ -115,8 +115,7 @@ class ItemControllerTest {
                 status().isBadRequest(),
                 jsonPath("$.timestamp").exists(),
                 jsonPath("$.status").value(400),
-                jsonPath("$.error").value("Ошибка ввода данных предмета"),
-                jsonPath("$.message").value("Возможность аренды должна быть указана"),
+                jsonPath("$.error").value("Ошибка ввода данных предмета: Возможность аренды должна быть указана"),
                 jsonPath("$.path").value("/items")
         );
     }
@@ -135,8 +134,7 @@ class ItemControllerTest {
                 status().isBadRequest(),
                 jsonPath("$.timestamp").exists(),
                 jsonPath("$.status").value(400),
-                jsonPath("$.error").value("Ошибка ввода данных предмета"),
-                jsonPath("$.message").value("Описание предмета не может быть пустым"),
+                jsonPath("$.error").value("Ошибка ввода данных предмета: Описание предмета не может быть пустым"),
                 jsonPath("$.path").value("/items")
         );
     }
@@ -159,8 +157,7 @@ class ItemControllerTest {
                 status().isNotFound(),
                 jsonPath("$.timestamp").exists(),
                 jsonPath("$.status").value(404),
-                jsonPath("$.error").value("Ошибка работы с предметами"),
-                jsonPath("$.message").value("Нельзя создать новую вещь для не существующего пользователя с id 10"),
+                jsonPath("$.error").value("Ошибка работы с предметами: Нельзя создать новую вещь для не существующего пользователя с id 10"),
                 jsonPath("$.path").value("/items")
         );
         Mockito.verify(itemService, Mockito.times(1)).addNewItem(Mockito.any(), Mockito.any());
@@ -204,8 +201,7 @@ class ItemControllerTest {
                 status().isBadRequest(),
                 jsonPath("$.timestamp").exists(),
                 jsonPath("$.status").value(400),
-                jsonPath("$.error").value("Не указан пользователь владелец предмета"),
-                jsonPath("$.message").value("Required request header 'X-Sharer-User-Id' for method parameter type Long is not present"),
+                jsonPath("$.error").value("Не указан пользователь владелец предмета: Required request header 'X-Sharer-User-Id' for method parameter type Long is not present"),
                 jsonPath("$.path").value("/items/1")
         );
     }
@@ -229,8 +225,7 @@ class ItemControllerTest {
                 status().isNotFound(),
                 jsonPath("$.timestamp").exists(),
                 jsonPath("$.status").value(404),
-                jsonPath("$.error").value("Ошибка работы с предметами"),
-                jsonPath("$.message").value("У пользователя с id 1 нет вещи для редактирования с id 10"),
+                jsonPath("$.error").value("Ошибка работы с предметами: У пользователя с id 1 нет вещи для редактирования с id 10"),
                 jsonPath("$.path").value("/items/10")
         );
         Mockito.verify(itemService, Mockito.times(1)).updateItem(Mockito.any(), Mockito.any(), Mockito.any());
@@ -254,8 +249,7 @@ class ItemControllerTest {
                 status().isNotFound(),
                 jsonPath("$.timestamp").exists(),
                 jsonPath("$.status").value(404),
-                jsonPath("$.error").value("Ошибка работы с предметами"),
-                jsonPath("$.message").value("Нельзя обновить вещь для не существующего пользователя с id 10"),
+                jsonPath("$.error").value("Ошибка работы с предметами: Нельзя обновить вещь для не существующего пользователя с id 10"),
                 jsonPath("$.path").value("/items/1")
         );
         Mockito.verify(itemService, Mockito.times(1)).updateItem(Mockito.any(), Mockito.any(), Mockito.any());
@@ -268,7 +262,22 @@ class ItemControllerTest {
                 .header(xSharerUserId, 1);
 
         Mockito.when(itemService.getItemByItemId(Mockito.any(), Mockito.any()))
-                .thenReturn(new ItemResponseDto(1L, "testName1", "testDescription1", true));
+                .thenReturn(OwnerItemResponseDto.builder()
+                        .id(1L)
+                        .name("testName1")
+                        .description("testDescription1")
+                        .available(true)
+                        .lastBooking(BookingShort.builder()
+                                .id(1L)
+                                .bookerId(1L)
+                                .build())
+                        .nextBooking(BookingShort.builder()
+                                .id(3L)
+                                .bookerId(4L)
+                                .build())
+                        .comments(List.of())
+                        .build()
+                );
 
         this.mockMvc.perform(request).andExpectAll(
                 status().isOk(),
@@ -293,8 +302,7 @@ class ItemControllerTest {
                 status().isNotFound(),
                 jsonPath("$.timestamp").exists(),
                 jsonPath("$.status").value(404),
-                jsonPath("$.error").value("Ошибка работы с предметами"),
-                jsonPath("$.message").value("Вещь с id 1 не существует"),
+                jsonPath("$.error").value("Ошибка работы с предметами: Вещь с id 1 не существует"),
                 jsonPath("$.path").value("/items/1")
         );
         Mockito.verify(itemService, Mockito.times(1)).getItemByItemId(Mockito.any(), Mockito.any());
@@ -326,8 +334,7 @@ class ItemControllerTest {
                 status().isNotFound(),
                 jsonPath("$.timestamp").exists(),
                 jsonPath("$.status").value(404),
-                jsonPath("$.error").value("Ошибка работы с предметами"),
-                jsonPath("$.message").value("Нельзя удалить вещь для не существующего пользователя с id 1"),
+                jsonPath("$.error").value("Ошибка работы с предметами: Нельзя удалить вещь для не существующего пользователя с id 1"),
                 jsonPath("$.path").value("/items/1")
         );
         Mockito.verify(itemService, Mockito.times(1)).deleteItemByItemId(Mockito.any(), Mockito.any());
@@ -347,8 +354,7 @@ class ItemControllerTest {
                 status().isNotFound(),
                 jsonPath("$.timestamp").exists(),
                 jsonPath("$.status").value(404),
-                jsonPath("$.error").value("Ошибка работы с предметами"),
-                jsonPath("$.message").value("Вещь с id 1 не существует у пользователя с id 1"),
+                jsonPath("$.error").value("Ошибка работы с предметами: Вещь с id 1 не существует у пользователя с id 1"),
                 jsonPath("$.path").value("/items/1")
         );
         Mockito.verify(itemService, Mockito.times(1)).deleteItemByItemId(Mockito.any(), Mockito.any());
@@ -364,8 +370,7 @@ class ItemControllerTest {
                 status().isBadRequest(),
                 jsonPath("$.timestamp").exists(),
                 jsonPath("$.status").value(400),
-                jsonPath("$.error").value("Не указан пользователь владелец предмета"),
-                jsonPath("$.message").value("Required request header 'X-Sharer-User-Id' for method parameter type Long is not present"),
+                jsonPath("$.error").value("Не указан пользователь владелец предмета: Required request header 'X-Sharer-User-Id' for method parameter type Long is not present"),
                 jsonPath("$.path").value("/items/1")
         );
     }
@@ -395,8 +400,7 @@ class ItemControllerTest {
                 status().isNotFound(),
                 jsonPath("$.timestamp").exists(),
                 jsonPath("$.status").value(404),
-                jsonPath("$.error").value("Ошибка работы с предметами"),
-                jsonPath("$.message").value("Нельзя удалить вещи для не существующего пользователя с id 1"),
+                jsonPath("$.error").value("Ошибка работы с предметами: Нельзя удалить вещи для не существующего пользователя с id 1"),
                 jsonPath("$.path").value("/items")
         );
         Mockito.verify(itemService, Mockito.times(1)).deleteAllItemByUser(Mockito.any());
@@ -412,8 +416,7 @@ class ItemControllerTest {
                 status().isBadRequest(),
                 jsonPath("$.timestamp").exists(),
                 jsonPath("$.status").value(400),
-                jsonPath("$.error").value("Не указан пользователь владелец предмета"),
-                jsonPath("$.message").value("Required request header 'X-Sharer-User-Id' for method parameter type Long is not present"),
+                jsonPath("$.error").value("Не указан пользователь владелец предмета: Required request header 'X-Sharer-User-Id' for method parameter type Long is not present"),
                 jsonPath("$.path").value("/items")
         );
     }
@@ -427,14 +430,38 @@ class ItemControllerTest {
 
         Mockito.when(itemService.getAllItemByUser(Mockito.any()))
                 .thenReturn(List.of(
-                        new ItemResponseDto(1L, "testName1", "testDescription1", true),
-                        new ItemResponseDto(2L, "testName2", "testDescription2", false)
+                        OwnerItemResponseDto.builder()
+                                .id(1L)
+                                .name("testName1")
+                                .description("testDescription1")
+                                .available(true)
+                                .lastBooking(BookingShort.builder()
+                                        .id(1L)
+                                        .bookerId(1L)
+                                        .build())
+                                .nextBooking(BookingShort.builder()
+                                        .id(3L)
+                                        .bookerId(4L)
+                                        .build())
+                                .comments(List.of())
+                                .build(),
+                        OwnerItemResponseDto.builder()
+                                .id(2L)
+                                .name("testName2")
+                                .description("testDescription2")
+                                .available(true)
+                                .lastBooking(BookingShort.builder()
+                                        .id(null)
+                                        .bookerId(null)
+                                        .build())
+                                .nextBooking(null)
+                                .comments(List.of())
+                                .build()
                 ));
 
         mockMvc.perform(request).andExpectAll(
                 status().isOk(),
-                content().json("[{\"id\":1,\"name\":\"testName1\",\"description\":\"testDescription1\",\"available\":true}," +
-                        "{\"id\":2,\"name\":\"testName2\",\"description\":\"testDescription2\",\"available\":false}]")
+                content().json("[{\"id\":1,\"name\":\"testName1\",\"description\":\"testDescription1\",\"available\":true,\"lastBooking\":{\"id\":1,\"bookerId\":1},\"nextBooking\":{\"id\":3,\"bookerId\":4},\"comments\":[]},{\"id\":2,\"name\":\"testName2\",\"description\":\"testDescription2\",\"available\":true,\"lastBooking\":{\"id\":null,\"bookerId\":null},\"nextBooking\":null,\"comments\":[]}]")
         );
         Mockito.verify(itemService, Mockito.times(1)).getAllItemByUser(Mockito.any());
     }
@@ -453,8 +480,7 @@ class ItemControllerTest {
                 status().isNotFound(),
                 jsonPath("$.timestamp").exists(),
                 jsonPath("$.status").value(404),
-                jsonPath("$.error").value("Ошибка работы с предметами"),
-                jsonPath("$.message").value("Нельзя получить список вещей для не существующего пользователя с id 1"),
+                jsonPath("$.error").value("Ошибка работы с предметами: Нельзя получить список вещей для не существующего пользователя с id 1"),
                 jsonPath("$.path").value("/items")
         );
         Mockito.verify(itemService, Mockito.times(1)).getAllItemByUser(Mockito.any());
@@ -470,8 +496,7 @@ class ItemControllerTest {
                 status().isBadRequest(),
                 jsonPath("$.timestamp").exists(),
                 jsonPath("$.status").value(400),
-                jsonPath("$.error").value("Не указан пользователь владелец предмета"),
-                jsonPath("$.message").value("Required request header 'X-Sharer-User-Id' for method parameter type Long is not present"),
+                jsonPath("$.error").value("Не указан пользователь владелец предмета: Required request header 'X-Sharer-User-Id' for method parameter type Long is not present"),
                 jsonPath("$.path").value("/items")
         );
     }
@@ -524,8 +549,7 @@ class ItemControllerTest {
                 status().isBadRequest(),
                 jsonPath("$.timestamp").exists(),
                 jsonPath("$.status").value(400),
-                jsonPath("$.error").value("Не указан пользователь владелец предмета"),
-                jsonPath("$.message").value("Required request header 'X-Sharer-User-Id' for method parameter type Long is not present"),
+                jsonPath("$.error").value("Не указан пользователь владелец предмета: Required request header 'X-Sharer-User-Id' for method parameter type Long is not present"),
                 jsonPath("$.path").value("/items")
         );
     }
