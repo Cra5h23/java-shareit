@@ -1,8 +1,6 @@
 package ru.practicum.shareit.user.converter;
 
 import org.springframework.core.convert.converter.Converter;
-import ru.practicum.shareit.booking.model.BookingState;
-import ru.practicum.shareit.exception.BookingStateException;
 import ru.practicum.shareit.user.exeption.UserSortException;
 import ru.practicum.shareit.user.model.UserSort;
 
