@@ -68,8 +68,7 @@ class UserControllerTest {
                 status().isBadRequest(),
                 jsonPath("$.timestamp").exists(),
                 jsonPath("$.status").value(400),
-                jsonPath("$.error").value("Ошибка ввода данных пользователя"),
-                jsonPath("$.message").value("Поле name не должно быть пустым"),
+                jsonPath("$.error").value("Ошибка ввода данных пользователя: Поле name не должно быть пустым"),
                 jsonPath("$.path").value("/users")
         );
     }
@@ -86,8 +85,7 @@ class UserControllerTest {
                 status().isBadRequest(),
                 jsonPath("$.timestamp").exists(),
                 jsonPath("$.status").value(400),
-                jsonPath("$.error").value("Ошибка ввода данных пользователя"),
-                jsonPath("$.message").value("Поле email не должно быть пустым"),
+                jsonPath("$.error").value("Ошибка ввода данных пользователя: Поле email не должно быть пустым"),
                 jsonPath("$.path").value("/users")
         );
     }
@@ -105,8 +103,7 @@ class UserControllerTest {
                 status().isBadRequest(),
                 jsonPath("$.timestamp").exists(),
                 jsonPath("$.status").value(400),
-                jsonPath("$.error").value("Ошибка ввода данных пользователя"),
-                jsonPath("$.message").value("Поле email должно иметь формат адреса электронной почты"),
+                jsonPath("$.error").value("Ошибка ввода данных пользователя: Поле email должно иметь формат адреса электронной почты"),
                 jsonPath("$.path").value("/users")
         );
     }
@@ -127,8 +124,7 @@ class UserControllerTest {
                 status().isConflict(),
                 jsonPath("$.timestamp").exists(),
                 jsonPath("$.status").value(409),
-                jsonPath("$.error").value("Ошибка работы с пользователями"),
-                jsonPath("$.message").value("Нельзя добавить нового пользователя, Пользователь с email testEmail1@test.com уже существует"),
+                jsonPath("$.error").value("Ошибка работы с пользователями: Нельзя добавить нового пользователя, Пользователь с email testEmail1@test.com уже существует"),
                 jsonPath("$.path").value("/users")
         );
         Mockito.verify(userService, Mockito.times(1)).addNewUser(Mockito.any(UserRequestDto.class));
@@ -171,8 +167,7 @@ class UserControllerTest {
                 status().isNotFound(),
                 jsonPath("$.timestamp").exists(),
                 jsonPath("$.status").value(404),
-                jsonPath("$.error").value("Ошибка работы с пользователями"),
-                jsonPath("$.message").value("Попытка обновить пользователя с не существующим id 1"),
+                jsonPath("$.error").value("Ошибка работы с пользователями: Попытка обновить пользователя с не существующим id 1"),
                 jsonPath("$.path").value("/users/1")
         );
         Mockito.verify(userService, Mockito.times(1)).updateUser(Mockito.any(UserRequestDto.class), Mockito.anyLong());
@@ -194,8 +189,7 @@ class UserControllerTest {
                 status().isConflict(),
                 jsonPath("$.timestamp").exists(),
                 jsonPath("$.status").value(409),
-                jsonPath("$.error").value("Ошибка работы с пользователями"),
-                jsonPath("$.message").value("Нельзя обновить пользователя с id 1, пользователь с email testEmail1@test.com уже существует"),
+                jsonPath("$.error").value("Ошибка работы с пользователями: Нельзя обновить пользователя с id 1, пользователь с email testEmail1@test.com уже существует"),
                 jsonPath("$.path").value("/users/1")
         );
         Mockito.verify(userService, Mockito.times(1)).updateUser(Mockito.any(UserRequestDto.class), Mockito.anyLong());
@@ -232,8 +226,7 @@ class UserControllerTest {
                 status().isNotFound(),
                 jsonPath("$.timestamp").exists(),
                 jsonPath("$.status").value(404),
-                jsonPath("$.error").value("Ошибка работы с пользователями"),
-                jsonPath("$.message").value("Попытка получить пользователя с не существующим id 1"),
+                jsonPath("$.error").value("Ошибка работы с пользователями: Попытка получить пользователя с не существующим id 1"),
                 jsonPath("$.path").value("/users/1")
         );
         Mockito.verify(userService, Mockito.times(1)).getUser(Mockito.anyLong());
@@ -266,8 +259,7 @@ class UserControllerTest {
                 status().isNotFound(),
                 jsonPath("$.timestamp").exists(),
                 jsonPath("$.status").value(404),
-                jsonPath("$.error").value("Ошибка работы с пользователями"),
-                jsonPath("$.message").value("Попытка удалить пользователя с не существующим id 1"),
+                jsonPath("$.error").value("Ошибка работы с пользователями: Попытка удалить пользователя с не существующим id 1"),
                 jsonPath("$.path").value("/users/1")
         );
         Mockito.verify(userService, Mockito.times(1)).deleteUser(Mockito.anyLong());
