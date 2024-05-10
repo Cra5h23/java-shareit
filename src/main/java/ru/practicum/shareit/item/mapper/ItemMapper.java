@@ -1,13 +1,17 @@
 package ru.practicum.shareit.item.mapper;
 
+import ru.practicum.shareit.booking.dto.BookingShort;
+import ru.practicum.shareit.item.dto.CommentResponseDto;
 import ru.practicum.shareit.item.dto.ItemRequestDto;
 import ru.practicum.shareit.item.dto.ItemResponseDto;
+import ru.practicum.shareit.item.dto.OwnerItemResponseDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
+import java.util.List;
+
 /**
  * Маппер для классов {@link Item}, {@link ItemRequestDto} и {@link ItemResponseDto}.
- * <p>
  * Предназначен для преобразования объекта класса {@link Item} в объект класса {@link ItemResponseDto}
  * и объект класса {@link ItemRequestDto} в объект класса {@link Item}.
  *
@@ -44,4 +48,20 @@ public class ItemMapper {
                 .owner(user)
                 .build();
     }
+
+    public static OwnerItemResponseDto toOwnerItemResponseDto(Item item,
+                                                              BookingShort lastBooking,
+                                                              BookingShort nextBooking,
+                                                              List<CommentResponseDto> comments) {
+        return OwnerItemResponseDto.builder()
+                .lastBooking(lastBooking)
+                .nextBooking(nextBooking)
+                .comments(comments)
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .build();
+    }
+
 }
