@@ -150,4 +150,14 @@ public class ItemController {
                 .status(HttpStatus.OK)
                 .body(itemService.updateComment(comment, userId, commentId));
     }
+
+    @DeleteMapping("comment/{commentId}")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteComment(
+            @PathVariable Long commentId,
+            @RequestHeader(value = xSharerUserId) Long userId) {
+        log.info("DELETE /items/comment/{} , header \"{}\" = {}", commentId,xSharerUserId,userId);
+
+        itemService.deleteComment(commentId, userId);
+    }
 }
