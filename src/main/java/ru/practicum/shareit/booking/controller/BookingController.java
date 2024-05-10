@@ -130,7 +130,7 @@ public class BookingController {
             @RequestHeader(value = xSharerUserId) Long userId,
             TimeZone timeZone,
             @RequestParam(required = false, name = "page", defaultValue = "1") long page, //todo
-            @RequestParam(required = false, name = "size", defaultValue = "10") @Min(1) @Max(100) long Size) {
+            @RequestParam(required = false, name = "size", defaultValue = "10") @Min(1) @Max(100) long size) {
         log.info("GET /bookings/owner?state={} , header \"{}\" = {}", state, xSharerUserId, userId);
 
         return ResponseEntity
