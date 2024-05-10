@@ -12,12 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.Marker;
 import ru.practicum.shareit.item.dto.CommentRequestDto;
 import ru.practicum.shareit.item.dto.ItemRequestDto;
-import ru.practicum.shareit.item.dto.ItemResponseDto;
-import ru.practicum.shareit.item.dto.OwnerItemResponseDto;
 import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.TimeZone;
 
 /**
@@ -126,5 +123,19 @@ public class ItemController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(itemService.searchItemByText(text, userId));
+    }
+
+    @PostMapping("{itemId}/comment")
+    @Validated(Marker.OnCreate.class)
+    public ResponseEntity<?> addComment(
+            @PathVariable Long itemId,
+            @RequestHeader(value = xSharerUserId) Long userId,
+            @RequestBody @Valid CommentRequestDto text,
+            TimeZone timeZone) {
+        log.info("POST /items/{}/comment , header \"{}\" = {}", itemId, xSharerUserId, userId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(itemService.addComment(itemId, userId, timeZone, text));
     }
 }
