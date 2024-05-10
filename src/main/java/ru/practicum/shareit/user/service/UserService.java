@@ -2,6 +2,7 @@ package ru.practicum.shareit.user.service;
 
 import ru.practicum.shareit.user.dto.UserRequestDto;
 import ru.practicum.shareit.user.dto.UserResponseDto;
+import ru.practicum.shareit.user.model.UserSort;
 
 import java.util.List;
 
@@ -49,4 +50,6 @@ public interface UserService {
      * @return {@link List} объектов {@link UserResponseDto}.
      */
     List<UserResponseDto> getAllUsers();
+
+    List<?> getAllUsers(int page, int size, UserSort sort);
 }
