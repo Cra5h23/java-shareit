@@ -15,6 +15,7 @@ import ru.practicum.shareit.user.dto.UserRequestDto;
 import ru.practicum.shareit.user.dto.UserResponseDto;
 import ru.practicum.shareit.user.exeption.UserRepositoryException;
 import ru.practicum.shareit.user.exeption.UserServiceException;
+import ru.practicum.shareit.user.model.UserSort;
 import ru.practicum.shareit.user.service.UserService;
 
 import java.util.List;
@@ -269,9 +270,9 @@ class UserControllerTest {
     @DisplayName("GET /users возвращает список всех пользователей")
     void getAllUsers_Valid() throws Exception {
         var request = MockMvcRequestBuilders
-                .get("/users");
+                .get("/users/?");
 
-        Mockito.when(userService.getAllUsers())
+        Mockito.when(userService.getAllUsers(Mockito.anyInt(),Mockito.anyInt(),Mockito.any(UserSort.class)))
                 .thenReturn(List.of(new UserResponseDto(1L, "testUser1", "testEmail1@test.com"),
                         new UserResponseDto(2L, "testUser2", "testEmail2@test.com")));
 
@@ -279,7 +280,7 @@ class UserControllerTest {
                 status().isOk(),
                 content().json("[{\"id\":1,\"name\":\"testUser1\",\"email\":\"testEmail1@test.com\"},{\"id\":2,\"name\":\"testUser2\",\"email\":\"testEmail2@test.com\"}]")
         );
-        Mockito.verify(userService, Mockito.times(1)).getAllUsers();
+        Mockito.verify(userService, Mockito.times(1)).getAllUsers(Mockito.anyInt(), Mockito.anyInt(), Mockito.any(UserSort.class));
     }
 
     @Test
@@ -288,13 +289,13 @@ class UserControllerTest {
         var request = MockMvcRequestBuilders
                 .get("/users");
 
-        Mockito.when(userService.getAllUsers())
+        Mockito.when(userService.getAllUsers(Mockito.anyInt(),Mockito.anyInt(),Mockito.any(UserSort.class)))
                 .thenReturn(List.of());
 
         mockMvc.perform(request).andExpectAll(
                 status().isOk(),
                 content().json("[]")
         );
-        Mockito.verify(userService, Mockito.times(1)).getAllUsers();
+        Mockito.verify(userService, Mockito.times(1)).getAllUsers(Mockito.anyInt(),Mockito.anyInt(),Mockito.any(UserSort.class));
     }
 }
