@@ -12,7 +12,7 @@ import ru.practicum.shareit.user.exeption.UserServiceException;
 
 import javax.validation.ConstraintViolationException;
 
-import static ru.practicum.shareit.ErrorResponse.*;
+import static ru.practicum.shareit.exception.ErrorResponse.*;
 
 /**
  * Класс {@link UserErrorHandler} для обработки исключений {@link UserRepositoryException}, {@link UserServiceException},
@@ -28,25 +28,25 @@ public class UserErrorHandler {
     @ExceptionHandler
     public ResponseEntity<?> handlerUserRepositoryException(final UserRepositoryException e, WebRequest webRequest) {
         log.warn("Ошибка работы с пользователями", e);
-        return makeErrorResponse(webRequest, HttpStatus.CONFLICT, "Ошибка работы с пользователями");
+        return makeErrorResponse(webRequest, HttpStatus.CONFLICT, "Ошибка работы с пользователями: ");
     }
 
     @ExceptionHandler
     public ResponseEntity<?> handlerUserServiceException(final UserServiceException e, WebRequest webRequest) {
         log.warn("Ошибка работы с пользователями", e);
-        return makeErrorResponse(webRequest, HttpStatus.NOT_FOUND, "Ошибка работы с пользователями");
+        return makeErrorResponse(webRequest, HttpStatus.NOT_FOUND, "Ошибка работы с пользователями: ");
     }
 
     @ExceptionHandler
     public ResponseEntity<?> handlerMethodArgumentNotValidException(final MethodArgumentNotValidException e,
                                                                     WebRequest webRequest) {
         log.warn("Ошибка ввода данных пользователя", e);
-        return makeErrorResponse(webRequest, HttpStatus.BAD_REQUEST, "Ошибка ввода данных пользователя");
+        return makeErrorResponse(webRequest, HttpStatus.BAD_REQUEST, "Ошибка ввода данных пользователя: ");
     }
 
     @ExceptionHandler
     public ResponseEntity<?> handlerConstraintViolationException(final ConstraintViolationException e, WebRequest webRequest) {
         log.warn("Ошибка ввода данных пользователя", e);
-        return makeErrorResponse(webRequest, HttpStatus.BAD_REQUEST, "Ошибка ввода данных пользователя");
+        return makeErrorResponse(webRequest, HttpStatus.BAD_REQUEST, "Ошибка ввода данных пользователя: ");
     }
 }
