@@ -11,9 +11,12 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.Marker;
 import ru.practicum.shareit.user.dto.UserRequestDto;
+import ru.practicum.shareit.user.model.UserSort;
 import ru.practicum.shareit.user.service.UserService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 /**
  * Контроллер для работы с эндпоинтами /users
@@ -75,11 +78,14 @@ public class UserController {
 
     @GetMapping
     @Operation(summary = "Получение списка всех пользователей", description = "Позволяет запросить список всех пользователей")
-    public ResponseEntity<?> getAllUsers() {
+    public ResponseEntity<?> getAllUsers(
+            @RequestParam(required = false, name = "page", defaultValue = "1") @Min(1) int page,
+            @RequestParam(required = false, name = "size", defaultValue = "10") @Min(1) @Max(100) int size,
+            @RequestParam(required = false, name = "sort", defaultValue = "NONE") UserSort sort) {
         log.info("GET /users");
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(userService.getAllUsers());
+                .body(userService.getAllUsers(page, size, sort));
     }
 }
