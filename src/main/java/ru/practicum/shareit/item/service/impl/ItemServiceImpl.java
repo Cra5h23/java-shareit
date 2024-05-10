@@ -3,18 +3,27 @@ package ru.practicum.shareit.item.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.item.dto.ItemRequestDto;
-import ru.practicum.shareit.item.dto.ItemResponseDto;
+import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.booking.dto.BookingShort;
+import ru.practicum.shareit.booking.mapper.BookingMapper;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.booking.repository.BookingRepository;
+import ru.practicum.shareit.exception.NotFoundBookingException;
+import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.exception.ItemServiceException;
+import ru.practicum.shareit.item.mapper.CommentMapper;
 import ru.practicum.shareit.item.mapper.ItemMapper;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -26,9 +35,12 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
+    private final BookingRepository bookingRepository;
+    private final CommentRepository commentRepository;
     private final String checkUserErrorMessage = "Нельзя %s вещ%s для не существующего пользователя с id %d";
 
     /**
@@ -39,6 +51,7 @@ public class ItemServiceImpl implements ItemService {
      * @return объект класса {@link ItemResponseDto}.
      */
     @Override
+    @Transactional
     public ItemResponseDto addNewItem(ItemRequestDto item, Long userId) {
         User user = checkUser(userId, String.format(checkUserErrorMessage, "создать новую", "ь", userId));
         Item i = ItemMapper.toItem(item, user);
@@ -57,6 +70,7 @@ public class ItemServiceImpl implements ItemService {
      * @return объект класса {@link ItemResponseDto}
      */
     @Override
+    @Transactional
     public ItemResponseDto updateItem(ItemRequestDto item, Long userId, Long itemId) {
         checkUser(userId, String.format(checkUserErrorMessage, "обновить", "ь", userId));
 
@@ -93,10 +107,46 @@ public class ItemServiceImpl implements ItemService {
      * @return объект класса {@link ItemResponseDto}
      */
     @Override
-    public ItemResponseDto getItemByItemId(Long itemId, Long userId) {
+    @Transactional(readOnly = true)
+    public OwnerItemResponseDto getItemByItemId(Long itemId, Long userId) {
         log.info("Получение вещи с id {}", itemId);
         Item i = checkItem(itemId, null);
-        return ItemMapper.toItemResponseDto(i);
+
+        Long id = i.getOwner().getId();
+
+        BookingShort lastBooking = null;
+        BookingShort nextBooking = null;
+
+        if (id.equals(userId)) {
+            List<Booking> bookings = bookingRepository.getBookings(itemId);
+            ZonedDateTime now = ZonedDateTime.now();
+
+            Optional<Booking> last = bookings.stream()
+                    .sorted(Comparator.comparing(Booking::getEnd))
+                    .filter(b -> b.getEnd().isBefore(now) ||
+                            (b.getStart().isBefore(now) && b.getEnd().isAfter(now)))
+                    .max(Comparator.comparing(Booking::getId));
+            lastBooking = last.map(BookingMapper::toBookingShort).orElse(null);
+
+            if (lastBooking != null) {
+                Optional<Booking> next = bookings.stream()
+                        .sorted(Comparator.comparing(Booking::getStart))
+                        .filter(b -> b.getStart().isAfter(now))
+                        .max(Comparator.comparing(Booking::getId));
+
+                log.info("next {}", next);
+                nextBooking = next
+                        .map(BookingMapper::toBookingShort)
+                        .orElse(null);
+            }
+        }
+        List<Comment> comments = commentRepository.findByItem_id(itemId);
+
+        List<CommentResponseDto> collect = comments.stream()
+                .map(CommentMapper::toCommentResponseDto)
+                .collect(Collectors.toList());
+
+        return ItemMapper.toOwnerItemResponseDto(i, lastBooking, nextBooking, collect);
     }
 
     /**
@@ -106,6 +156,7 @@ public class ItemServiceImpl implements ItemService {
      * @param userId идентификационный номер пользователя владельца вещи.
      */
     @Override
+    @Transactional
     public void deleteItemByItemId(Long itemId, Long userId) {
         checkUser(userId, String.format(checkUserErrorMessage, "удалить", "ь c id " + itemId, userId));
         checkItem(itemId, userId);
@@ -120,11 +171,51 @@ public class ItemServiceImpl implements ItemService {
      * @return {@link List} объектов {@link ItemResponseDto}.
      */
     @Override
-    public List<ItemResponseDto> getAllItemByUser(Long userId) {
+    @Transactional(readOnly = true)
+    public List<OwnerItemResponseDto> getAllItemByUser(Long userId) {
         checkUser(userId, String.format(checkUserErrorMessage, "получить список", "ей", userId));
         log.info("Получение списка всех вещей для пользователя с id {}", userId);
-        List<Item> allById = itemRepository.findAllById(userId);
-        return allById.stream().map(ItemMapper::toItemResponseDto).collect(Collectors.toList());
+
+        List<Item> allByUserId = itemRepository.findItemsByUserId(userId);
+
+        List<Long> collect = allByUserId.stream().map(Item::getId).collect(Collectors.toList());
+
+        List<Booking> bookingsByItems = bookingRepository.getBookingsByItems(collect);
+        ZonedDateTime now = ZonedDateTime.now();
+        List<OwnerItemResponseDto> dtoList = new ArrayList<>();
+        log.info("{}", bookingsByItems);
+        for (Item item : allByUserId) {
+            BookingShort lastBooking = null;
+            BookingShort nextBooking = null;
+
+            Optional<Booking> last = bookingsByItems.stream()
+                    .filter(b -> b.getItem().getId().equals(item.getId()))
+                    .sorted(Comparator.comparing(Booking::getEnd))
+                    .filter(b -> b.getEnd().isBefore(now) ||
+                            (b.getStart().isBefore(now) && b.getStart().isAfter(now)))
+                    .max(Comparator.comparing(Booking::getId));
+            lastBooking = last.map(BookingMapper::toBookingShort).orElse(null);
+
+            if (lastBooking != null) {
+                Optional<Booking> next = bookingsByItems.stream()
+                        .filter(b -> b.getItem().getId().equals(item.getId()))
+                        .sorted(Comparator.comparing(Booking::getStart))
+                        .filter(b -> b.getStart().isAfter(now))
+                        .max(Comparator.comparing(Booking::getId));
+                nextBooking = next
+                        .map(BookingMapper::toBookingShort)
+                        .orElse(null);
+            }
+            List<Comment> byItemId = commentRepository.findByItem_id(item.getId());
+            List<CommentResponseDto> comments = byItemId.stream()
+                    .map(CommentMapper::toCommentResponseDto)
+                    .collect(Collectors.toList());
+
+            OwnerItemResponseDto dto = ItemMapper.toOwnerItemResponseDto(item, lastBooking, nextBooking, comments);
+            dtoList.add(dto);
+        }
+
+        return dtoList;
     }
 
     /**
@@ -135,18 +226,18 @@ public class ItemServiceImpl implements ItemService {
      * @return {@link List} объектов {@link ItemResponseDto}.
      */
     @Override
+    @Transactional(readOnly = true)
     public List<ItemResponseDto> searchItemByText(String text, Long userId) {
         if (text.isBlank()) {
             return List.of();
         }
-
         checkUser(userId, String.format(
                 checkUserErrorMessage, "найти список", "ей с параметром поиска" + text, userId));
         log.info("Поиск вещей для пользователя с id {} с параметром поиска {}", userId, text);
 
-        List<Item> search = itemRepository.search(text);
+        List<Item> items = itemRepository.searchItem(text);
 
-        return search.stream().map(ItemMapper::toItemResponseDto).collect(Collectors.toList());
+        return items.stream().map(ItemMapper::toItemResponseDto).collect(Collectors.toList());
     }
 
     /**
@@ -155,10 +246,41 @@ public class ItemServiceImpl implements ItemService {
      * @param userId идентификационный номер пользователя.
      */
     @Override
+    @Transactional
     public void deleteAllItemByUser(Long userId) {
         checkUser(userId, String.format(checkUserErrorMessage, "удалить все", "и", userId));
         log.info("Удаление всех вещей для пользователя с id {}", userId);
-        itemRepository.deleteAll(userId);
+        itemRepository.deleteAllByOwner_Id(userId);
+    }
+
+    /**
+     * Метод добавления комментария вещи.
+     *
+     * @param itemId   идентификационный номер вещи.
+     * @param userId   идентификационный номер пользователя.
+     * @param timeZone часовой пояс пользователя.
+     * @param text     текст комментария.
+     * @return {@link CommentResponseDto}
+     */
+    @Override
+    @Transactional
+    public CommentResponseDto addComment(Long itemId, Long userId, TimeZone timeZone, CommentRequestDto text) {
+        Item item = checkItem(itemId, null);
+        User user = checkUser(userId, String.format(
+                "Нельзя оставить комментарий от не существующего пользователя с id %d", userId));
+        ZonedDateTime zonedDateTime = LocalDateTime.now().atZone(timeZone.toZoneId());
+        List<Booking> byBookerId = bookingRepository.findByItem_IdAndBooker_Id(itemId, userId, zonedDateTime);
+        log.info("{}", byBookerId);
+
+        if (byBookerId.isEmpty()) {
+            throw new NotFoundBookingException(String.format(
+                    "Нельзя оставить комментарий. Пользователь с id %d ещё не бронировал вещь с id %d", userId, itemId));
+        }
+
+        Comment comment = CommentMapper.toComment(text, item, user, timeZone);
+
+        Comment save = commentRepository.save(comment);
+        return CommentMapper.toCommentResponseDto(save);
     }
 
     /**
@@ -167,6 +289,7 @@ public class ItemServiceImpl implements ItemService {
      * @param userId  идентификатор пользователя владельца вещи.
      * @param message текст сообщения ошибки.
      */
+    @Transactional(readOnly = true)
     private User checkUser(Long userId, String message) {
         return userRepository.findById(userId).orElseThrow(() -> new ItemServiceException(message));
     }
@@ -178,6 +301,7 @@ public class ItemServiceImpl implements ItemService {
      * @param userId идентификатор пользователя владельца вещи.
      * @return объект класса {@link Item}
      */
+    @Transactional(readOnly = true)
     private Item checkItem(Long itemId, Long userId) {
         var s = "Вещь с id %d не существует у пользователя с id %d";
         Optional<Item> byId = itemRepository.findById(itemId);
