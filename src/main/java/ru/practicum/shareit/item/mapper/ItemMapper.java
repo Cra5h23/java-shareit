@@ -63,5 +63,4 @@ public class ItemMapper {
                 .available(item.getAvailable())
                 .build();
     }
-
 }
