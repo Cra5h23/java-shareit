@@ -138,4 +138,16 @@ public class ItemController {
                 .status(HttpStatus.OK)
                 .body(itemService.addComment(itemId, userId, timeZone, text));
     }
+
+    @PatchMapping("comment/{commentId}")
+    public ResponseEntity<?> updateComment(
+            @RequestBody CommentRequestDto comment,
+            @RequestHeader(value = xSharerUserId) Long userId,
+            @PathVariable Long commentId) {
+        log.info("PATCH /items/comment/{} , header \"{}\" = {}", commentId, xSharerUserId, userId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(itemService.updateComment(comment, userId, commentId));
+    }
 }
