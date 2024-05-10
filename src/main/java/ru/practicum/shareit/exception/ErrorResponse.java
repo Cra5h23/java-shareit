@@ -1,4 +1,4 @@
-package ru.practicum.shareit;
+package ru.practicum.shareit.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,13 +30,10 @@ public class ErrorResponse {
 
         response.put("timestamp", LocalDateTime.now());
         response.put("status", status.value());
-        response.put("error", message);
-
         String string = Objects.requireNonNull(webRequest.getAttribute(
                 "org.springframework.boot.web.servlet.error.DefaultErrorAttributes.ERROR", 0)).toString();
         String substring = string.substring(string.lastIndexOf(":") + 2);
-
-        response.put("message", substring);
+        response.put("error", message + substring);
         response.put("path", Objects.requireNonNull(webRequest.getAttribute(
                 "org.springframework.web.util.ServletRequestPathUtils.PATH", 0)).toString());
 
