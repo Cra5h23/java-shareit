@@ -27,25 +27,25 @@ public class BookingErrorHandler {
     @ExceptionHandler
     public ResponseEntity<?> handlerBookingServiceException(final BookingServiceException e, WebRequest webRequest) {
         log.info("Ошибка работы с бронированиями", e);
-        return ErrorResponse.makeErrorResponse(webRequest, HttpStatus.BAD_REQUEST, "Ошибка работы с бронированиями ");
+        return ErrorResponse.makeErrorResponse(webRequest, HttpStatus.BAD_REQUEST, "Ошибка работы с бронированиями: ");
     }
 
     @ExceptionHandler
     public ResponseEntity<?> handlerNotFoundUserException(final NotFoundUserException e, WebRequest webRequest) {
         log.info("Ошибка работы с бронированиями", e);
-        return ErrorResponse.makeErrorResponse(webRequest, HttpStatus.NOT_FOUND, "Ошибка работы с бронированиями ");
+        return ErrorResponse.makeErrorResponse(webRequest, HttpStatus.NOT_FOUND, "Ошибка работы с бронированиями: ");
     }
 
     @ExceptionHandler
     public ResponseEntity<?> handlerNotFoundItemException(final NotFoundItemException e, WebRequest webRequest) {
         log.info("Ошибка работы с бронированиями", e);
-        return ErrorResponse.makeErrorResponse(webRequest, HttpStatus.NOT_FOUND, "Ошибка работы с бронированиями ");
+        return ErrorResponse.makeErrorResponse(webRequest, HttpStatus.NOT_FOUND, "Ошибка работы с бронированиями: ");
     }
 
     @ExceptionHandler
     public ResponseEntity<?> handlerConstraintViolationException(final ConstraintViolationException e, WebRequest webRequest) {
         log.warn("Ошибка ввода данных бронирования", e);
-        return makeErrorResponse(webRequest, HttpStatus.BAD_REQUEST, "Ошибка ввода данных бронирования ");
+        return makeErrorResponse(webRequest, HttpStatus.BAD_REQUEST, "Ошибка ввода данных бронирования: ");
     }
 
     @ExceptionHandler
@@ -57,6 +57,6 @@ public class BookingErrorHandler {
     @ExceptionHandler
     public ResponseEntity<?> handlerNotFoundBookingException(final NotFoundBookingException e, WebRequest webRequest) {
         log.warn("Ошибка ввода данных бронирования", e);
-        return makeErrorResponse(webRequest, HttpStatus.NOT_FOUND, "Ошибка работы с бронированиями ");
+        return makeErrorResponse(webRequest, HttpStatus.NOT_FOUND, "Ошибка работы с бронированиями: ");
     }
 }
