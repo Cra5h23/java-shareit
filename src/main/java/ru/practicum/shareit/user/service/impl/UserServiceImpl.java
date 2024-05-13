@@ -133,6 +133,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<UserResponseDto> getAllUsers(int page, int size, UserSort sort) {
         log.info("Получение {} страницы списка всех пользователей размером {} записей и сортировкой {}", page, size, sort.name());
         Sort.TypedSort<User> s = Sort.sort(User.class);
@@ -175,7 +176,6 @@ public class UserServiceImpl implements UserService {
      * @param message сообщение ошибки если пользователь не существует.
      * @return объект класса {@link UserResponseDto}
      */
-    @Transactional(readOnly = true)
     private User checkUser(long userId, String message) {
         return userRepository.findById(userId).orElseThrow(() -> new UserServiceException(message));
     }
