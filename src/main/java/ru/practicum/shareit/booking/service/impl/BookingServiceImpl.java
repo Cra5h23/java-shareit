@@ -142,6 +142,7 @@ public class BookingServiceImpl implements BookingService {
      * @return {@link List} объектов класса {@link BookingResponseDto}.
      */
     @Override
+    @Transactional(readOnly = true)
     public List<BookingResponseDto> getBookingsByBooker(Long userId, BookingState state, TimeZone timeZone) {
         checkUser(userId, String.format(
                 "Нельзя получить список бронирований для не существующего пользователя с id %d", userId));
@@ -159,6 +160,7 @@ public class BookingServiceImpl implements BookingService {
      * @return {@link List} объектов класса {@link BookingResponseDto}.
      */
     @Override
+    @Transactional(readOnly = true)
     public List<BookingResponseDto> getBookingByOwner(Long userId, BookingState state, TimeZone timeZone) {
         checkUser(userId, String.format(
                 "Нельзя получить список забронированных вещей для не существующего пользователя с id %d", userId));

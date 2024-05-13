@@ -285,6 +285,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public CommentResponseDto updateComment(CommentRequestDto comment, Long userId, Long commentId) {
         log.info("Обновление комментария с id {} для пользователя с id {}", commentId, userId);
         checkUser(userId, String.format("Нельзя обновить комментарий для не существующего пользователя с id %d", userId));
@@ -305,6 +306,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public void deleteComment(Long commentId, Long userId) {
         checkUser(userId, String.format(
                 "Нельзя удалить коментарий для не существующего пользователя с id %d", userId));
@@ -325,7 +327,6 @@ public class ItemServiceImpl implements ItemService {
      * @param userId  идентификатор пользователя владельца вещи.
      * @param message текст сообщения ошибки.
      */
-    @Transactional(readOnly = true)
     private User checkUser(Long userId, String message) {
         return userRepository.findById(userId).orElseThrow(() -> new ItemServiceException(message));
     }
@@ -337,7 +338,6 @@ public class ItemServiceImpl implements ItemService {
      * @param userId идентификатор пользователя владельца вещи.
      * @return объект класса {@link Item}
      */
-    @Transactional(readOnly = true)
     private Item checkItem(Long itemId, Long userId) {
         var s = "Вещь с id %d не существует у пользователя с id %d";
         Optional<Item> byId = itemRepository.findById(itemId);
