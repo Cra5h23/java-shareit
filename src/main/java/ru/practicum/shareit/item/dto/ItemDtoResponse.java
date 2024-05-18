@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @Schema(name = "Вещь для ответа", description = "Сущность вещи для ответа")
-public class ItemResponseDto {
+public class ItemDtoResponse {
     /**
      * Уникальный идентификационный номер вещи.
      */
