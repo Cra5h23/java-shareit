@@ -2,8 +2,8 @@ package ru.practicum.shareit.item.mapper;
 
 import ru.practicum.shareit.booking.dto.BookingShort;
 import ru.practicum.shareit.item.dto.CommentResponseDto;
-import ru.practicum.shareit.item.dto.ItemRequestDto;
-import ru.practicum.shareit.item.dto.ItemResponseDto;
+import ru.practicum.shareit.item.dto.ItemDtoRequest;
+import ru.practicum.shareit.item.dto.ItemDtoResponse;
 import ru.practicum.shareit.item.dto.OwnerItemResponseDto;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
@@ -11,21 +11,21 @@ import ru.practicum.shareit.user.model.User;
 import java.util.List;
 
 /**
- * Маппер для классов {@link Item}, {@link ItemRequestDto} и {@link ItemResponseDto}.
- * Предназначен для преобразования объекта класса {@link Item} в объект класса {@link ItemResponseDto}
- * и объект класса {@link ItemRequestDto} в объект класса {@link Item}.
+ * Маппер для классов {@link Item}, {@link ItemDtoRequest} и {@link ItemDtoResponse}.
+ * Предназначен для преобразования объекта класса {@link Item} в объект класса {@link ItemDtoResponse}
+ * и объект класса {@link ItemDtoRequest} в объект класса {@link Item}.
  *
  * @author Nikolay Radzivon.
  */
 public class ItemMapper {
     /**
-     * Метод для преобразования объекта {@link Item} в объект {@link ItemResponseDto}.
+     * Метод для преобразования объекта {@link Item} в объект {@link ItemDtoResponse}.
      *
      * @param item объект класса {@link Item}
-     * @return объект класса {@link ItemResponseDto}.
+     * @return объект класса {@link ItemDtoResponse}.
      */
-    public static ItemResponseDto toItemResponseDto(Item item) {
-        return ItemResponseDto.builder()
+    public static ItemDtoResponse toItemResponseDto(Item item) {
+        return ItemDtoResponse.builder()
                 .id(item.getId())
                 .name(item.getName())
                 .description(item.getDescription())
@@ -34,13 +34,13 @@ public class ItemMapper {
     }
 
     /**
-     * Метод для преобразования объекта класса {@link ItemResponseDto} в объект класса {@link Item}.
+     * Метод для преобразования объекта класса {@link ItemDtoResponse} в объект класса {@link Item}.
      *
-     * @param itemDto объект класса {@link ItemResponseDto}
+     * @param itemDto объект класса {@link ItemDtoResponse}
      * @param user    Пользователь владелец вещи.
      * @return объект класса {@link Item}.
      */
-    public static Item toItem(ItemRequestDto itemDto, User user) {
+    public static Item toItem(ItemDtoRequest itemDto, User user) {
         return Item.builder()
                 .name(itemDto.getName())
                 .description(itemDto.getDescription())

@@ -12,7 +12,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.practicum.shareit.booking.dto.BookingShort;
-import ru.practicum.shareit.item.dto.ItemResponseDto;
+import ru.practicum.shareit.item.dto.ItemDtoResponse;
 import ru.practicum.shareit.item.dto.OwnerItemResponseDto;
 import ru.practicum.shareit.item.exception.ItemRepositoryException;
 import ru.practicum.shareit.item.exception.ItemServiceException;
@@ -69,7 +69,7 @@ class ItemControllerTest {
                         "\"available\": true}");
 
         Mockito.when(itemService.addNewItem(Mockito.any(), Mockito.any()))
-                .thenReturn(new ItemResponseDto(1L, "testName1", "testDescription1", true));
+                .thenReturn(new ItemDtoResponse(1L, "testName1", "testDescription1", true));
 
         this.mockMvc.perform(request).andExpectAll(
                 status().isCreated(),
@@ -175,7 +175,7 @@ class ItemControllerTest {
                         "\"available\": false}");
 
         Mockito.when(itemService.updateItem(Mockito.any(), Mockito.any(), Mockito.any()))
-                .thenReturn(new ItemResponseDto(1L, "testName1update", "testDescription1update", false));
+                .thenReturn(new ItemDtoResponse(1L, "testName1update", "testDescription1update", false));
 
         this.mockMvc.perform(request).andExpectAll(
                 status().isOk(),
@@ -510,8 +510,8 @@ class ItemControllerTest {
 
         Mockito.when(itemService.searchItemByText(Mockito.any(), Mockito.any()))
                 .thenReturn(List.of(
-                        new ItemResponseDto(1L, "testName1", "testDescription1", true),
-                        new ItemResponseDto(2L, "testName2", "testDescription2", true)
+                        new ItemDtoResponse(1L, "testName1", "testDescription1", true),
+                        new ItemDtoResponse(2L, "testName2", "testDescription2", true)
                 ));
 
         mockMvc.perform(request).andExpectAll(

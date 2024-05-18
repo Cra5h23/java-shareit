@@ -47,13 +47,13 @@ public class ItemServiceImpl implements ItemService {
     /**
      * Метод добавления новой вещи.
      *
-     * @param item   объект класса {@link ItemRequestDto}.
+     * @param item   объект класса {@link ItemDtoRequest}.
      * @param userId идентификационный номер пользователя владельца вещи.
-     * @return объект класса {@link ItemResponseDto}.
+     * @return объект класса {@link ItemDtoResponse}.
      */
     @Override
     @Transactional
-    public ItemResponseDto addNewItem(ItemRequestDto item, Long userId) {
+    public ItemDtoResponse addNewItem(ItemDtoRequest item, Long userId) {
         User user = checkUser(userId, String.format(checkUserErrorMessage, "создать новую", "ь", userId));
         Item i = ItemMapper.toItem(item, user);
         Item save = itemRepository.save(i);
@@ -65,14 +65,14 @@ public class ItemServiceImpl implements ItemService {
     /**
      * Метод обновления вещи.
      *
-     * @param item   объект класса {@link ItemRequestDto}.
+     * @param item   объект класса {@link ItemDtoRequest}.
      * @param userId идентификационный номер пользователя владельца вещи.
      * @param itemId идентификационный номер вещи.
-     * @return объект класса {@link ItemResponseDto}
+     * @return объект класса {@link ItemDtoResponse}
      */
     @Override
     @Transactional
-    public ItemResponseDto updateItem(ItemRequestDto item, Long userId, Long itemId) {
+    public ItemDtoResponse updateItem(ItemDtoRequest item, Long userId, Long itemId) {
         checkUser(userId, String.format(checkUserErrorMessage, "обновить", "ь", userId));
 
         Item i = checkItem(itemId, userId);
@@ -105,7 +105,7 @@ public class ItemServiceImpl implements ItemService {
      *
      * @param itemId идентификационный номер вещи.
      * @param userId идентификационный номер пользователя владельца вещи.
-     * @return объект класса {@link ItemResponseDto}
+     * @return объект класса {@link ItemDtoResponse}
      */
     @Override
     @Transactional(readOnly = true)
@@ -169,7 +169,7 @@ public class ItemServiceImpl implements ItemService {
      * Метод получения списка всех вещей пользователя.
      *
      * @param userId идентификационный номер пользователя владельца вещей.
-     * @return {@link List} объектов {@link ItemResponseDto}.
+     * @return {@link List} объектов {@link ItemDtoResponse}.
      */
     @Override
     @Transactional(readOnly = true)
@@ -224,11 +224,11 @@ public class ItemServiceImpl implements ItemService {
      *
      * @param text   текст по которому будет осуществлён поиск.
      * @param userId идентификационный номер пользователя у которого будет производиться поиск.
-     * @return {@link List} объектов {@link ItemResponseDto}.
+     * @return {@link List} объектов {@link ItemDtoResponse}.
      */
     @Override
     @Transactional(readOnly = true)
-    public List<ItemResponseDto> searchItemByText(String text, Long userId) {
+    public List<ItemDtoResponse> searchItemByText(String text, Long userId) {
         if (text.isBlank()) {
             return List.of();
         }
