@@ -22,7 +22,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 @Schema(name = "Вещь для запроса", description = "Сущность вещи для запроса")
-public class ItemRequestDto {
+public class ItemDtoRequest {
     /**
      * Название вещи.
      */
