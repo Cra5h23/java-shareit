@@ -6,5 +6,8 @@ package ru.practicum.shareit.request.dto;
  * @author Nikolay Radzivon
  */
 public class ItemRequestDtoRequest {
+    /**
+     * Описание вещи.
+     */
     private String description;
 }
