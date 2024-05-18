@@ -18,9 +18,9 @@ public interface ItemService {
      *
      * @param item   объект класса {@link Item}.
      * @param userId идентификационный номер пользователя владельца вещи.
-     * @return объект класса {@link ItemResponseDto}.
+     * @return объект класса {@link ItemDtoResponse}.
      */
-    ItemResponseDto addNewItem(ItemRequestDto item, Long userId);
+    ItemDtoResponse addNewItem(ItemDtoRequest item, Long userId);
 
     /**
      * Метод обновления вещи.
@@ -28,16 +28,16 @@ public interface ItemService {
      * @param item   объект класса {@link Item}.
      * @param userId идентификационный номер пользователя владельца вещи.
      * @param itemId идентификационный номер вещи.
-     * @return объект класса {@link ItemResponseDto}
+     * @return объект класса {@link ItemDtoResponse}
      */
-    ItemResponseDto updateItem(ItemRequestDto item, Long userId, Long itemId);
+    ItemDtoResponse updateItem(ItemDtoRequest item, Long userId, Long itemId);
 
     /**
      * Метод получения вещи по его id для определённого пользователя.
      *
      * @param itemId идентификационный номер вещи.
      * @param userId идентификационный номер пользователя владельца вещи.
-     * @return объект класса {@link ItemResponseDto}
+     * @return объект класса {@link ItemDtoResponse}
      */
     OwnerItemResponseDto getItemByItemId(Long itemId, Long userId);
 
@@ -53,7 +53,7 @@ public interface ItemService {
      * Метод получения списка всех вещей пользователя.
      *
      * @param userId идентификационный номер пользователя владельца вещей.
-     * @return {@link List} объектов {@link ItemResponseDto}.
+     * @return {@link List} объектов {@link ItemDtoResponse}.
      */
     List<OwnerItemResponseDto> getAllItemByUser(Long userId);
 
@@ -62,9 +62,9 @@ public interface ItemService {
      *
      * @param text   текст по которому будет осуществлён поиск.
      * @param userId идентификационный номер пользователя у которого будет производиться поиск.
-     * @return {@link List} объектов {@link ItemResponseDto}.
+     * @return {@link List} объектов {@link ItemDtoResponse}.
      */
-    List<ItemResponseDto> searchItemByText(String text, Long userId);
+    List<ItemDtoResponse> searchItemByText(String text, Long userId);
 
     /**
      * Метод удаления всех вещей пользователя.

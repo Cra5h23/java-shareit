@@ -11,7 +11,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.Marker;
 import ru.practicum.shareit.item.dto.CommentRequestDto;
-import ru.practicum.shareit.item.dto.ItemRequestDto;
+import ru.practicum.shareit.item.dto.ItemDtoRequest;
 import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.Valid;
@@ -37,7 +37,7 @@ public class ItemController {
     @Validated(Marker.OnCreate.class)
     @Operation(summary = "Добавление новой вещи", description = "Позволяет добавить новую вещь")
     public ResponseEntity<?> addNewItem(
-            @Valid @RequestBody @Parameter(description = "Данные вещи") ItemRequestDto item,
+            @Valid @RequestBody @Parameter(description = "Данные вещи") ItemDtoRequest item,
             @RequestHeader(value = xSharerUserId) @Parameter(
                     description = "Идентификационный номер пользователя владельца вещи") Long userId) {
         log.info("POST /items , body = {}, header \"{}\" = {}", item, xSharerUserId, userId);
@@ -50,7 +50,7 @@ public class ItemController {
     @PatchMapping("/{itemId}")
     @Operation(summary = "Обновление вещи", description = "Позволяет обновить вещь (может обновить только владелец вещи)")
     public ResponseEntity<?> updateItem(
-            @RequestBody @Parameter(description = "Данные вещи") ItemRequestDto item,
+            @RequestBody @Parameter(description = "Данные вещи") ItemDtoRequest item,
             @PathVariable @Parameter(description = "Идентификационный номер вещи") Long itemId,
             @RequestHeader(value = xSharerUserId) @Parameter(
                     description = "Идентификационный номер пользователя владельца вещи") Long userId) {
