@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.UserChecker;
+import ru.practicum.shareit.exception.NotFoundItemRequestException;
 import ru.practicum.shareit.request.dto.ItemRequestDtoCreated;
 import ru.practicum.shareit.request.dto.ItemRequestDtoRequest;
 import ru.practicum.shareit.request.dto.ItemRequestDtoResponse;
@@ -102,5 +103,26 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         var requests = itemRequestRepository.findAllByRequestorIdNot(userId, pageable);
 
         return requests.map(ItemRequestMapper::toItemRequestDtoResponse).stream().collect(Collectors.toList());
+    }
+
+    /**
+     * Метод получения запроса по его идентификационному номеру.
+     *
+     * @param requestId {@link Long} идентификационный номер запроса.
+     * @param userId    {@link Long} идентификационный номер пользователя.
+     * @return {@link ItemRequestDtoResponse}
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public ItemRequestDtoResponse getRequestById(Long requestId, Long userId) {
+        userChecker.checkUser(userId, String.format(
+                "Нельзя получить запрос не существующим пользователем с id %d", userId));
+
+        var byId = itemRequestRepository.findById(requestId);
+        var itemRequest = byId.orElseThrow(()-> new NotFoundItemRequestException(
+                String.format("Запрос с id %d не существует", requestId)));
+        log.info("Запрошен запрос с id {} от пользователя с id {}", requestId, userId);
+
+        return ItemRequestMapper.toItemRequestDtoResponse(itemRequest);
     }
 }
