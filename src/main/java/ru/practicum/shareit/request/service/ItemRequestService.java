@@ -35,12 +35,19 @@ public interface ItemRequestService {
     /**
      * Метод получения всех запросов.
      *
-     * @param userId идентификационный номер пользователя.
+     * @param userId {@link Long} идентификационный номер пользователя.
      * @param from   индекс первого элемента начиная с 0.
      * @param size   количество элементов для отображения.
      * @return постраничный список запросов.
      */
     List<ItemRequestDtoResponse> getAllRequests(Long userId, Integer from, Integer size);
 
+    /**
+     * Метод получения запроса по его идентификационному номеру.
+     *
+     * @param requestId {@link Long} идентификационный номер запроса.
+     * @param userId    {@link Long} идентификационный номер пользователя.
+     * @return {@link ItemRequestDtoResponse}
+     */
     ItemRequestDtoResponse getRequestById(Long requestId, Long userId);
 }
