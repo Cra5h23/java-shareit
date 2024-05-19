@@ -11,6 +11,8 @@ import ru.practicum.shareit.request.dto.ItemRequestDtoRequest;
 import ru.practicum.shareit.request.service.ItemRequestService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.TimeZone;
 
 /**
@@ -60,9 +62,14 @@ public class ItemRequestController {
     @GetMapping("/all")
     public ResponseEntity<?> getAllRequests(
             @RequestHeader(value = xSharerUserId) Long userId,
-            @RequestParam(required = false, name = "from") int from,
-            @RequestParam(required = false, name = "size") int size) {
-        log.info("GET /requests/all?from={}&size={} ,{} = {}",from, size, xSharerUserId, userId);
+            @RequestParam(required = false, name = "from")
+            @Min(value = 0, message = "Параметр from не может быть меньше 0.")
+            Integer from,
+            @RequestParam(required = false, name = "size")
+            @Min(value = 1, message = "Параметр size не может быть меньше 0.")
+            @Max(value = 100, message = "Параметр size не может быть больше 100.")
+            Integer size) {
+        log.info("GET /requests/all?from={}&size={} ,{} = {}", from, size, xSharerUserId, userId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
