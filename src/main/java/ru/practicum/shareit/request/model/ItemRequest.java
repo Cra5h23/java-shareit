@@ -38,13 +38,13 @@ public class ItemRequest {
      * Пользователь создатель запроса.
      */
     @ManyToOne(targetEntity = User.class)
-    @JoinColumn(name = "requestor_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User requestor;
 
     /**
      * Дата и время создания запроса.
      */
-    @Column(name = "created_data", nullable = false)
+    @Column(name = "created", nullable = false)
     private ZonedDateTime created;
 
     @Override
