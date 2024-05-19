@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.UserChecker;
 import ru.practicum.shareit.request.dto.ItemRequestDtoCreated;
 import ru.practicum.shareit.request.dto.ItemRequestDtoRequest;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class ItemRequestServiceImpl implements ItemRequestService {
     private final ItemRequestRepository itemRequestRepository;
     private final UserChecker userChecker;
@@ -37,6 +39,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
      * @return {@link ItemRequestDtoResponse} данные запроса.
      */
     @Override
+    @Transactional
     public ItemRequestDtoCreated addNewRequest(ItemRequestDtoRequest request, Long userId, TimeZone timeZone) {
         log.info("Пользователь с id {} создаёт запрос {}", userId, request);
 
@@ -57,6 +60,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
      * @return список запросов.
      */
     @Override
+    @Transactional(readOnly = true)
     public List<ItemRequestDtoResponse> getUserRequests(Long userId) {
         userChecker.checkUser(userId, String.format(
                 "Нельзя запросить список запросов для не существующего пользователя с id %d.", userId));
