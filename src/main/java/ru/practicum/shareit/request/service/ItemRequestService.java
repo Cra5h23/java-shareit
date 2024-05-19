@@ -4,6 +4,7 @@ import ru.practicum.shareit.request.dto.ItemRequestDtoCreated;
 import ru.practicum.shareit.request.dto.ItemRequestDtoRequest;
 import ru.practicum.shareit.request.dto.ItemRequestDtoResponse;
 
+import java.util.List;
 import java.util.TimeZone;
 
 /**
@@ -22,4 +23,11 @@ public interface ItemRequestService {
      * @return {@link ItemRequestDtoCreated} данные запроса.
      */
     ItemRequestDtoCreated addNewRequest(ItemRequestDtoRequest request, Long userId, TimeZone timeZone);
+
+    /**
+     * Метод получения всех запросов для указанного пользователя.
+     * @param userId {@link Long} идентификационный номер пользователя.
+     * @return список запросов.
+     */
+    List<ItemRequestDtoResponse> getUserRequests(Long userId);
 }
