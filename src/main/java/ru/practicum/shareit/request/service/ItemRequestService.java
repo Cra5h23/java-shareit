@@ -1,5 +1,6 @@
 package ru.practicum.shareit.request.service;
 
+import ru.practicum.shareit.request.dto.ItemRequestDtoCreated;
 import ru.practicum.shareit.request.dto.ItemRequestDtoRequest;
 import ru.practicum.shareit.request.dto.ItemRequestDtoResponse;
 
@@ -18,7 +19,7 @@ public interface ItemRequestService {
      * @param request  {@link ItemRequestDtoRequest} описание вещи которая нужна.
      * @param userId   {@link Long} идентификационный номер пользователя создающего запрос.
      * @param timeZone {@link TimeZone} часовой пояс пользователя создающего запрос.
-     * @return {@link ItemRequestDtoResponse} данные запроса.
+     * @return {@link ItemRequestDtoCreated} данные запроса.
      */
-    ItemRequestDtoResponse addNewRequest(ItemRequestDtoRequest request, Long userId, TimeZone timeZone);
+    ItemRequestDtoCreated addNewRequest(ItemRequestDtoRequest request, Long userId, TimeZone timeZone);
 }
