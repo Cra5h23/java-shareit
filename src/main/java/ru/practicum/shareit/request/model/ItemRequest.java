@@ -6,6 +6,8 @@ import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Модель запроса на вещь.
@@ -37,8 +39,9 @@ public class ItemRequest {
     /**
      * Пользователь создатель запроса.
      */
-    @ManyToOne(targetEntity = User.class)
+    @ManyToOne(targetEntity = User.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @ToString.Exclude
     private User requestor;
 
     /**
@@ -46,6 +49,10 @@ public class ItemRequest {
      */
     @Column(name = "created", nullable = false)
     private ZonedDateTime created;
+
+    @OneToMany(mappedBy = "request", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<ItemResponse> responses = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
