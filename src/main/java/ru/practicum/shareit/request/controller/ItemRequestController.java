@@ -75,4 +75,15 @@ public class ItemRequestController {
                 .status(HttpStatus.OK)
                 .body(itemRequestService.getAllRequests(userId, from, size));
     }
+
+    @GetMapping("/{requestId}")
+    public ResponseEntity<?> getRequestById(
+            @RequestHeader(value = xSharerUserId) Long userId,
+            @PathVariable Long requestId) {
+        log.info("GET /requests/{} ,{} = {}", requestId, xSharerUserId, userId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(itemRequestService.getRequestById(requestId, userId));
+    }
 }
