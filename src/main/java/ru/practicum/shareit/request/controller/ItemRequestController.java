@@ -29,15 +29,16 @@ public class ItemRequestController {
 
     /**
      * Метод создания нового запроса вещи.
-     * @param request {@link ItemRequestDtoRequest} описание вещи которая требуется.
-     * @param userId {@link Long} идентификационный номер пользователя создающего запрос.
+     *
+     * @param request  {@link ItemRequestDtoRequest} описание вещи которая требуется.
+     * @param userId   {@link Long} идентификационный номер пользователя создающего запрос.
      * @param timeZone {@link TimeZone} часовой пояс пользователя.
      * @return {@link ResponseEntity}
      */
     @PostMapping
     @Validated(Marker.OnCreate.class)
     public ResponseEntity<?> addNewRequest(
-            @Valid @RequestBody  ItemRequestDtoRequest request,
+            @Valid @RequestBody ItemRequestDtoRequest request,
             @RequestHeader(value = xSharerUserId) Long userId,
             TimeZone timeZone) {
         log.info("POST /requests , body = {} , {} = {}", request, xSharerUserId, userId);
@@ -45,5 +46,14 @@ public class ItemRequestController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(itemRequestService.addNewRequest(request, userId, timeZone));
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getUserRequests(
+            @RequestHeader(value = xSharerUserId) Long userId) {
+        log.info("GET /requests , {} = {}", xSharerUserId, userId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(itemRequestService.getUserRequests(userId));
     }
 }
