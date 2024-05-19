@@ -2,6 +2,7 @@ package ru.practicum.shareit.request.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,5 +76,31 @@ public class ItemRequestServiceImpl implements ItemRequestService {
 
         log.info("Запрошен список всех запросов для пользователя с id {}", userId);
         return requestsDto;
+    }
+
+    /**
+     * Метод получения всех запросов.
+     *
+     * @param userId идентификационный номер пользователя.
+     * @param from   индекс первого элемента начиная с 0.
+     * @param size   количество элементов для отображения.
+     * @return постраничный список запросов.
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public List<ItemRequestDtoResponse> getAllRequests(Long userId, Integer from, Integer size) {
+        log.info("Запрошен список всех запросов с параметрами from={}, size={}", from, size);
+        if (from == null || size == null) {
+            return List.of();
+        }
+
+        userChecker.checkUser(userId, String.format(
+                "Нельзя запросить список всех запросов от не существующего пользователя с id %d", userId));
+
+        var sort = typedSort.by(ItemRequest::getCreated).descending();
+        var pageable = PageRequest.of(from, size, sort);
+        var requests = itemRequestRepository.findAllByRequestorIdNot(userId, pageable);
+
+        return requests.map(ItemRequestMapper::toItemRequestDtoResponse).stream().collect(Collectors.toList());
     }
 }
