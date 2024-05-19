@@ -41,4 +41,6 @@ public interface ItemRequestService {
      * @return постраничный список запросов.
      */
     List<ItemRequestDtoResponse> getAllRequests(Long userId, Integer from, Integer size);
+
+    ItemRequestDtoResponse getRequestById(Long requestId, Long userId);
 }
