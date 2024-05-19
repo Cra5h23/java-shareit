@@ -1,13 +1,17 @@
 package ru.practicum.shareit.request.mapper;
 
+import ru.practicum.shareit.request.dto.ItemFromItemRequest;
 import ru.practicum.shareit.request.dto.ItemRequestDtoCreated;
 import ru.practicum.shareit.request.dto.ItemRequestDtoRequest;
 import ru.practicum.shareit.request.dto.ItemRequestDtoResponse;
 import ru.practicum.shareit.request.model.ItemRequest;
+import ru.practicum.shareit.request.model.ItemResponse;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 /**
  * @author Nikolay Radzivon
@@ -23,7 +27,7 @@ public class ItemRequestMapper {
                 .build();
     }
 
-    public static ItemRequestDtoCreated toItemRequestDtoCreated (ItemRequest request) {
+    public static ItemRequestDtoCreated toItemRequestDtoCreated(ItemRequest request) {
         return ItemRequestDtoCreated.builder()
                 .id(request.getId())
                 .description(request.getDescription())
@@ -40,4 +44,15 @@ public class ItemRequestMapper {
                 .build();
     }
 
+    private static List<ItemFromItemRequest> toListItemFromItemRequest(List<ItemResponse> responses) {
+        return responses.stream()
+                .map(i -> ItemFromItemRequest.builder()
+                        .requestId(i.getRequest().getId())
+                        .name(i.getItem().getName())
+                        .id(i.getItem().getId())
+                        .available(i.getItem().getAvailable())
+                        .description(i.getItem().getDescription())
+                        .build())
+                .collect(Collectors.toList());
+    }
 }
