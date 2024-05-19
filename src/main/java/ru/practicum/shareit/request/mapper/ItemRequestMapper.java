@@ -30,4 +30,14 @@ public class ItemRequestMapper {
                 .created(request.getCreated().toLocalDateTime())
                 .build();
     }
+
+    public static ItemRequestDtoResponse toItemRequestDtoResponse(ItemRequest request) {
+
+        return ItemRequestDtoResponse.builder()
+                .created(request.getCreated().toLocalDateTime())
+                .description(request.getDescription())
+                .response(toListItemFromItemRequest(request.getResponses()))
+                .build();
+    }
+
 }
