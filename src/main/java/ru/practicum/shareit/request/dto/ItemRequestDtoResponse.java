@@ -20,6 +20,11 @@ import java.util.List;
 @Builder(toBuilder = true)
 public class ItemRequestDtoResponse {
     /**
+     * Идентификационный номер запроса.
+     */
+    private Long id;
+
+    /**
      * Описание запроса.
      */
     private String description;
@@ -32,5 +37,5 @@ public class ItemRequestDtoResponse {
     /**
      *Список ответов на запрос.
      */
-    private List<ItemFromItemRequest> response;
+    private List<ItemFromItemRequest> items;
 }
