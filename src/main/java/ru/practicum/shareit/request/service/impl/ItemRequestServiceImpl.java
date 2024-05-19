@@ -68,7 +68,6 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         userChecker.checkUser(userId, String.format(
                 "Нельзя запросить список запросов для не существующего пользователя с id %d.", userId));
 
-        var typedSort = Sort.sort(ItemRequest.class);
         var sort = typedSort.by(ItemRequest::getCreated).descending();
         var requests = itemRequestRepository.findAllByRequestorId(userId, sort);
         var requestsDto = requests.stream()
