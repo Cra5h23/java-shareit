@@ -40,5 +40,5 @@ public interface ItemRequestService {
      * @param size   количество элементов для отображения.
      * @return постраничный список запросов.
      */
-    List<ItemRequestDtoResponse> getAllRequests(Long userId, int from, int size);
+    List<ItemRequestDtoResponse> getAllRequests(Long userId, Integer from, Integer size);
 }
