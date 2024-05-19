@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 public class ItemRequestServiceImpl implements ItemRequestService {
     private final ItemRequestRepository itemRequestRepository;
     private final UserChecker userChecker;
+    private final Sort.TypedSort<ItemRequest> typedSort = Sort.sort(ItemRequest.class);
 
     /**
      * Метод создания нового запроса вещи.
