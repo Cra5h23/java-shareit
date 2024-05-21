@@ -10,8 +10,11 @@ import ru.practicum.shareit.Marker;
 import ru.practicum.shareit.booking.dto.BookingRequestDto;
 import ru.practicum.shareit.booking.model.BookingState;
 import ru.practicum.shareit.booking.service.BookingService;
+import ru.practicum.shareit.booking.service.GetBookingsParams;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.TimeZone;
 
@@ -79,7 +82,6 @@ public class BookingController {
      * @return {@link ResponseEntity}
      */
     @GetMapping("/{bookingId}")
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> getBooking(
             @PathVariable Long bookingId,
             @RequestHeader(value = xSharerUserId) Long userId,
@@ -138,11 +140,26 @@ public class BookingController {
     public ResponseEntity<?> getBookingByOwner(
             @RequestParam(required = false, name = "state", defaultValue = "ALL") BookingState state,
             @RequestHeader(value = xSharerUserId) Long userId,
-            TimeZone timeZone) {
-        log.info("GET /bookings/owner?state={} , header \"{}\" = {}", state, xSharerUserId, userId);
+            TimeZone timeZone,
+            @RequestParam(required = false, name = "from", defaultValue = "0")
+            @Min(value = 0, message = "Параметр from не может быть меньше 0.")
+            Integer from,
+            @RequestParam(required = false, name = "size", defaultValue = "10")
+            @Min(value = 1, message = "Параметр size не может быть меньше 0.")
+            @Max(value = 100, message = "Параметр size не может быть больше 100.")
+            Integer size) {
+        log.info("GET /bookings/owner?state={}&from={}&size={} , header \"{}\" = {}", state, from, size, xSharerUserId, userId);
+
+        var params = GetBookingsParams.builder()
+                .userId(userId)
+                .state(state)
+                .timeZone(timeZone)
+                .from(from)
+                .size(size)
+                .build();
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(bookingService.getBookingByOwner(userId, state, timeZone));
+                .body(bookingService.getBookingByOwner(params));
     }
 }
