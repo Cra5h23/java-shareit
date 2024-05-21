@@ -100,16 +100,30 @@ public class BookingController {
      * @return {@link ResponseEntity}
      */
     @GetMapping
-    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> getBookingByUser(
             @RequestParam(required = false, name = "state", defaultValue = "ALL") BookingState state,
             @RequestHeader(value = xSharerUserId) Long userId,
-            TimeZone timeZone) {
-        log.info("GET /bookings?state={} , header \"{}\" = {}", state, xSharerUserId, userId);
+            TimeZone timeZone,
+            @RequestParam(required = false, name = "from", defaultValue = "0")
+            @Min(value = 0, message = "Параметр from не может быть меньше 0.")
+            Integer from,
+            @RequestParam(required = false, name = "size", defaultValue = "10")
+            @Min(value = 1, message = "Параметр size не может быть меньше 0.")
+            @Max(value = 100, message = "Параметр size не может быть больше 100.")
+            Integer size) {
+        log.info("GET /bookings?state={}&from={}&size={} , header \"{}\" = {}", state, from, size, xSharerUserId, userId);
+
+        var params = GetBookingsParams.builder()
+                .userId(userId)
+                .state(state)
+                .timeZone(timeZone)
+                .from(from)
+                .size(size)
+                .build();
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(bookingService.getBookingsByBooker(userId, state, timeZone));
+                .body(bookingService.getBookingsByBooker(params));
     }
 
     /**
