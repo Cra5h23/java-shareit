@@ -3,9 +3,11 @@ package ru.practicum.shareit.booking.service.impl;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.booking.service.GetBookingsParams;
 import ru.practicum.shareit.booking.model.UserType;
 import ru.practicum.shareit.booking.dto.BookingRequestDto;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
@@ -25,10 +27,12 @@ import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
+import javax.validation.Valid;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 /**
  * Реализация интерфейса {@link BookingService}.
@@ -136,43 +140,50 @@ public class BookingServiceImpl implements BookingService {
     /**
      * Метод получения списка бронирований для бронирующего.
      *
-     * @param userId   объект класса  {@link Long} идентификационный номер пользователя.
-     * @param state    объект класса {@link BookingState} состояние бронирования по которому запросить список.
-     * @param timeZone объект класса {@link TimeZone} часовой пояс пользователя.
+     * @param params объект класса  {@link GetBookingsParams} параметры запроса (содержит userId - идентификационный номер пользователя, state - объект класса {@link BookingState} состояние бронирования по которому запросить список, timeZone - объект класса {@link TimeZone} часовой пояс пользователя, from - {@link Integer} индекс первого элемента, начиная с 0, size - {@link Integer} количество элементов для отображения).
      * @return {@link List} объектов класса {@link BookingResponseDto}.
      */
     @Override
     @Transactional(readOnly = true)
-    public List<BookingResponseDto> getBookingsByBooker(Long userId, BookingState state, TimeZone timeZone) {
+    public List<BookingResponseDto> getBookingsByBooker(@Valid GetBookingsParams params) {
+
+        var userId = params.getUserId();
         checkUser(userId, String.format(
                 "Нельзя получить список бронирований для не существующего пользователя с id %d", userId));
-
+        var state = params.getState();
         log.info("Получение списка бронирований для пользователя с id {} и сортировкой {}", userId, state);
-        return getBookings(userId, state, UserType.BOOKER, timeZone);
+
+        return getBookings(params, UserType.BOOKER);
     }
 
     /**
      * Метод получения списка бронирований для владельца вещей.
      *
-     * @param userId   объект класса  {@link Long} идентификационный номер пользователя владельца вещей.
-     * @param state    объект класса {@link BookingState} состояние бронирования по которому запросить список.
-     * @param timeZone объект класса {@link TimeZone} часовой пояс пользователя.
+     * @param params объект класса  {@link GetBookingsParams} параметры запроса (содержит userId - идентификационный номер пользователя владельца вещей, state - объект класса {@link BookingState} состояние бронирования по которому запросить список, timeZone - объект класса {@link TimeZone} часовой пояс пользователя, from - {@link Integer} индекс первого элемента, начиная с 0, size - {@link Integer} количество элементов для отображения).
      * @return {@link List} объектов класса {@link BookingResponseDto}.
      */
     @Override
     @Transactional(readOnly = true)
-    public List<BookingResponseDto> getBookingByOwner(Long userId, BookingState state, TimeZone timeZone) {
+    public List<BookingResponseDto> getBookingByOwner(@Valid GetBookingsParams params) {
+        var userId = params.getUserId();
         checkUser(userId, String.format(
                 "Нельзя получить список забронированных вещей для не существующего пользователя с id %d", userId));
+        var state = params.getState();
         log.info("Получение списка бронирований для пользователя владельца вещей с id {} и сортировкой {}", userId, state);
-        return getBookings(userId, state, UserType.OWNER, timeZone);
+
+        return getBookings(params, UserType.OWNER);
     }
 
-    private List<BookingResponseDto> getBookings(Long userId, BookingState state, UserType type, TimeZone timeZone) {
-        Sort.TypedSort<Booking> bookingTypedSort = Sort.sort(Booking.class);
-        Sort descending = bookingTypedSort.by(Booking::getStart).descending();
-
+    private List<BookingResponseDto> getBookings(GetBookingsParams params, UserType type) {
+        var typedSort = Sort.sort(Booking.class);
+        var descending = typedSort.by(Booking::getStart).descending();
         BooleanExpression query = null;
+        var userId = params.getUserId();
+        var timeZone = params.getTimeZone();
+        var state = params.getState();
+        var size = params.getSize();
+        var from = params.getFrom();
+        var now = ZonedDateTime.now();
 
         switch (type) {
             case OWNER:
@@ -182,8 +193,6 @@ public class BookingServiceImpl implements BookingService {
                 query = QBooking.booking.booker.id.eq(userId);
                 break;
         }
-
-        ZonedDateTime now = ZonedDateTime.now();
 
         switch (state) {
             case ALL:
@@ -203,10 +212,17 @@ public class BookingServiceImpl implements BookingService {
             case REJECTED:
                 query = query.and(QBooking.booking.status.eq(BookingStatus.REJECTED));
                 break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + state);
         }
 
-        Iterable<Booking> all = bookingRepository.findAll(query, descending);
-        return BookingMapper.toBookingResponseDtoList(all, timeZone);
+        var page = from / size;
+        var pageable = PageRequest.of(page, size, descending);
+        var all = bookingRepository.findAll(query, pageable);
+
+        return all.stream()
+                .map(b -> BookingMapper.toBookingResponseDto(b, timeZone))
+                .collect(Collectors.toList());
     }
 
     private User checkUser(Long id, String message) {
