@@ -49,20 +49,16 @@ public interface BookingService {
     /**
      * Метод получения списка бронирований для бронирующего.
      *
-     * @param userId   объект класса  {@link Long} идентификационный номер пользователя.
-     * @param state    объект класса {@link BookingState} состояние бронирования по которому запросить список.
-     * @param timeZone объект класса {@link TimeZone} часовой пояс пользователя бронирующего вещь.
+     * @param params объект класса  {@link GetBookingsParams} параметры запроса (содержит userId - идентификационный номер пользователя, state - объект класса {@link BookingState} состояние бронирования по которому запросить список, timeZone - объект класса {@link TimeZone} часовой пояс пользователя, from - {@link Integer} индекс первого элемента, начиная с 0, size - {@link Integer} количество элементов для отображения).
      * @return {@link List} объектов класса {@link BookingResponseDto}.
      */
-    List<BookingResponseDto> getBookingsByBooker(Long userId, BookingState state, TimeZone timeZone);
+    List<BookingResponseDto> getBookingsByBooker(GetBookingsParams params);
 
     /**
      * Метод получения списка бронирований для владельца вещей.
      *
-     * @param userId   объект класса  {@link Long} идентификационный номер пользователя владельца вещей.
-     * @param state    объект класса {@link BookingState} состояние бронирования по которому запросить список.
-     * @param timeZone объект класса {@link TimeZone} часовой пояс пользователя владельца вещей.
+     * @param params объект класса  {@link GetBookingsParams} параметры запроса (содержит userId - идентификационный номер пользователя владельца вещей, state - объект класса {@link BookingState} состояние бронирования по которому запросить список, timeZone - объект класса {@link TimeZone} часовой пояс пользователя, from - {@link Integer} индекс первого элемента, начиная с 0, size - {@link Integer} количество элементов для отображения).
      * @return {@link List} объектов класса {@link BookingResponseDto}.
      */
-    List<BookingResponseDto> getBookingByOwner(Long userId, BookingState state, TimeZone timeZone);
+    List<BookingResponseDto> getBookingByOwner(GetBookingsParams params);
 }
