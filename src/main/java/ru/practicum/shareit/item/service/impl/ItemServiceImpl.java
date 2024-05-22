@@ -155,13 +155,8 @@ public class ItemServiceImpl implements ItemService {
                         .orElse(null);
             }
         }
-        List<Comment> comments = commentRepository.findByItem_id(itemId);
 
-        List<CommentResponseDto> collect = comments.stream()
-                .map(CommentMapper::toCommentResponseDto)
-                .collect(Collectors.toList());
-
-        return ItemMapper.toOwnerItemResponseDto(i, lastBooking, nextBooking, collect);
+        return ItemMapper.toOwnerItemResponseDto(i, lastBooking, nextBooking);
     }
 
     /**
