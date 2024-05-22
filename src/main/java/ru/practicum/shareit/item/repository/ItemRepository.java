@@ -16,18 +16,6 @@ import java.util.List;
  */
 public interface ItemRepository extends JpaRepository<Item, Long>, QuerydslPredicateExecutor<Item> {
     /**
-     * Метод получения списка вещей для пользователя владельца вещей.
-     *
-     * @param userId идентификационный номер пользователя.
-     * @return {@link List} {@link Item}.
-     */
-    @Query("select i " +
-            "from Item as i " +
-            "join fetch i.owner as ow " +
-            "where ow.id = :user_id")
-    List<Item> findItemsByUserId(@Param("user_id") Long userId);
-
-    /**
      * Метод поиска вещи по её названию или описанию
      *
      * @param text текс поиска.
