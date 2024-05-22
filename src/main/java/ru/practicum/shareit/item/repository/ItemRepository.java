@@ -31,6 +31,11 @@ public interface ItemRepository extends JpaRepository<Item, Long>, QuerydslPredi
             "and i.available = true ")
     Page<Item> searchItem(@Param("text") String text, Pageable pageable);
 
+    /**
+     * Метод удаления всех вещей указанного пользователя.
+     *
+     * @param ownerId идентификационный номер пользователя.
+     */
     void deleteAllByOwner_Id(Long ownerId);
 }
 
