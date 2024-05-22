@@ -9,6 +9,7 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Маппер для классов {@link Item}, {@link ItemDtoRequest} и {@link ItemDtoResponse}.
@@ -79,5 +80,19 @@ public class ItemMapper {
                 .requestId(requestId)
                 .build();
     }
+
+    public static OwnerItemResponseDto toOwnerItemResponseDto(Item item ,BookingShort lastBooking,
+                                                               BookingShort nextBooking) {
+        return OwnerItemResponseDto.builder()
+                .lastBooking(lastBooking)
+                .nextBooking(nextBooking)
+                .comments(item.getComments().stream()
+                        .map(CommentMapper::toCommentResponseDto)
+                        .collect(Collectors.toList()))
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .build();
     }
 }
