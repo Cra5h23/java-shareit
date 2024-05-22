@@ -19,6 +19,8 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
 import ru.practicum.shareit.item.service.ItemService;
+import ru.practicum.shareit.request.mapper.ItemResponseMapper;
+import ru.practicum.shareit.request.repository.ItemResponseRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
@@ -43,6 +45,8 @@ public class ItemServiceImpl implements ItemService {
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
     private final String checkUserErrorMessage = "Нельзя %s вещ%s для не существующего пользователя с id %d";
+    private final ItemResponseRepository itemResponseRepository;
+    private final Sort.TypedSort<Item> typedSort = Sort.sort(Item.class);
 
     /**
      * Метод добавления новой вещи.
@@ -54,9 +58,19 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public ItemDtoResponse addNewItem(ItemDtoRequest item, Long userId) {
-        User user = checkUser(userId, String.format(checkUserErrorMessage, "создать новую", "ь", userId));
-        Item i = ItemMapper.toItem(item, user);
-        Item save = itemRepository.save(i);
+        var user = checkUser(userId, String.format(checkUserErrorMessage, "создать новую", "ь", userId));
+        var i = ItemMapper.toItem(item, user);
+        var save = itemRepository.save(i);
+        var requestId = item.getRequestId();
+
+        if (requestId != null) {
+            var itemResponse = ItemResponseMapper.toItemResponse(i, item.getRequestId());
+            var response = itemResponseRepository.save(itemResponse);
+
+            log.info("Создана новая вещь {} для пользователя с id {} и присвоен id {}, для запроса с id {} и ответу присвоен id {}",
+                    item, userId, save.getId(), requestId, response.getId());
+            return ItemMapper.toItemResponseDto(i, requestId);
+        }
 
         log.info("Создана новая вещь {} для пользователя с id {} и присвоен id {}", item, userId, save.getId());
         return ItemMapper.toItemResponseDto(i);
