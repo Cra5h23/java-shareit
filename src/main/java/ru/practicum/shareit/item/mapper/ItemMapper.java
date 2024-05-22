@@ -1,6 +1,6 @@
 package ru.practicum.shareit.item.mapper;
 
-import ru.practicum.shareit.booking.dto.BookingShort;
+import ru.practicum.shareit.item.dto.BookingShort;
 import ru.practicum.shareit.item.dto.CommentResponseDto;
 import ru.practicum.shareit.item.dto.ItemDtoRequest;
 import ru.practicum.shareit.item.dto.ItemDtoResponse;
@@ -21,16 +21,22 @@ public class ItemMapper {
     /**
      * Метод для преобразования объекта {@link Item} в объект {@link ItemDtoResponse}.
      *
-     * @param item объект класса {@link Item}
+     * @param item объект класса {@link Item}.
      * @return объект класса {@link ItemDtoResponse}.
      */
     public static ItemDtoResponse toItemResponseDto(Item item) {
-        return ItemDtoResponse.builder()
-                .id(item.getId())
-                .name(item.getName())
-                .description(item.getDescription())
-                .available(item.getAvailable())
-                .build();
+        return getItemDtoResponse(item, null);
+    }
+
+    /**
+     * Метод для преобразования объекта {@link Item} в объект {@link ItemDtoResponse}.
+     *
+     * @param item объект класса {@link Item}.
+     * @param requestId идентификационный номер запроса.
+     * @return объект класса {@link ItemDtoResponse}.
+     */
+    public static ItemDtoResponse toItemResponseDto(Item item, Long requestId) {
+        return getItemDtoResponse(item, requestId);
     }
 
     /**
@@ -62,5 +68,16 @@ public class ItemMapper {
                 .description(item.getDescription())
                 .available(item.getAvailable())
                 .build();
+    }
+
+    private static ItemDtoResponse getItemDtoResponse(Item item, Long requestId) {
+        return ItemDtoResponse.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .requestId(requestId)
+                .build();
+    }
     }
 }
