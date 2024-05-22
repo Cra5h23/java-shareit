@@ -38,7 +38,7 @@ public class Comment {
     /**
      * Предмет которому оставлен комментарий.
      */
-    @ManyToOne(fetch = FetchType.LAZY, targetEntity = Item.class)
+    @ManyToOne( targetEntity = Item.class)
     @JoinColumn(name = "item_id")
     @Builder.Default
     @ToString.Exclude
