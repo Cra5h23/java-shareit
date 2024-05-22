@@ -5,6 +5,8 @@ import lombok.*;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Модель вещь.
@@ -50,6 +52,10 @@ public class Item {
     @JoinColumn(name = "user_id")
     @ToString.Exclude
     private User owner = null;
+
+    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY)
+    @ToString.Exclude
+    private List<Comment> comments =new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
