@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import ru.practicum.shareit.exception.NotFoundItemRequestException;
 import ru.practicum.shareit.exception.NotFoundUserException;
 
 import javax.validation.ConstraintViolationException;
@@ -30,5 +31,11 @@ public class ItemRequestErrorHandler {
     public ResponseEntity<?> handlerConstraintViolationException(final ConstraintViolationException e, WebRequest webRequest) {
         log.warn("Ошибка ввода данных запроса", e);
         return makeErrorResponse(webRequest, HttpStatus.BAD_REQUEST, "Ошибка ввода данных запроса: ");
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<?> handlerNotFoundItemRequestException(final NotFoundItemRequestException e, WebRequest webRequest) {
+        log.warn("Ошибка работы с запросами", e);
+        return makeErrorResponse(webRequest, HttpStatus.NOT_FOUND, "Ошибка работы с запросами: ");
     }
 }
