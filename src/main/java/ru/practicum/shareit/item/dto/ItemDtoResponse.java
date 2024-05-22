@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Модель для возвращения данных о предмете в ответ.
+ * Dto класса {@link ru.practicum.shareit.item.model.Item} для возвращения данных о предмете в ответ.
  *
  * @author Nikolay Radzivon
  */
@@ -37,4 +37,6 @@ public class ItemDtoResponse {
      */
     @Schema(description = "Доступность для аренды", example = "true")
     private Boolean available;
+
+    private Long requestId;
 }
