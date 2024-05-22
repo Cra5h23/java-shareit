@@ -6,7 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.UserChecker;
+import ru.practicum.shareit.checker.UserChecker;
 import ru.practicum.shareit.exception.NotFoundItemRequestException;
 import ru.practicum.shareit.request.dto.ItemRequestDtoCreated;
 import ru.practicum.shareit.request.dto.ItemRequestDtoRequest;
@@ -98,7 +98,8 @@ public class ItemRequestServiceImpl implements ItemRequestService {
                 "Нельзя запросить список всех запросов от не существующего пользователя с id %d", userId));
 
         var sort = typedSort.by(ItemRequest::getCreated).descending();
-        var pageable = PageRequest.of(from, size, sort);
+        var page = from / size;
+        var pageable = PageRequest.of(page, size, sort);
         var requests = itemRequestRepository.findAllByRequestorIdNot(userId, pageable);
 
         return requests.map(ItemRequestMapper::toItemRequestDtoResponse).stream().collect(Collectors.toList());
@@ -118,8 +119,8 @@ public class ItemRequestServiceImpl implements ItemRequestService {
                 "Нельзя получить запрос не существующим пользователем с id %d", userId));
 
         var byId = itemRequestRepository.findById(requestId);
-        var itemRequest = byId.orElseThrow(()-> new NotFoundItemRequestException(
-                String.format("Запрос с id %d не существует", requestId)));
+        var itemRequest = byId.orElseThrow(() -> new NotFoundItemRequestException(
+                String.format("Нельзя получить не существующий запрос с id %d", requestId)));
         log.info("Запрошен запрос с id {} от пользователя с id {}", requestId, userId);
 
         return ItemRequestMapper.toItemRequestDtoResponse(itemRequest);
