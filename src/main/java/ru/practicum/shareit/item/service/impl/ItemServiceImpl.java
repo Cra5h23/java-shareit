@@ -2,9 +2,11 @@ package ru.practicum.shareit.item.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.booking.dto.BookingShort;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
@@ -18,12 +20,14 @@ import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.item.service.ItemSearchParams;
 import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.request.mapper.ItemResponseMapper;
 import ru.practicum.shareit.request.repository.ItemResponseRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -182,11 +186,17 @@ public class ItemServiceImpl implements ItemService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<OwnerItemResponseDto> getAllItemByUser(Long userId) {
+    public List<OwnerItemResponseDto> getAllItemByUser(Long userId, Integer from, Integer size) {
         checkUser(userId, String.format(checkUserErrorMessage, "получить список", "ей", userId));
-        log.info("Получение списка всех вещей для пользователя с id {}", userId);
+        log.info("Получение списка всех вещей для пользователя с id {} с параметрами from={}, size={}", userId, from, size);
 
-        List<Item> allByUserId = itemRepository.findItemsByUserId(userId);
+        if (from == null || size == null) {
+            return List.of();
+        }
+        var sort = typedSort.by(Item::getId);
+        var pageable = PageRequest.of(from, size, sort);
+
+        Page<Item> allByUserId = itemRepository.findAllByOwnerId(userId, pageable);
 
         List<Long> collect = allByUserId.stream().map(Item::getId).collect(Collectors.toList());
 
@@ -216,12 +226,8 @@ public class ItemServiceImpl implements ItemService {
                         .map(BookingMapper::toBookingShort)
                         .orElse(null);
             }
-            List<Comment> byItemId = commentRepository.findByItem_id(item.getId());
-            List<CommentResponseDto> comments = byItemId.stream()
-                    .map(CommentMapper::toCommentResponseDto)
-                    .collect(Collectors.toList());
 
-            OwnerItemResponseDto dto = ItemMapper.toOwnerItemResponseDto(item, lastBooking, nextBooking, comments);
+            OwnerItemResponseDto dto = ItemMapper.toOwnerItemResponseDto(item, lastBooking, nextBooking);
             dtoList.add(dto);
         }
 
@@ -231,21 +237,30 @@ public class ItemServiceImpl implements ItemService {
     /**
      * Метод поиска вещей по тексту.
      *
-     * @param text   текст по которому будет осуществлён поиск.
-     * @param userId идентификационный номер пользователя у которого будет производиться поиск.
+     * @param params {@link ItemSearchParams} параметры поиска включают в себя (userId - идентификатор пользователя, text - текст поиска, from - индекс первого элемента, size - количество элементов для отображения).
      * @return {@link List} объектов {@link ItemDtoResponse}.
      */
     @Override
     @Transactional(readOnly = true)
-    public List<ItemDtoResponse> searchItemByText(String text, Long userId) {
+    public List<ItemDtoResponse> searchItemByText(@Valid ItemSearchParams params) {
+        var text = params.getText();
+
         if (text.isBlank()) {
             return List.of();
         }
-        checkUser(userId, String.format(
-                checkUserErrorMessage, "найти список", "ей с параметром поиска" + text, userId));
-        log.info("Поиск вещей для пользователя с id {} с параметром поиска {}", userId, text);
 
-        List<Item> items = itemRepository.searchItem(text);
+        var userId = params.getUserId();
+        checkUser(params.getUserId(), String.format(
+                checkUserErrorMessage, "найти список", "ей с параметром поиска" + text, userId));
+
+        var from = params.getFrom();
+        var size = params.getSize();
+
+        log.info("Поиск вещей для пользователя с id {} с параметрами поиска text={}, from={}, size={}", userId, text, from, size);
+
+        var pageable = PageRequest.of(from, size);
+
+        Page<Item> items = itemRepository.searchItem(text, pageable);
 
         return items.stream().map(ItemMapper::toItemResponseDto).collect(Collectors.toList());
     }
