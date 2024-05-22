@@ -55,16 +55,15 @@ public interface ItemService {
      * @param userId идентификационный номер пользователя владельца вещей.
      * @return {@link List} объектов {@link ItemDtoResponse}.
      */
-    List<OwnerItemResponseDto> getAllItemByUser(Long userId);
+    List<OwnerItemResponseDto> getAllItemByUser(Long userId, Integer from, Integer size);
 
     /**
      * Метод поиска вещей по тексту.
      *
-     * @param text   текст по которому будет осуществлён поиск.
-     * @param userId идентификационный номер пользователя у которого будет производиться поиск.
+     * @param params параметры запроса.
      * @return {@link List} объектов {@link ItemDtoResponse}.
      */
-    List<ItemDtoResponse> searchItemByText(String text, Long userId);
+    List<ItemDtoResponse> searchItemByText(ItemSearchParams params);
 
     /**
      * Метод удаления всех вещей пользователя.
