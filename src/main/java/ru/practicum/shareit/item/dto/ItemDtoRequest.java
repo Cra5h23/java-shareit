@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
- * Модель для принятия данных вещи из запроса.
+ * Dto класса {@link ru.practicum.shareit.item.model.Item} для принятия данных вещи из запроса.
  *
  * @author Nikolay Radzivon
  * @Date 20.04.2024
@@ -45,7 +45,7 @@ public class ItemDtoRequest {
     private Boolean available;
 
     /**
-     * Список комментариев для вещи.
+     * Идентификационный номер запроса до которого создана вещь.
      */
-    private List<CommentResponseDto> comments;
+    private Long requestId;
 }
