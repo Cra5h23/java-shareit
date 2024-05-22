@@ -118,20 +118,6 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(userId);
     }
 
-    /**
-     * Метод получения списка всех пользователей.
-     *
-     * @return {@link List} объектов {@link UserResponseDto}.
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public List<UserResponseDto> getAllUsers() {
-        log.info("Получение списка всех пользователей");
-        Collection<User> all = userRepository.findAll();
-
-        return all.stream().map(UserMapper::toUserResponseDto).collect(Collectors.toList());
-    }
-
     @Override
     @Transactional(readOnly = true)
     public List<UserResponseDto> getAllUsers(int page, int size, UserSort sort) {

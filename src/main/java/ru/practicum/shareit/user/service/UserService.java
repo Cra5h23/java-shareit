@@ -49,7 +49,5 @@ public interface UserService {
      *
      * @return {@link List} объектов {@link UserResponseDto}.
      */
-    List<UserResponseDto> getAllUsers();
-
     List<UserResponseDto> getAllUsers(int page, int size, UserSort sort);
 }
