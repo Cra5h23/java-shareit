@@ -1,5 +1,7 @@
 package ru.practicum.shareit.item.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
@@ -16,17 +18,18 @@ import java.util.List;
  */
 public interface ItemRepository extends JpaRepository<Item, Long>, QuerydslPredicateExecutor<Item> {
     /**
-     * Метод поиска вещи по её названию или описанию
+     * Метод поиска вещи по её названию или описанию и вывода постранично.
      *
      * @param text текс поиска.
-     * @return {@link List} {@link Item}.
+     * @param pageable страница.
+     * @return {@link Page} {@link Item}.
      */
     @Query(" select i " +
             "from Item i " +
             "where (upper(i.name) like upper(concat('%', :text, '%')) " +
             " or upper(i.description) like upper(concat('%', :text, '%'))) " +
             "and i.available = true ")
-    List<Item> searchItem(@Param("text") String text);
+    Page<Item> searchItem(@Param("text") String text, Pageable pageable);
 
     void deleteAllByOwner_Id(Long ownerId);
 }
