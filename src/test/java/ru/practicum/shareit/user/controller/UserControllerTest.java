@@ -11,10 +11,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import ru.practicum.shareit.exception.NotFoundUserException;
 import ru.practicum.shareit.user.dto.UserRequestDto;
 import ru.practicum.shareit.user.dto.UserResponseDto;
 import ru.practicum.shareit.user.exeption.UserRepositoryException;
-import ru.practicum.shareit.user.exeption.UserServiceException;
 import ru.practicum.shareit.user.model.UserSort;
 import ru.practicum.shareit.user.service.UserService;
 
@@ -162,13 +162,13 @@ class UserControllerTest {
                         "\"email\": \"testEmail1update@test.com\"}");
 
         Mockito.when(userService.updateUser(Mockito.any(UserRequestDto.class), Mockito.anyLong()))
-                .thenThrow(new UserServiceException("Попытка обновить пользователя с не существующим id 1"));
+                .thenThrow(new NotFoundUserException("Нельзя обновить не существующего пользователя с id 1"));
 
         mockMvc.perform(request).andExpectAll(
                 status().isNotFound(),
                 jsonPath("$.timestamp").exists(),
                 jsonPath("$.status").value(404),
-                jsonPath("$.error").value("Ошибка работы с пользователями: Попытка обновить пользователя с не существующим id 1"),
+                jsonPath("$.error").value("Ошибка работы с пользователями: Нельзя обновить не существующего пользователя с id 1"),
                 jsonPath("$.path").value("/users/1")
         );
         Mockito.verify(userService, Mockito.times(1)).updateUser(Mockito.any(UserRequestDto.class), Mockito.anyLong());
@@ -221,13 +221,13 @@ class UserControllerTest {
                 .get("/users/1");
 
         Mockito.when(userService.getUser(Mockito.anyLong()))
-                .thenThrow(new UserServiceException("Попытка получить пользователя с не существующим id 1"));
+                .thenThrow(new NotFoundUserException("Нельзя получить не существующего пользователя с id 1"));
 
         mockMvc.perform(request).andExpectAll(
                 status().isNotFound(),
                 jsonPath("$.timestamp").exists(),
                 jsonPath("$.status").value(404),
-                jsonPath("$.error").value("Ошибка работы с пользователями: Попытка получить пользователя с не существующим id 1"),
+                jsonPath("$.error").value("Ошибка работы с пользователями: Нельзя получить не существующего пользователя с id 1"),
                 jsonPath("$.path").value("/users/1")
         );
         Mockito.verify(userService, Mockito.times(1)).getUser(Mockito.anyLong());
@@ -253,14 +253,14 @@ class UserControllerTest {
         var request = MockMvcRequestBuilders
                 .delete("/users/1");
 
-        Mockito.doThrow(new UserServiceException("Попытка удалить пользователя с не существующим id 1"))
+        Mockito.doThrow(new NotFoundUserException("Нельзя удалить не существующего пользователя с id 1"))
                 .when(userService).deleteUser(Mockito.anyLong());
 
         mockMvc.perform(request).andExpectAll(
                 status().isNotFound(),
                 jsonPath("$.timestamp").exists(),
                 jsonPath("$.status").value(404),
-                jsonPath("$.error").value("Ошибка работы с пользователями: Попытка удалить пользователя с не существующим id 1"),
+                jsonPath("$.error").value("Ошибка работы с пользователями: Нельзя удалить не существующего пользователя с id 1"),
                 jsonPath("$.path").value("/users/1")
         );
         Mockito.verify(userService, Mockito.times(1)).deleteUser(Mockito.anyLong());
@@ -272,7 +272,7 @@ class UserControllerTest {
         var request = MockMvcRequestBuilders
                 .get("/users/?");
 
-        Mockito.when(userService.getAllUsers(Mockito.anyInt(),Mockito.anyInt(),Mockito.any(UserSort.class)))
+        Mockito.when(userService.getAllUsers(Mockito.anyInt(), Mockito.anyInt(), Mockito.any(UserSort.class)))
                 .thenReturn(List.of(new UserResponseDto(1L, "testUser1", "testEmail1@test.com"),
                         new UserResponseDto(2L, "testUser2", "testEmail2@test.com")));
 
@@ -289,13 +289,13 @@ class UserControllerTest {
         var request = MockMvcRequestBuilders
                 .get("/users");
 
-        Mockito.when(userService.getAllUsers(Mockito.anyInt(),Mockito.anyInt(),Mockito.any(UserSort.class)))
+        Mockito.when(userService.getAllUsers(Mockito.anyInt(), Mockito.anyInt(), Mockito.any(UserSort.class)))
                 .thenReturn(List.of());
 
         mockMvc.perform(request).andExpectAll(
                 status().isOk(),
                 content().json("[]")
         );
-        Mockito.verify(userService, Mockito.times(1)).getAllUsers(Mockito.anyInt(),Mockito.anyInt(),Mockito.any(UserSort.class));
+        Mockito.verify(userService, Mockito.times(1)).getAllUsers(Mockito.anyInt(), Mockito.anyInt(), Mockito.any(UserSort.class));
     }
 }
