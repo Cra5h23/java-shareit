@@ -665,7 +665,7 @@ class ItemControllerTest {
                 status().isBadRequest(),
                 jsonPath("$.timestamp").exists(),
                 jsonPath("$.status").value(400),
-                jsonPath("$.error").value("Ошибка ввода данных предмета: size must be between 1 and 512"),
+                jsonPath("$.error").value("Ошибка ввода данных предмета: size must be between 0 and 512"),
                 jsonPath("$.path").value("/items/1/comment")
         );
     }
