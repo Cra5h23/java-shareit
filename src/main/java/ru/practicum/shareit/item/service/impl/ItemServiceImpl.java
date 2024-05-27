@@ -10,10 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.booking.repository.BookingRepository;
+import ru.practicum.shareit.checker.ItemChecker;
+import ru.practicum.shareit.checker.UserChecker;
 import ru.practicum.shareit.exception.NotFoundBookingException;
+import ru.practicum.shareit.exception.NotFoundCommentException;
+import ru.practicum.shareit.exception.NotFoundItemException;
 import ru.practicum.shareit.item.dto.*;
-import ru.practicum.shareit.item.exception.ItemServiceException;
-import ru.practicum.shareit.item.exception.NotFoundCommentException;
 import ru.practicum.shareit.item.mapper.CommentMapper;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Comment;
@@ -24,10 +26,7 @@ import ru.practicum.shareit.item.service.ItemSearchParams;
 import ru.practicum.shareit.item.service.ItemService;
 import ru.practicum.shareit.request.mapper.ItemResponseMapper;
 import ru.practicum.shareit.request.repository.ItemResponseRepository;
-import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.repository.UserRepository;
 
-import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -45,12 +44,12 @@ import java.util.stream.Collectors;
 @Transactional
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
-    private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
-    private final String checkUserErrorMessage = "Нельзя %s вещ%s для не существующего пользователя с id %d";
     private final ItemResponseRepository itemResponseRepository;
     private final Sort.TypedSort<Item> typedSort = Sort.sort(Item.class);
+    private final ItemChecker itemChecker;
+    private final UserChecker userChecker;
 
     /**
      * Метод добавления новой вещи.
@@ -62,22 +61,24 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public ItemDtoResponse addNewItem(ItemDtoRequest item, Long userId) {
-        var user = checkUser(userId, String.format(checkUserErrorMessage, "создать новую", "ь", userId));
+        var user = userChecker.checkUser(userId, String.format(
+                "Нельзя создать новую вещь для не существующего пользователя с id %d", userId));
         var i = ItemMapper.toItem(item, user);
         var save = itemRepository.save(i);
         var requestId = item.getRequestId();
 
         if (requestId != null) {
-            var itemResponse = ItemResponseMapper.toItemResponse(i, item.getRequestId());
+            var itemResponse = ItemResponseMapper.toItemResponse(i, requestId);
             var response = itemResponseRepository.save(itemResponse);
 
-            log.info("Создана новая вещь {} для пользователя с id {} и присвоен id {}, для запроса с id {} и ответу присвоен id {}",
+            log.info("Создана новая вещь {} для пользователя с id {} и присвоен id {}," +
+                            " для запроса с id {} и ответу присвоен id {}",
                     item, userId, save.getId(), requestId, response.getId());
-            return ItemMapper.toItemResponseDto(i, requestId);
+            return ItemMapper.toItemResponseDto(save, requestId);
         }
 
         log.info("Создана новая вещь {} для пользователя с id {} и присвоен id {}", item, userId, save.getId());
-        return ItemMapper.toItemResponseDto(i);
+        return ItemMapper.toItemResponseDto(save);
     }
 
     /**
@@ -91,29 +92,37 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public ItemDtoResponse updateItem(ItemDtoRequest item, Long userId, Long itemId) {
-        checkUser(userId, String.format(checkUserErrorMessage, "обновить", "ь", userId));
+        userChecker.checkUser(userId, String.format(
+                "Нельзя обновить вещь c id %d для не существующего пользователя с id %d", itemId, userId));
+        var i = itemChecker.checkItem(itemId, String.format(
+                "Нельзя обновить не существующую вещь с id %d для пользователя с id %d", itemId, userId));
 
-        Item i = checkItem(itemId, userId);
-        String name = item.getName();
+        if (!i.getOwner().getId().equals(userId)) {
+            throw new NotFoundItemException(String.format(
+                    "Нельзя обновить вещь с id %d пользователь с id %d не является её владельцем", itemId, userId));
+        }
 
-        log.info("Обновление вещи c id {} для пользователя с id {}, старые данные новые {} данные {}", itemId, userId, i, item);
+        var name = item.getName();
+
+        log.info("Обновление вещи c id {} для пользователя с id {}, старые данные новые {} данные {}",
+                itemId, userId, i, item);
         if (name != null) {
             i.setName(name);
         }
 
-        Boolean available = item.getAvailable();
+        var available = item.getAvailable();
 
         if (available != null) {
             i.setAvailable(available);
         }
 
-        String description = item.getDescription();
+        var description = item.getDescription();
 
         if (description != null) {
             i.setDescription(description);
         }
 
-        Item save = itemRepository.save(i);
+        var save = itemRepository.save(i);
 
         return ItemMapper.toItemResponseDto(save);
     }
@@ -128,15 +137,16 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional(readOnly = true)
     public OwnerItemResponseDto getItemByItemId(Long itemId, Long userId) {
+        var i = itemChecker.checkItem(itemId, String.format(
+                "Нельзя получить не существующую вещь с id %d", itemId));
         log.info("Получение вещи с id {}", itemId);
-        Item i = checkItem(itemId, null);
 
-        Long id = i.getOwner().getId();
+        var ownerId = i.getOwner().getId();
 
         BookingShort lastBooking = null;
         BookingShort nextBooking = null;
 
-        if (id.equals(userId)) {
+        if (ownerId.equals(userId)) {
             List<Booking> bookings = bookingRepository.getBookings(itemId);
             ZonedDateTime now = ZonedDateTime.now();
 
@@ -153,7 +163,6 @@ public class ItemServiceImpl implements ItemService {
                         .filter(b -> b.getStart().isAfter(now))
                         .max(Comparator.comparing(Booking::getId));
 
-                log.info("next {}", next);
                 nextBooking = next
                         .map(BookingMapper::toBookingShort)
                         .orElse(null);
@@ -172,8 +181,16 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public void deleteItemByItemId(Long itemId, Long userId) {
-        checkUser(userId, String.format(checkUserErrorMessage, "удалить", "ь c id " + itemId, userId));
-        checkItem(itemId, userId);
+        userChecker.checkUser(userId, String.format(
+                "Нельзя удалить вещь с id %d для не существующего пользователя с id %d", itemId, userId));
+        var item = itemChecker.checkItem(itemId, String.format(
+                "Нельзя удалить не существующую вещь с id %d для пользователя с id %d", itemId, userId));
+
+        if (!item.getOwner().getId().equals(userId)) {
+            throw new NotFoundItemException(String.format(
+                    "Нельзя удалить вещь с id %d пользователь с id %d не является её владельцем", itemId, userId));
+        }
+
         log.info("Удаление вещи с id {} для пользователя с id {}", itemId, userId);
         itemRepository.deleteById(itemId);
     }
@@ -187,8 +204,11 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional(readOnly = true)
     public List<OwnerItemResponseDto> getAllItemByUser(Long userId, Integer from, Integer size) {
-        checkUser(userId, String.format(checkUserErrorMessage, "получить список", "ей", userId));
-        log.info("Получение списка всех вещей для пользователя с id {} с параметрами from={}, size={}", userId, from, size);
+        userChecker.checkUser(userId, String.format(
+                "Нельзя получить список вещей для не существующего пользователя с id %d", userId));
+
+        log.info("Получение списка всех вещей для пользователя с id {} с параметрами from={}, size={}",
+                userId, from, size);
 
         if (from == null || size == null) {
             return List.of();
@@ -197,6 +217,10 @@ public class ItemServiceImpl implements ItemService {
         var pageable = PageRequest.of(from, size, sort);
 
         Page<Item> allByUserId = itemRepository.findAllByOwnerId(userId, pageable);
+
+        if (allByUserId.getTotalElements() == 0) {
+            return List.of();
+        }
 
         List<Long> collect = allByUserId.stream().map(Item::getId).collect(Collectors.toList());
 
@@ -242,7 +266,7 @@ public class ItemServiceImpl implements ItemService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<ItemDtoResponse> searchItemByText(@Valid ItemSearchParams params) {
+    public List<ItemDtoResponse> searchItemByText(ItemSearchParams params) {
         var text = params.getText();
 
         if (text.isBlank()) {
@@ -250,13 +274,14 @@ public class ItemServiceImpl implements ItemService {
         }
 
         var userId = params.getUserId();
-        checkUser(params.getUserId(), String.format(
-                checkUserErrorMessage, "найти список", "ей с параметром поиска" + text, userId));
+        userChecker.checkUser(userId, String.format(
+                "Нельзя найти список вещей для не существующего пользователя с id %d", userId));
 
         var from = params.getFrom();
         var size = params.getSize();
 
-        log.info("Поиск вещей для пользователя с id {} с параметрами поиска text={}, from={}, size={}", userId, text, from, size);
+        log.info("Поиск вещей для пользователя с id {} с параметрами поиска text={}, from={}, size={}",
+                userId, text, from, size);
 
         var pageable = PageRequest.of(from, size);
 
@@ -273,7 +298,9 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public void deleteAllItemByUser(Long userId) {
-        checkUser(userId, String.format(checkUserErrorMessage, "удалить все", "и", userId));
+        userChecker.checkUser(userId, String.format(
+                "Нельзя удалить все вещи для не существующего пользователя с id %d", userId));
+
         log.info("Удаление всех вещей для пользователя с id {}", userId);
         itemRepository.deleteAllByOwner_Id(userId);
     }
@@ -290,9 +317,11 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public CommentResponseDto addComment(Long itemId, Long userId, TimeZone timeZone, CommentRequestDto text) {
-        Item item = checkItem(itemId, null);
-        User user = checkUser(userId, String.format(
-                "Нельзя оставить комментарий от не существующего пользователя с id %d", userId));
+        var user = userChecker.checkUser(userId, String.format(
+                "Нельзя оставить комментарий вещи с id %d от не существующего пользователя с id %d", itemId, userId));
+        var item = itemChecker.checkItem(itemId, String.format(
+                "Нельзя оставить комментарий не существующей вещи id %d от пользователя с id %d", itemId, userId));
+
         ZonedDateTime zonedDateTime = LocalDateTime.now().atZone(timeZone.toZoneId());
         List<Booking> byBookerId = bookingRepository.findByItem_IdAndBooker_Id(itemId, userId, zonedDateTime);
 
@@ -311,17 +340,20 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public CommentResponseDto updateComment(CommentRequestDto comment, Long userId, Long commentId) {
-        log.info("Обновление комментария с id {} для пользователя с id {}", commentId, userId);
-        checkUser(userId, String.format("Нельзя обновить комментарий для не существующего пользователя с id %d", userId));
-        Optional<Comment> commentOptional = commentRepository.findById(commentId);
+        userChecker.checkUser(userId, String.format(
+                "Нельзя обновить комментарий c id %d для не существующего пользователя с id %d", commentId, userId));
 
-        Comment c = commentOptional.orElseThrow(
-                () -> new NotFoundCommentException(String.format("Нет комментария с id %d", commentId)));
+        log.info("Обновление комментария с id {} для пользователя с id {}", commentId, userId);
+
+        Optional<Comment> commentOptional = commentRepository.findById(commentId);
+        Comment c = commentOptional.orElseThrow(() -> new NotFoundCommentException(String.format(
+                "Нельзя обновить не существующий комментарий с id %d для пользователя с id %d", commentId, userId)));
 
         if (!c.getAuthor().getId().equals(userId)) {
             throw new NotFoundCommentException(String.format(
                     "У пользователя с id %d нет комментария с id %d", userId, commentId));
         }
+
         log.info("Новые данные {} , старые данные {}", comment, c);
         c.setText(comment.getText());
         Comment save = commentRepository.save(c);
@@ -332,53 +364,18 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public void deleteComment(Long commentId, Long userId) {
-        checkUser(userId, String.format(
-                "Нельзя удалить коментарий для не существующего пользователя с id %d", userId));
+        userChecker.checkUser(userId, String.format(
+                "Нельзя удалить комментарий c id %d для не существующего пользователя с id %d", commentId, userId));
+
         Optional<Comment> byId = commentRepository.findById(commentId);
         Comment comment = byId.orElseThrow(() -> new NotFoundCommentException(
-                String.format("Нельзя удалить не существующий комментарий с id %d", commentId)));
+                String.format("Нельзя удалить не существующий комментарий с id %d для  пользователя с id %d",
+                        commentId, userId)));
         if (!comment.getAuthor().getId().equals(userId)) {
             throw new NotFoundCommentException(String.format(
                     "У пользователя с id %d нет комментария с id %d", userId, commentId));
         }
         log.info("Удалён комментарий с id {} для пользователя с id {}", commentId, userId);
         commentRepository.deleteById(commentId);
-    }
-
-    /**
-     * Метод проверки, что пользователь существует.
-     *
-     * @param userId  идентификатор пользователя владельца вещи.
-     * @param message текст сообщения ошибки.
-     */
-    private User checkUser(Long userId, String message) {
-        return userRepository.findById(userId).orElseThrow(() -> new ItemServiceException(message));
-    }
-
-    /**
-     * Метод проверки, что вещь существует.
-     *
-     * @param itemId идентификатор вещи.
-     * @param userId идентификатор пользователя владельца вещи.
-     * @return объект класса {@link Item}
-     */
-    private Item checkItem(Long itemId, Long userId) {
-        var s = "Вещь с id %d не существует у пользователя с id %d";
-        Optional<Item> byId = itemRepository.findById(itemId);
-
-        if (userId != null) {
-            if (byId.isEmpty()) {
-                throw new ItemServiceException(String.format(s, itemId, userId));
-            }
-            if (byId.get().getOwner().getId().equals(userId)) {
-                return byId.get();
-            }
-            throw new ItemServiceException(String.format(s, itemId, userId));
-        } else {
-            if (byId.isEmpty()) {
-                throw new ItemServiceException(String.format(s.substring(0, 26), itemId));
-            }
-            return byId.get();
-        }
     }
 }
