@@ -1,11 +1,9 @@
 package ru.practicum.shareit.user.service.impl;
 
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import ru.practicum.shareit.checker.UserChecker;
@@ -19,8 +17,6 @@ import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.service.UserService;
 
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Nikolay Radzivon
@@ -238,22 +234,22 @@ class UserServiceImplTest {
 
         Assertions.assertNotNull(allUsers);
         Assertions.assertEquals(4, allUsers.size());
-        Assertions.assertEquals(1,allUsers.get(0).getId());
-        Assertions.assertEquals("testUser1",allUsers.get(0).getName());
-        Assertions.assertEquals("testUser1@email.com",allUsers.get(0).getEmail());
+        Assertions.assertEquals(1, allUsers.get(0).getId());
+        Assertions.assertEquals("testUser1", allUsers.get(0).getName());
+        Assertions.assertEquals("testUser1@email.com", allUsers.get(0).getEmail());
 
-        Assertions.assertEquals(2,allUsers.get(1).getId());
-        Assertions.assertEquals("testUser2",allUsers.get(1).getName());
-        Assertions.assertEquals("testUser2@email.com",allUsers.get(1).getEmail());
+        Assertions.assertEquals(2, allUsers.get(1).getId());
+        Assertions.assertEquals("testUser2", allUsers.get(1).getName());
+        Assertions.assertEquals("testUser2@email.com", allUsers.get(1).getEmail());
 
-        Assertions.assertEquals(3,allUsers.get(2).getId());
-        Assertions.assertEquals("testUser3",allUsers.get(2).getName());
-        Assertions.assertEquals("testUser3@email.com",allUsers.get(2).getEmail());
+        Assertions.assertEquals(3, allUsers.get(2).getId());
+        Assertions.assertEquals("testUser3", allUsers.get(2).getName());
+        Assertions.assertEquals("testUser3@email.com", allUsers.get(2).getEmail());
 
 
-        Assertions.assertEquals(4,allUsers.get(3).getId());
-        Assertions.assertEquals("testUser4",allUsers.get(3).getName());
-        Assertions.assertEquals("testUser4@email.com",allUsers.get(3).getEmail());
+        Assertions.assertEquals(4, allUsers.get(3).getId());
+        Assertions.assertEquals("testUser4", allUsers.get(3).getName());
+        Assertions.assertEquals("testUser4@email.com", allUsers.get(3).getEmail());
 
         Mockito.verify(userRepository, Mockito.times(1)).findAll(Mockito.any(Pageable.class));
     }
@@ -287,22 +283,22 @@ class UserServiceImplTest {
 
         Assertions.assertNotNull(allUsers);
         Assertions.assertEquals(4, allUsers.size());
-        Assertions.assertEquals(1,allUsers.get(0).getId());
-        Assertions.assertEquals("testUser1",allUsers.get(0).getName());
-        Assertions.assertEquals("testUser1@email.com",allUsers.get(0).getEmail());
+        Assertions.assertEquals(1, allUsers.get(0).getId());
+        Assertions.assertEquals("testUser1", allUsers.get(0).getName());
+        Assertions.assertEquals("testUser1@email.com", allUsers.get(0).getEmail());
 
-        Assertions.assertEquals(2,allUsers.get(1).getId());
-        Assertions.assertEquals("testUser2",allUsers.get(1).getName());
-        Assertions.assertEquals("testUser2@email.com",allUsers.get(1).getEmail());
+        Assertions.assertEquals(2, allUsers.get(1).getId());
+        Assertions.assertEquals("testUser2", allUsers.get(1).getName());
+        Assertions.assertEquals("testUser2@email.com", allUsers.get(1).getEmail());
 
-        Assertions.assertEquals(3,allUsers.get(2).getId());
-        Assertions.assertEquals("testUser3",allUsers.get(2).getName());
-        Assertions.assertEquals("testUser3@email.com",allUsers.get(2).getEmail());
+        Assertions.assertEquals(3, allUsers.get(2).getId());
+        Assertions.assertEquals("testUser3", allUsers.get(2).getName());
+        Assertions.assertEquals("testUser3@email.com", allUsers.get(2).getEmail());
 
 
-        Assertions.assertEquals(4,allUsers.get(3).getId());
-        Assertions.assertEquals("testUser4",allUsers.get(3).getName());
-        Assertions.assertEquals("testUser4@email.com",allUsers.get(3).getEmail());
+        Assertions.assertEquals(4, allUsers.get(3).getId());
+        Assertions.assertEquals("testUser4", allUsers.get(3).getName());
+        Assertions.assertEquals("testUser4@email.com", allUsers.get(3).getEmail());
 
         Mockito.verify(userRepository, Mockito.times(1)).findAll(Mockito.any(Pageable.class));
     }
@@ -337,21 +333,21 @@ class UserServiceImplTest {
         Assertions.assertNotNull(allUsers);
         Assertions.assertEquals(4, allUsers.size());
 
-        Assertions.assertEquals(4,allUsers.get(0).getId());
-        Assertions.assertEquals("testUser4",allUsers.get(0).getName());
-        Assertions.assertEquals("testUser4@email.com",allUsers.get(0).getEmail());
+        Assertions.assertEquals(4, allUsers.get(0).getId());
+        Assertions.assertEquals("testUser4", allUsers.get(0).getName());
+        Assertions.assertEquals("testUser4@email.com", allUsers.get(0).getEmail());
 
-        Assertions.assertEquals(3,allUsers.get(1).getId());
-        Assertions.assertEquals("testUser3",allUsers.get(1).getName());
-        Assertions.assertEquals("testUser3@email.com",allUsers.get(1).getEmail());
+        Assertions.assertEquals(3, allUsers.get(1).getId());
+        Assertions.assertEquals("testUser3", allUsers.get(1).getName());
+        Assertions.assertEquals("testUser3@email.com", allUsers.get(1).getEmail());
 
-        Assertions.assertEquals(2,allUsers.get(2).getId());
-        Assertions.assertEquals("testUser2",allUsers.get(2).getName());
-        Assertions.assertEquals("testUser2@email.com",allUsers.get(2).getEmail());
+        Assertions.assertEquals(2, allUsers.get(2).getId());
+        Assertions.assertEquals("testUser2", allUsers.get(2).getName());
+        Assertions.assertEquals("testUser2@email.com", allUsers.get(2).getEmail());
 
-        Assertions.assertEquals(1,allUsers.get(3).getId());
-        Assertions.assertEquals("testUser1",allUsers.get(3).getName());
-        Assertions.assertEquals("testUser1@email.com",allUsers.get(3).getEmail());
+        Assertions.assertEquals(1, allUsers.get(3).getId());
+        Assertions.assertEquals("testUser1", allUsers.get(3).getName());
+        Assertions.assertEquals("testUser1@email.com", allUsers.get(3).getEmail());
 
         Mockito.verify(userRepository, Mockito.times(1)).findAll(Mockito.any(Pageable.class));
     }
@@ -387,22 +383,22 @@ class UserServiceImplTest {
         Assertions.assertNotNull(allUsers);
         Assertions.assertEquals(4, allUsers.size());
 
-        Assertions.assertEquals(1,allUsers.get(0).getId());
-        Assertions.assertEquals("aTestUser1",allUsers.get(0).getName());
-        Assertions.assertEquals("testUser1@email.com",allUsers.get(0).getEmail());
+        Assertions.assertEquals(1, allUsers.get(0).getId());
+        Assertions.assertEquals("aTestUser1", allUsers.get(0).getName());
+        Assertions.assertEquals("testUser1@email.com", allUsers.get(0).getEmail());
 
-        Assertions.assertEquals(2,allUsers.get(1).getId());
-        Assertions.assertEquals("bTestUser2",allUsers.get(1).getName());
-        Assertions.assertEquals("testUser2@email.com",allUsers.get(1).getEmail());
+        Assertions.assertEquals(2, allUsers.get(1).getId());
+        Assertions.assertEquals("bTestUser2", allUsers.get(1).getName());
+        Assertions.assertEquals("testUser2@email.com", allUsers.get(1).getEmail());
 
-        Assertions.assertEquals(3,allUsers.get(2).getId());
-        Assertions.assertEquals("cTestUser3",allUsers.get(2).getName());
-        Assertions.assertEquals("testUser3@email.com",allUsers.get(2).getEmail());
+        Assertions.assertEquals(3, allUsers.get(2).getId());
+        Assertions.assertEquals("cTestUser3", allUsers.get(2).getName());
+        Assertions.assertEquals("testUser3@email.com", allUsers.get(2).getEmail());
 
 
-        Assertions.assertEquals(4,allUsers.get(3).getId());
-        Assertions.assertEquals("dTestUser4",allUsers.get(3).getName());
-        Assertions.assertEquals("testUser4@email.com",allUsers.get(3).getEmail());
+        Assertions.assertEquals(4, allUsers.get(3).getId());
+        Assertions.assertEquals("dTestUser4", allUsers.get(3).getName());
+        Assertions.assertEquals("testUser4@email.com", allUsers.get(3).getEmail());
 
         Mockito.verify(userRepository, Mockito.times(1)).findAll(Mockito.any(Pageable.class));
     }
@@ -437,22 +433,22 @@ class UserServiceImplTest {
         Assertions.assertNotNull(allUsers);
         Assertions.assertEquals(4, allUsers.size());
 
-        Assertions.assertEquals(1,allUsers.get(0).getId());
-        Assertions.assertEquals("dTestUser1",allUsers.get(0).getName());
-        Assertions.assertEquals("testUser1@email.com",allUsers.get(0).getEmail());
+        Assertions.assertEquals(1, allUsers.get(0).getId());
+        Assertions.assertEquals("dTestUser1", allUsers.get(0).getName());
+        Assertions.assertEquals("testUser1@email.com", allUsers.get(0).getEmail());
 
-        Assertions.assertEquals(2,allUsers.get(1).getId());
-        Assertions.assertEquals("cTestUser2",allUsers.get(1).getName());
-        Assertions.assertEquals("testUser2@email.com",allUsers.get(1).getEmail());
+        Assertions.assertEquals(2, allUsers.get(1).getId());
+        Assertions.assertEquals("cTestUser2", allUsers.get(1).getName());
+        Assertions.assertEquals("testUser2@email.com", allUsers.get(1).getEmail());
 
-        Assertions.assertEquals(3,allUsers.get(2).getId());
-        Assertions.assertEquals("bTestUser3",allUsers.get(2).getName());
-        Assertions.assertEquals("testUser3@email.com",allUsers.get(2).getEmail());
+        Assertions.assertEquals(3, allUsers.get(2).getId());
+        Assertions.assertEquals("bTestUser3", allUsers.get(2).getName());
+        Assertions.assertEquals("testUser3@email.com", allUsers.get(2).getEmail());
 
 
-        Assertions.assertEquals(4,allUsers.get(3).getId());
-        Assertions.assertEquals("aTestUser4",allUsers.get(3).getName());
-        Assertions.assertEquals("testUser4@email.com",allUsers.get(3).getEmail());
+        Assertions.assertEquals(4, allUsers.get(3).getId());
+        Assertions.assertEquals("aTestUser4", allUsers.get(3).getName());
+        Assertions.assertEquals("testUser4@email.com", allUsers.get(3).getEmail());
 
         Mockito.verify(userRepository, Mockito.times(1)).findAll(Mockito.any(Pageable.class));
     }
@@ -487,21 +483,21 @@ class UserServiceImplTest {
         Assertions.assertNotNull(allUsers);
         Assertions.assertEquals(4, allUsers.size());
 
-        Assertions.assertEquals(1,allUsers.get(0).getId());
-        Assertions.assertEquals("testUser1",allUsers.get(0).getName());
-        Assertions.assertEquals("dTestUser1@email.com",allUsers.get(0).getEmail());
+        Assertions.assertEquals(1, allUsers.get(0).getId());
+        Assertions.assertEquals("testUser1", allUsers.get(0).getName());
+        Assertions.assertEquals("dTestUser1@email.com", allUsers.get(0).getEmail());
 
-        Assertions.assertEquals(2,allUsers.get(1).getId());
-        Assertions.assertEquals("testUser2",allUsers.get(1).getName());
-        Assertions.assertEquals("cTestUser2@email.com",allUsers.get(1).getEmail());
+        Assertions.assertEquals(2, allUsers.get(1).getId());
+        Assertions.assertEquals("testUser2", allUsers.get(1).getName());
+        Assertions.assertEquals("cTestUser2@email.com", allUsers.get(1).getEmail());
 
-        Assertions.assertEquals(3,allUsers.get(2).getId());
-        Assertions.assertEquals("testUser3",allUsers.get(2).getName());
-        Assertions.assertEquals("bTestUser3@email.com",allUsers.get(2).getEmail());
+        Assertions.assertEquals(3, allUsers.get(2).getId());
+        Assertions.assertEquals("testUser3", allUsers.get(2).getName());
+        Assertions.assertEquals("bTestUser3@email.com", allUsers.get(2).getEmail());
 
-        Assertions.assertEquals(4,allUsers.get(3).getId());
-        Assertions.assertEquals("testUser4",allUsers.get(3).getName());
-        Assertions.assertEquals("aTestUser4@email.com",allUsers.get(3).getEmail());
+        Assertions.assertEquals(4, allUsers.get(3).getId());
+        Assertions.assertEquals("testUser4", allUsers.get(3).getName());
+        Assertions.assertEquals("aTestUser4@email.com", allUsers.get(3).getEmail());
 
         Mockito.verify(userRepository, Mockito.times(1)).findAll(Mockito.any(Pageable.class));
     }
@@ -536,21 +532,21 @@ class UserServiceImplTest {
         Assertions.assertNotNull(allUsers);
         Assertions.assertEquals(4, allUsers.size());
 
-        Assertions.assertEquals(1,allUsers.get(0).getId());
-        Assertions.assertEquals("testUser1",allUsers.get(0).getName());
-        Assertions.assertEquals("aTestUser1@email.com",allUsers.get(0).getEmail());
+        Assertions.assertEquals(1, allUsers.get(0).getId());
+        Assertions.assertEquals("testUser1", allUsers.get(0).getName());
+        Assertions.assertEquals("aTestUser1@email.com", allUsers.get(0).getEmail());
 
-        Assertions.assertEquals(2,allUsers.get(1).getId());
-        Assertions.assertEquals("testUser2",allUsers.get(1).getName());
-        Assertions.assertEquals("bTestUser2@email.com",allUsers.get(1).getEmail());
+        Assertions.assertEquals(2, allUsers.get(1).getId());
+        Assertions.assertEquals("testUser2", allUsers.get(1).getName());
+        Assertions.assertEquals("bTestUser2@email.com", allUsers.get(1).getEmail());
 
-        Assertions.assertEquals(3,allUsers.get(2).getId());
-        Assertions.assertEquals("testUser3",allUsers.get(2).getName());
-        Assertions.assertEquals("cTestUser3@email.com",allUsers.get(2).getEmail());
+        Assertions.assertEquals(3, allUsers.get(2).getId());
+        Assertions.assertEquals("testUser3", allUsers.get(2).getName());
+        Assertions.assertEquals("cTestUser3@email.com", allUsers.get(2).getEmail());
 
-        Assertions.assertEquals(4,allUsers.get(3).getId());
-        Assertions.assertEquals("testUser4",allUsers.get(3).getName());
-        Assertions.assertEquals("dTestUser4@email.com",allUsers.get(3).getEmail());
+        Assertions.assertEquals(4, allUsers.get(3).getId());
+        Assertions.assertEquals("testUser4", allUsers.get(3).getName());
+        Assertions.assertEquals("dTestUser4@email.com", allUsers.get(3).getEmail());
 
         Mockito.verify(userRepository, Mockito.times(1)).findAll(Mockito.any(Pageable.class));
     }
