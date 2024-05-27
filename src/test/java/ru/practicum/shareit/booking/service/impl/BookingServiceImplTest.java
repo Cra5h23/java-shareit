@@ -666,7 +666,7 @@ class BookingServiceImplTest {
     void getBookingByOwner() {
     }
 
-
+    @Test
     void getBookingByOwnerTestValidBookingStateAll() {
         Mockito.when(userChecker.checkUser(Mockito.anyLong(), Mockito.anyString()))
                 .thenReturn(User.builder()
