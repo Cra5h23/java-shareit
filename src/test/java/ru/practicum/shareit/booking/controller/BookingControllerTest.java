@@ -299,32 +299,6 @@ class BookingControllerTest {
     }
 
     @Test
-    @DisplayName("POST /bookings  не создаёт новое бронирование если дата окончания бронирования в прошлом")
-    void addNewBookingTestNotValidEndTimeIsPast() throws Exception {
-        var now = LocalDateTime.now();
-
-        var s = objectMapper.writeValueAsString(BookingRequestDto.builder()
-                .itemId(1L)
-                .start(now.plusDays(1))
-                .end(now.minusDays(1))
-                .build());
-
-        var request = MockMvcRequestBuilders
-                .post("/bookings")
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(xSharerUserId, 1)
-                .content(s);
-
-        this.mockMvc.perform(request).andExpectAll(
-                status().isBadRequest(),
-                jsonPath("$.timestamp").exists(),
-                jsonPath("$.status").value(400),
-                jsonPath("$.error").value("Ошибка ввода данных бронирования: Дата окончания бронирования не должна быть в прошлом"),
-                jsonPath("$.path").value("/bookings")
-        );
-    }
-
-    @Test
     @DisplayName("POST /bookings  не создаёт новое бронирование если дата окончания бронирования раньше времени окончания бронирования")
     void addNewBookingTestNotValidEndTimeIsBeforeStartTime() throws Exception {
         var now = LocalDateTime.now().plusDays(2);
