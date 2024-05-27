@@ -2,9 +2,6 @@ package ru.practicum.shareit.user.model;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import ru.practicum.shareit.booking.model.UserType;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Nikolay Radzivon
