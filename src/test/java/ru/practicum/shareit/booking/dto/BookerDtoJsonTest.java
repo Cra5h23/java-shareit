@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
 
 import java.io.IOException;
+
 /**
  * @author Nikolay Radzivon
  * @Date 27.05.2024
@@ -25,5 +26,13 @@ class BookerDtoJsonTest {
 
         Assertions.assertThat(result).hasJsonPath("$.id");
         Assertions.assertThat(result).extractingJsonPathNumberValue("$.id").isEqualTo(dto.getId().intValue());
+    }
+
+    @Test
+    void testDes() throws IOException {
+        BookerDto bookerDto = json.parseObject("{\"id\": 1}");
+
+        Assertions.assertThat(bookerDto).isNotNull();
+        Assertions.assertThat(bookerDto.getId()).isEqualTo(1);
     }
 }
