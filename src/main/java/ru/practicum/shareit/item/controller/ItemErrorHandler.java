@@ -14,10 +14,10 @@ import ru.practicum.shareit.item.exception.NotFoundCommentException;
 
 import javax.validation.ConstraintViolationException;
 
-import static ru.practicum.shareit.exception.ErrorResponse.*;
+import static ru.practicum.shareit.exception.ErrorResponse.makeErrorResponse;
 
 /**
- * Класс {@link ItemErrorHandler} для обработки исключений {@link ItemRepositoryException}, {@link ItemServiceException},
+ * Класс {@link ItemErrorHandler} для обработки исключений {@link NotFoundItemException}, {@link NotFoundUserException},
  * {@link MissingRequestHeaderException}, {@link ConstraintViolationException} в пакете {@link ru.practicum.shareit.item}
  *
  * @author Nikolay Radzivon
@@ -26,18 +26,6 @@ import static ru.practicum.shareit.exception.ErrorResponse.*;
 @ControllerAdvice("ru.practicum.shareit.item")
 @Slf4j
 public class ItemErrorHandler {
-    @ExceptionHandler
-    public ResponseEntity<?> handlerItemRepositoryException(final ItemRepositoryException e, WebRequest webRequest) {
-        log.warn("Ошибка работы с предметами", e);
-        return makeErrorResponse(webRequest, HttpStatus.NOT_FOUND, "Ошибка работы с предметами: ");
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<?> handlerItemServiceException(final ItemServiceException e, WebRequest webRequest) {
-        log.warn("Ошибка работы с предметами", e);
-        return makeErrorResponse(webRequest, HttpStatus.NOT_FOUND, "Ошибка работы с предметами: ");
-    }
-
     @ExceptionHandler
     public ResponseEntity<?> handlerConstraintViolationException(final ConstraintViolationException e,
                                                                  WebRequest webRequest) {
@@ -62,5 +50,17 @@ public class ItemErrorHandler {
     public ResponseEntity<?> handlerNotFoundCommentException(final NotFoundCommentException e, WebRequest webRequest) {
         log.warn("Ошибка работы с комментариями", e);
         return makeErrorResponse(webRequest, HttpStatus.BAD_REQUEST, "Ошибка работы с комментариями: ");
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<?> handlerNotFoundItemException(final NotFoundItemException e, WebRequest webRequest) {
+        log.warn("Ошибка работы с предметами", e);
+        return makeErrorResponse(webRequest, HttpStatus.NOT_FOUND, "Ошибка работы с предметами: ");
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<?> handlerNotFoundUserException(final NotFoundUserException e, WebRequest webRequest) {
+        log.warn("Ошибка работы с предметами", e);
+        return makeErrorResponse(webRequest, HttpStatus.NOT_FOUND, "Ошибка работы с предметами: ");
     }
 }
