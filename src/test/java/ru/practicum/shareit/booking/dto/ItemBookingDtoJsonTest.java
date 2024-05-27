@@ -31,7 +31,7 @@ class ItemBookingDtoJsonTest {
     }
 
     @Test
-    void testDes() throws IOException {
+    void testToObject() throws IOException {
         var dto = json.parseObject("{\"id\": 1, \"name\": \"TestName\"}");
 
         assertThat(dto).isNotNull();
