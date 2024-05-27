@@ -3,6 +3,7 @@ package ru.practicum.shareit.booking.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -59,4 +60,12 @@ public class BookingErrorHandler {
         log.warn("Ошибка ввода данных бронирования", e);
         return makeErrorResponse(webRequest, HttpStatus.NOT_FOUND, "Ошибка работы с бронированиями: ");
     }
+
+    @ExceptionHandler
+    public ResponseEntity<?> handlerMissingRequestHeaderException(final MissingRequestHeaderException e,
+                                                                  WebRequest webRequest) {
+        log.warn("Не указан заголовок", e);
+        return makeErrorResponse(webRequest, HttpStatus.BAD_REQUEST, "Не указан заголовок: ");
+    }
+
 }
