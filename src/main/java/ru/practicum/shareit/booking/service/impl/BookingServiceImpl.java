@@ -7,25 +7,17 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.booking.service.GetBookingsParams;
-import ru.practicum.shareit.booking.model.UserType;
 import ru.practicum.shareit.booking.dto.BookingRequestDto;
 import ru.practicum.shareit.booking.dto.BookingResponseDto;
 import ru.practicum.shareit.booking.exception.BookingServiceException;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
-import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shareit.booking.model.BookingState;
-import ru.practicum.shareit.booking.model.BookingStatus;
-import ru.practicum.shareit.booking.model.QBooking;
+import ru.practicum.shareit.booking.model.*;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.booking.service.BookingService;
+import ru.practicum.shareit.booking.service.GetBookingsParams;
+import ru.practicum.shareit.checker.ItemChecker;
+import ru.practicum.shareit.checker.UserChecker;
 import ru.practicum.shareit.exception.NotFoundBookingException;
-import ru.practicum.shareit.exception.NotFoundItemException;
-import ru.practicum.shareit.exception.NotFoundUserException;
-import ru.practicum.shareit.item.model.Item;
-import ru.practicum.shareit.item.repository.ItemRepository;
-import ru.practicum.shareit.user.model.User;
-import ru.practicum.shareit.user.repository.UserRepository;
 
 import javax.validation.Valid;
 import java.time.ZonedDateTime;
@@ -46,8 +38,8 @@ import java.util.stream.Collectors;
 @Transactional
 public class BookingServiceImpl implements BookingService {
     private final BookingRepository bookingRepository;
-    private final UserRepository userRepository;
-    private final ItemRepository itemRepository;
+    private final UserChecker userChecker;
+    private final ItemChecker itemChecker;
 
     /**
      * Метод добавления нового бронирования.
@@ -60,20 +52,20 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional
     public BookingResponseDto addNewBooking(BookingRequestDto booking, Long userId, TimeZone timeZone) {
-        var user = checkUser(userId, String.format(
-                "Нельзя забронировать вещь для не существующего пользователя с id %d", userId));
         var itemId = booking.getItemId();
-        var item = checkItem(itemId, String.format(
-                "Нельзя забронировать не существующую вещь с id %d", itemId));
+        var user = userChecker.checkUser(userId, String.format(
+                "Нельзя забронировать вещь с id %d для не существующего пользователя с id %d", itemId, userId));
+        var item = itemChecker.checkItem(itemId, String.format(
+                "Нельзя забронировать не существующую вещь с id %d для пользователя с id %d", itemId, userId));
 
         if (!item.getAvailable()) {
             throw new BookingServiceException(
-                    String.format("Нельзя забронировать не доступную для бронирования вещь с id %d", itemId));
+                    String.format("Нельзя забронировать не доступную для бронирования вещь с id %d для пользователя с id %d", itemId, userId));
         }
 
         if (item.getOwner().getId().equals(userId)) {
             throw new NotFoundBookingException(String.format(
-                    "Нельзя забронировать вещь у самого себя пользователь с id %d является владельцем вещи с id %d",
+                    "Нельзя забронировать вещь c id %d пользователь с id %d является владельцем вещи",
                     userId, itemId));
         }
 
@@ -146,9 +138,8 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional(readOnly = true)
     public List<BookingResponseDto> getBookingsByBooker(@Valid GetBookingsParams params) {
-
         var userId = params.getUserId();
-        checkUser(userId, String.format(
+        userChecker.checkUser(userId, String.format(
                 "Нельзя получить список бронирований для не существующего пользователя с id %d", userId));
         var state = params.getState();
         log.info("Получение списка бронирований для пользователя с id {} и сортировкой {}", userId, state);
@@ -166,7 +157,7 @@ public class BookingServiceImpl implements BookingService {
     @Transactional(readOnly = true)
     public List<BookingResponseDto> getBookingByOwner(@Valid GetBookingsParams params) {
         var userId = params.getUserId();
-        checkUser(userId, String.format(
+        userChecker.checkUser(userId, String.format(
                 "Нельзя получить список забронированных вещей для не существующего пользователя с id %d", userId));
         var state = params.getState();
         log.info("Получение списка бронирований для пользователя владельца вещей с id {} и сортировкой {}", userId, state);
@@ -223,13 +214,5 @@ public class BookingServiceImpl implements BookingService {
         return all.stream()
                 .map(b -> BookingMapper.toBookingResponseDto(b, timeZone))
                 .collect(Collectors.toList());
-    }
-
-    private User checkUser(Long id, String message) {
-        return userRepository.findById(id).orElseThrow(() -> new NotFoundUserException(message));
-    }
-
-    private Item checkItem(Long id, String message) {
-        return itemRepository.findById(id).orElseThrow(() -> new NotFoundItemException(message));
     }
 }
