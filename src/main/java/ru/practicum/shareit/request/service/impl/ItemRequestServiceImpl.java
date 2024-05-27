@@ -47,7 +47,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
         log.info("Пользователь с id {} создаёт запрос {}", userId, request);
 
         var user = userChecker.checkUser(userId, String.format(
-                "Нельзя создать новый запрос для не существующего пользователя с id %d.", userId));
+                "Нельзя создать новый запрос для не существующего пользователя с id %d", userId));
         var itemRequest = ItemRequestMapper.toItemRequest(request, user, timeZone);
         var save = itemRequestRepository.save(itemRequest);
         var itemRequestDtoCreated = ItemRequestMapper.toItemRequestDtoCreated(save);
@@ -66,7 +66,7 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     @Transactional(readOnly = true)
     public List<ItemRequestDtoResponse> getUserRequests(Long userId) {
         userChecker.checkUser(userId, String.format(
-                "Нельзя запросить список запросов для не существующего пользователя с id %d.", userId));
+                "Нельзя запросить список запросов для не существующего пользователя с id %d", userId));
 
         var sort = typedSort.by(ItemRequest::getCreated).descending();
         var requests = itemRequestRepository.findAllByRequestorId(userId, sort);
@@ -116,11 +116,11 @@ public class ItemRequestServiceImpl implements ItemRequestService {
     @Transactional(readOnly = true)
     public ItemRequestDtoResponse getRequestById(Long requestId, Long userId) {
         userChecker.checkUser(userId, String.format(
-                "Нельзя получить запрос не существующим пользователем с id %d", userId));
+                "Нельзя получить запрос c id %d не существующим пользователем с id %d", requestId, userId));
 
         var byId = itemRequestRepository.findById(requestId);
         var itemRequest = byId.orElseThrow(() -> new NotFoundItemRequestException(
-                String.format("Нельзя получить не существующий запрос с id %d", requestId)));
+                String.format("Нельзя получить не существующий запрос с id %d пользователем с id %d", requestId, userId)));
         log.info("Запрошен запрос с id {} от пользователя с id {}", requestId, userId);
 
         return ItemRequestMapper.toItemRequestDtoResponse(itemRequest);
