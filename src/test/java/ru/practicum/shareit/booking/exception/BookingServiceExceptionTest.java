@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
  */
 class BookingServiceExceptionTest {
     @Test
-    void CreateException() {
+    void createException() {
         var test = new BookingServiceException("Message");
 
         Assertions.assertNotNull(test);
