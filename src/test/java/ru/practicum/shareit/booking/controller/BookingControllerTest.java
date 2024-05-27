@@ -301,12 +301,12 @@ class BookingControllerTest {
     @Test
     @DisplayName("POST /bookings  не создаёт новое бронирование если дата окончания бронирования в прошлом")
     void addNewBookingTestNotValidEndTimeIsPast() throws Exception {
-        var now = LocalDateTime.now().plusDays(1);
-        var end = LocalDateTime.now().minusDays(2);
+        var now = LocalDateTime.now();
+
         var s = objectMapper.writeValueAsString(BookingRequestDto.builder()
                 .itemId(1L)
-                .start(now)
-                .end(end)
+                .start(now.minusDays(2))
+                .end(now.minusDays(1))
                 .build());
 
         var request = MockMvcRequestBuilders
