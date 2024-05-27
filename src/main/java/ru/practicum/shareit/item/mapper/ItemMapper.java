@@ -67,7 +67,7 @@ public class ItemMapper {
         return OwnerItemResponseDto.builder()
                 .lastBooking(lastBooking)
                 .nextBooking(nextBooking)
-                .comments(item.getComments() !=null ? item.getComments().stream()
+                .comments(item.getComments() != null ? item.getComments().stream()
                         .map(CommentMapper::toCommentResponseDto)
                         .collect(Collectors.toList()) : List.of())
                 .id(item.getId())
