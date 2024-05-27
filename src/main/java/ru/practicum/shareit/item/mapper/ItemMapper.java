@@ -52,21 +52,6 @@ public class ItemMapper {
                 .build();
     }
 
-    public static OwnerItemResponseDto toOwnerItemResponseDto(Item item,
-                                                              BookingShort lastBooking,
-                                                              BookingShort nextBooking,
-                                                              List<CommentResponseDto> comments) {
-        return OwnerItemResponseDto.builder()
-                .lastBooking(lastBooking)
-                .nextBooking(nextBooking)
-                .comments(comments)
-                .id(item.getId())
-                .name(item.getName())
-                .description(item.getDescription())
-                .available(item.getAvailable())
-                .build();
-    }
-
     private static ItemDtoResponse getItemDtoResponse(Item item, Long requestId) {
         return ItemDtoResponse.builder()
                 .id(item.getId())
