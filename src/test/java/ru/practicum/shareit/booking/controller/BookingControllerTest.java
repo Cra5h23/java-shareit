@@ -305,7 +305,7 @@ class BookingControllerTest {
 
         var s = objectMapper.writeValueAsString(BookingRequestDto.builder()
                 .itemId(1L)
-                .start(now.minusDays(2))
+                .start(now.plusDays(1))
                 .end(now.minusDays(1))
                 .build());
 
