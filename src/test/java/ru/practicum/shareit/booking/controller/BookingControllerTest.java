@@ -353,12 +353,11 @@ class BookingControllerTest {
     @Test
     @DisplayName("POST /bookings  не создаёт новое бронирование если дата окончания бронирования равна времени начала бронирования")
     void addNewBookingTestNotValidEndTimeEqualsStartTime() throws Exception {
-        var now = LocalDateTime.now().plusDays(1);
-        var end = LocalDateTime.now().plusDays(1);
+        var now = LocalDateTime.of(2024, 3,5,20,21,10);
         var s = objectMapper.writeValueAsString(BookingRequestDto.builder()
                 .itemId(1L)
                 .start(now)
-                .end(end)
+                .end(now)
                 .build());
 
         var request = MockMvcRequestBuilders
