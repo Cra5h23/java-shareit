@@ -32,7 +32,7 @@ public class ItemResponse {
      * Запрос.
      */
     @ManyToOne(targetEntity = ItemRequest.class)
-    @JoinColumn(name= "request_id")
+    @JoinColumn(name = "request_id")
     @ToString.Exclude
     private ItemRequest request;
 
@@ -40,7 +40,7 @@ public class ItemResponse {
      * Предмет предлагаемый для запроса.
      */
     @ManyToOne(targetEntity = Item.class)
-    @JoinColumn(name= "item_id")
+    @JoinColumn(name = "item_id")
     @ToString.Exclude
     private Item item;
 
