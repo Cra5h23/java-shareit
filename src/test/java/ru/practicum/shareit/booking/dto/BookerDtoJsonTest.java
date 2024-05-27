@@ -30,7 +30,7 @@ class BookerDtoJsonTest {
     }
 
     @Test
-    void testDes() throws IOException {
+    void testToObject() throws IOException {
         var dto = json.parseObject("{\"id\": 1}");
 
         assertThat(dto).isNotNull();
