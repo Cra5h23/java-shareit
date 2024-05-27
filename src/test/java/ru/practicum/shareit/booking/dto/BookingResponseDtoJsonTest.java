@@ -45,7 +45,7 @@ class BookingResponseDtoJsonTest {
     }
 
     @Test
-    void testDes() throws IOException {
+    void testToObject() throws IOException {
         var dto = json.parseObject("{\"id\": 1, \"start\": \"2023-06-10T15:23:00\", \"end\": \"2023-06-10T18:23:00\", \"status\": \"APPROVED\", \"booker\": {\"id\": 1}, \"item\": {\"id\": 2, \"name\": \"testName\"}}");
 
         assertThat(dto).isNotNull();
