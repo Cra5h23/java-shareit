@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import ru.practicum.shareit.exception.NotFoundBookingException;
-import ru.practicum.shareit.item.exception.ItemRepositoryException;
-import ru.practicum.shareit.item.exception.ItemServiceException;
-import ru.practicum.shareit.item.exception.NotFoundCommentException;
+import ru.practicum.shareit.exception.NotFoundCommentException;
+import ru.practicum.shareit.exception.NotFoundItemException;
+import ru.practicum.shareit.exception.NotFoundUserException;
 
 import javax.validation.ConstraintViolationException;
 
