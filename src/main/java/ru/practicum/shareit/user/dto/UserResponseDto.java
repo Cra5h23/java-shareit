@@ -22,11 +22,13 @@ public class UserResponseDto {
      */
     @Schema(description = "Идентификационный номер пользователя", example = "1")
     private Long id;
+
     /**
      * Имя пользователя.
      */
     @Schema(description = "Имя пользователя", example = "exampleUserName")
     private String name;
+
     /**
      * Электронная почта пользователя.
      */
