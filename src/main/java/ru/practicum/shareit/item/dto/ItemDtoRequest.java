@@ -9,7 +9,6 @@ import ru.practicum.shareit.Marker;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.List;
 
 /**
  * Dto класса {@link ru.practicum.shareit.item.model.Item} для принятия данных вещи из запроса.
