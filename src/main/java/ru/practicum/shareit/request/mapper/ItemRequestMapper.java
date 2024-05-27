@@ -36,12 +36,11 @@ public class ItemRequestMapper {
     }
 
     public static ItemRequestDtoResponse toItemRequestDtoResponse(ItemRequest request) {
-
         return ItemRequestDtoResponse.builder()
                 .id(request.getId())
                 .created(request.getCreated().toLocalDateTime())
                 .description(request.getDescription())
-                .items(toListItemFromItemRequest(request.getResponses()))
+                .items(request.getResponses() != null ? toListItemFromItemRequest(request.getResponses()) : null)
                 .build();
     }
 
