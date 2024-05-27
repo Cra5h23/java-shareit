@@ -7,17 +7,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.checker.UserChecker;
 import ru.practicum.shareit.user.dto.UserRequestDto;
 import ru.practicum.shareit.user.dto.UserResponseDto;
 import ru.practicum.shareit.user.exeption.UserRepositoryException;
-import ru.practicum.shareit.user.exeption.UserServiceException;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.model.UserSort;
 import ru.practicum.shareit.user.repository.UserRepository;
 import ru.practicum.shareit.user.service.UserService;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,7 +31,7 @@ import java.util.stream.Collectors;
 @Transactional
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
-    private final String checkUserErrorMessage = "Попытка %s пользователя с не существующим id %d";
+    private final UserChecker userChecker;
 
     /**
      * Метод добавления нового пользователя.
@@ -48,7 +47,7 @@ public class UserServiceImpl implements UserService {
         log.info("Создание нового пользователя c данными {}", user);
         try {
             User save = userRepository.save(u);
-            log.info("Присвоен id {}", save);
+            log.info("Присвоен id {}", save.getId());
             return UserMapper.toUserResponseDto(save);
         } catch (Exception e) {
             throw new UserRepositoryException(String.format(
@@ -67,21 +66,22 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserResponseDto updateUser(UserRequestDto user, long userId) {
         log.info("Обновление пользователя с id {}", userId);
-        User u = checkUser(userId, String.format(checkUserErrorMessage, "обновить", userId));
+        var u = userChecker.checkUser(userId, String.format("Нельзя обновить не существующего пользователя с id %d", userId));
+
         log.info("Старые данные {} новые данные {}", u, user);
-        String email = user.getEmail();
+        var email = user.getEmail();
 
         if (email != null) {
             u.setEmail(email);
         }
 
-        String name = user.getName();
+        var name = user.getName();
 
         if (name != null) {
             u.setName(name);
         }
         try {
-            User save = userRepository.save(u);
+            var save = userRepository.save(u);
 
             return UserMapper.toUserResponseDto(save);
         } catch (Exception e) {
@@ -100,7 +100,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public UserResponseDto getUser(long userId) {
         log.info("Получение пользователя с id {}", userId);
-        User user = checkUser(userId, String.format(checkUserErrorMessage, "получить", userId));
+        var user = userChecker.checkUser(userId, String.format("Нельзя получить не существующего пользователя с id %d", userId));
 
         return UserMapper.toUserResponseDto(user);
     }
@@ -113,8 +113,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void deleteUser(long userId) {
+        userChecker.checkUser(userId, String.format("Нельзя удалить не существующего пользователя с id %d", userId));
         log.info("Удаление пользователя с id {}", userId);
-        checkUser(userId, String.format(checkUserErrorMessage, "удалить", userId));
+
         userRepository.deleteById(userId);
     }
 
@@ -153,16 +154,5 @@ public class UserServiceImpl implements UserService {
                 .map(UserMapper::toUserResponseDto)
                 .stream()
                 .collect(Collectors.toList());
-    }
-
-    /**
-     * Метод для проверки существования пользователя.
-     *
-     * @param userId  идентификационный номер пользователя.
-     * @param message сообщение ошибки если пользователь не существует.
-     * @return объект класса {@link UserResponseDto}
-     */
-    private User checkUser(long userId, String message) {
-        return userRepository.findById(userId).orElseThrow(() -> new UserServiceException(message));
     }
 }
