@@ -1,7 +1,6 @@
 package ru.practicum.shareit.item.model;
 
 import lombok.*;
-
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
@@ -55,7 +54,7 @@ public class Item {
 
     @OneToMany(mappedBy = "item", fetch = FetchType.LAZY)
     @ToString.Exclude
-    private List<Comment> comments =new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
