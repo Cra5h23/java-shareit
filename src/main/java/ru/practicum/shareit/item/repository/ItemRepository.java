@@ -8,8 +8,6 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.query.Param;
 import ru.practicum.shareit.item.model.Item;
 
-import java.util.List;
-
 /**
  * Интерфейс {@link ItemRepository}
  *
@@ -20,7 +18,7 @@ public interface ItemRepository extends JpaRepository<Item, Long>, QuerydslPredi
     /**
      * Метод поиска вещи по её названию или описанию и вывода постранично.
      *
-     * @param text текс поиска.
+     * @param text     текс поиска.
      * @param pageable страница.
      * @return {@link Page} {@link Item}.
      */
