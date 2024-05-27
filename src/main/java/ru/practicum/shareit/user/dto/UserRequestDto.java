@@ -26,6 +26,7 @@ public class UserRequestDto {
     @NotBlank(groups = Marker.OnCreate.class, message = "Поле name не должно быть пустым")
     @Schema(description = "Имя пользователя", example = "exampleUserName")
     private String name;
+
     /**
      * Электронная почта пользователя
      */
