@@ -152,7 +152,7 @@ class ItemRequestServiceImplTest {
     @Test
     void getAllRequestsValid() {
         Mockito.when(itemRequestRepository.findAllByRequestorIdNot(Mockito.anyLong(), Mockito.any(Pageable.class)))
-                .thenReturn(new PageImpl<ItemRequest>(List.of(
+                .thenReturn(new PageImpl<>(List.of(
                         ItemRequest.builder()
                                 .id(1L)
                                 .requestor(User.builder()

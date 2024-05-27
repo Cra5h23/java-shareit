@@ -3,8 +3,6 @@ package ru.practicum.shareit.booking.model;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
  * @author Nikolay Radzivon
  * @Date 27.05.2024

@@ -208,7 +208,7 @@ class UserServiceImplTest {
     @Test
     void getAllUsersTestValidSortNone() {
         Mockito.when(userRepository.findAll(Mockito.any(Pageable.class)))
-                .thenReturn(new PageImpl<User>(List.of(User.builder()
+                .thenReturn(new PageImpl<>(List.of(User.builder()
                                 .id(1L)
                                 .name("testUser1")
                                 .email("testUser1@email.com")
@@ -257,7 +257,7 @@ class UserServiceImplTest {
     @Test
     void getAllUsersTestValidSortID_ASC() {
         Mockito.when(userRepository.findAll(Mockito.any(Pageable.class)))
-                .thenReturn(new PageImpl<User>(List.of(User.builder()
+                .thenReturn(new PageImpl<>(List.of(User.builder()
                                 .id(1L)
                                 .name("testUser1")
                                 .email("testUser1@email.com")
@@ -306,7 +306,7 @@ class UserServiceImplTest {
     @Test
     void getAllUsersTestValidSortID_DESC() {
         Mockito.when(userRepository.findAll(Mockito.any(Pageable.class)))
-                .thenReturn(new PageImpl<User>(List.of(User.builder()
+                .thenReturn(new PageImpl<>(List.of(User.builder()
                                 .id(4L)
                                 .name("testUser4")
                                 .email("testUser4@email.com")
@@ -356,7 +356,7 @@ class UserServiceImplTest {
     @Test
     void getAllUsersTestValidSortNAME_ASC() {
         Mockito.when(userRepository.findAll(Mockito.any(Pageable.class)))
-                .thenReturn(new PageImpl<User>(List.of(User.builder()
+                .thenReturn(new PageImpl<>(List.of(User.builder()
                                 .id(1L)
                                 .name("aTestUser1")
                                 .email("testUser1@email.com")
@@ -406,7 +406,7 @@ class UserServiceImplTest {
     @Test
     void getAllUsersTestValidSortNAME_DESC() {
         Mockito.when(userRepository.findAll(Mockito.any(Pageable.class)))
-                .thenReturn(new PageImpl<User>(List.of(User.builder()
+                .thenReturn(new PageImpl<>(List.of(User.builder()
                                 .id(1L)
                                 .name("dTestUser1")
                                 .email("testUser1@email.com")
@@ -456,7 +456,7 @@ class UserServiceImplTest {
     @Test
     void getAllUsersTestValidSortEMAIL_DESC() {
         Mockito.when(userRepository.findAll(Mockito.any(Pageable.class)))
-                .thenReturn(new PageImpl<User>(List.of(User.builder()
+                .thenReturn(new PageImpl<>(List.of(User.builder()
                                 .id(1L)
                                 .name("testUser1")
                                 .email("dTestUser1@email.com")
@@ -505,7 +505,7 @@ class UserServiceImplTest {
     @Test
     void getAllUsersTestValidSortEMAIL_ASC() {
         Mockito.when(userRepository.findAll(Mockito.any(Pageable.class)))
-                .thenReturn(new PageImpl<User>(List.of(User.builder()
+                .thenReturn(new PageImpl<>(List.of(User.builder()
                                 .id(1L)
                                 .name("testUser1")
                                 .email("aTestUser1@email.com")
