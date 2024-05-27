@@ -2,11 +2,8 @@ package ru.practicum.shareit.user.converter;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import ru.practicum.shareit.exception.BookingStateException;
 import ru.practicum.shareit.user.exeption.UserSortException;
 import ru.practicum.shareit.user.model.UserSort;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Nikolay Radzivon
