@@ -1,12 +1,13 @@
 package ru.practicum.shareit.booking.dto;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
 
 import java.io.IOException;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Nikolay Radzivon
@@ -24,15 +25,16 @@ class BookerDtoJsonTest {
 
         var result = json.write(dto);
 
-        Assertions.assertThat(result).hasJsonPath("$.id");
-        Assertions.assertThat(result).extractingJsonPathNumberValue("$.id").isEqualTo(dto.getId().intValue());
+        assertThat(result).hasJsonPath("$.id");
+        assertThat(result).extractingJsonPathNumberValue("$.id").isEqualTo(dto.getId().intValue());
     }
 
     @Test
     void testDes() throws IOException {
-        BookerDto bookerDto = json.parseObject("{\"id\": 1}");
+        var dto = json.parseObject("{\"id\": 1}");
 
-        Assertions.assertThat(bookerDto).isNotNull();
-        Assertions.assertThat(bookerDto.getId()).isEqualTo(1);
+        assertThat(dto).isNotNull();
+        assertThat(dto.getId()).isEqualTo(1);
+        assertThat(dto.getClass()).isEqualTo(BookerDto.class);
     }
 }
