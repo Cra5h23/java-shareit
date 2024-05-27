@@ -7,15 +7,15 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import ru.practicum.shareit.exception.NotFoundUserException;
 import ru.practicum.shareit.user.exeption.UserRepositoryException;
-import ru.practicum.shareit.user.exeption.UserServiceException;
 
 import javax.validation.ConstraintViolationException;
 
 import static ru.practicum.shareit.exception.ErrorResponse.*;
 
 /**
- * Класс {@link UserErrorHandler} для обработки исключений {@link UserRepositoryException}, {@link UserServiceException},
+ * Класс {@link UserErrorHandler} для обработки исключений {@link UserRepositoryException}, {@link NotFoundUserException},
  * {@link MethodArgumentNotValidException}, {@link ConstraintViolationException} в пакете {@link ru.practicum.shareit.user}
  *
  * @author Nikolay Radzivon
@@ -32,12 +32,6 @@ public class UserErrorHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<?> handlerUserServiceException(final UserServiceException e, WebRequest webRequest) {
-        log.warn("Ошибка работы с пользователями", e);
-        return makeErrorResponse(webRequest, HttpStatus.NOT_FOUND, "Ошибка работы с пользователями: ");
-    }
-
-    @ExceptionHandler
     public ResponseEntity<?> handlerMethodArgumentNotValidException(final MethodArgumentNotValidException e,
                                                                     WebRequest webRequest) {
         log.warn("Ошибка ввода данных пользователя", e);
@@ -48,5 +42,11 @@ public class UserErrorHandler {
     public ResponseEntity<?> handlerConstraintViolationException(final ConstraintViolationException e, WebRequest webRequest) {
         log.warn("Ошибка ввода данных пользователя", e);
         return makeErrorResponse(webRequest, HttpStatus.BAD_REQUEST, "Ошибка ввода данных пользователя: ");
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<?> handlerNotFoundUserException(final NotFoundUserException e, WebRequest webRequest) {
+        log.warn("Ошибка работы с пользователями", e);
+        return makeErrorResponse(webRequest, HttpStatus.NOT_FOUND, "Ошибка работы с пользователями: ");
     }
 }
