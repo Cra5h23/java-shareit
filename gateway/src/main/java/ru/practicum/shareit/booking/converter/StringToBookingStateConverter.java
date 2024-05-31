@@ -1,8 +1,7 @@
 package ru.practicum.shareit.booking.converter;
 
 import org.springframework.core.convert.converter.Converter;
-import ru.practicum.shareit.booking.model.BookingState;
-import ru.practicum.shareit.exception.BookingStateException;
+import ru.practicum.shareit.booking.dto.BookingState;
 
 /**
  * Класс конвертер для преобразования {@link String} полученной из запроса в объект класса {@link BookingState}.
@@ -16,9 +15,16 @@ public class StringToBookingStateConverter implements Converter<String, BookingS
         try {
             return BookingState.valueOf(source.toUpperCase());
         } catch (IllegalArgumentException e) {
-            String message = e.getMessage();
-            String ex = message.substring(message.lastIndexOf(".") + 1);
-            throw new BookingStateException(ex);
+            var message = e.getMessage();
+            var ex = message.substring(message.lastIndexOf(".") + 1);
+            throw new BookingStateException(ex); //todo если что ошибку вынести в отдельный класс
+        }
+    }
+
+    //todo попробую можно ли так
+    public static class BookingStateException extends RuntimeException {
+        public BookingStateException(String message) {
+            super(message);
         }
     }
 }
