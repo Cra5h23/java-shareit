@@ -1,8 +1,7 @@
 package ru.practicum.shareit.user.converter;
 
 import org.springframework.core.convert.converter.Converter;
-import ru.practicum.shareit.user.exeption.UserSortException;
-import ru.practicum.shareit.user.model.UserSort;
+import ru.practicum.shareit.user.dto.UserSort;
 
 /**
  * @author Nikolay Radzivon
@@ -17,6 +16,12 @@ public class StringToUserSortConverter implements Converter<String, UserSort> {
             String message = e.getMessage();
             String ex = message.substring(message.lastIndexOf(".") + 1);
             throw new UserSortException(ex);
+        }
+    }
+
+    public static class UserSortException extends RuntimeException {
+        public UserSortException(String message) {
+            super(message);
         }
     }
 }
