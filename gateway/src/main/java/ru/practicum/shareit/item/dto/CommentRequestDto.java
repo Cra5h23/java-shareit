@@ -23,7 +23,7 @@ public class CommentRequestDto {
     /**
      * Текст комментария.
      */
-    @NotBlank(groups = Marker.OnCreate.class)
+    @NotBlank(/*groups = Marker.OnCreate.class*/)
     @Size(max = 512, groups = Marker.OnCreate.class)
     private String text;
 }
