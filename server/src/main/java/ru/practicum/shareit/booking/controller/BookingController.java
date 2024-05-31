@@ -39,9 +39,10 @@ public class BookingController {
      * @return {@link ResponseEntity}
      */
     @PostMapping
-    @Validated(Marker.OnCreate.class)
+    @Validated(Marker.OnCreate.class) //todo убрать валидацию
     public ResponseEntity<?> addNewBooking(
-            @Valid @RequestBody BookingRequestDto booking,
+            @Valid
+            @RequestBody BookingRequestDto booking,
             @RequestHeader(value = xSharerUserId) Long userId,
             TimeZone timeZone) {
         log.info("POST /bookings, body = {}, header \"{}\" = {}", booking, xSharerUserId, userId);
