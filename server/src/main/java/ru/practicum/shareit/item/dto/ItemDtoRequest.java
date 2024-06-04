@@ -5,10 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.Marker;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 /**
  * Dto класса {@link ru.practicum.shareit.item.model.Item} для принятия данных вещи из запроса.
@@ -25,21 +21,21 @@ public class ItemDtoRequest {
     /**
      * Название вещи.
      */
-    @NotBlank(groups = Marker.OnCreate.class, message = "Название предмета не может быть пустым")
+//    @NotBlank(groups = Marker.OnCreate.class, message = "Название предмета не может быть пустым")
     @Schema(description = "Название вещи", example = "exampleName")
     private String name;
 
     /**
      * Описание вещи.
      */
-    @NotBlank(groups = Marker.OnCreate.class, message = "Описание предмета не может быть пустым")
+//    @NotBlank(groups = Marker.OnCreate.class, message = "Описание предмета не может быть пустым")
     @Schema(description = "Описание вещи", example = "exampleDescription")
     private String description;
 
     /**
      * Возможность аренды вещи.
      */
-    @NotNull(groups = Marker.OnCreate.class, message = "Возможность аренды должна быть указана")
+//    @NotNull(groups = Marker.OnCreate.class, message = "Возможность аренды должна быть указана")
     @Schema(description = "Доступность для аренды", example = "true")
     private Boolean available;
 
