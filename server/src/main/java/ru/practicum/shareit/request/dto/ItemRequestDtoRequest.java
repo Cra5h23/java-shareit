@@ -18,7 +18,5 @@ public class ItemRequestDtoRequest {
     /**
      * Описание вещи.
      */
-//    @NotBlank(groups = Marker.OnCreate.class, message = "Описание требуемой вещи не может быть пустым")
-//    @Size(min = 1, max = 512, message = "Описание требуемой вещи не может быть меньше 1 и больше 512 символов")
     private String description;
 }

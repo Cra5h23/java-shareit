@@ -35,10 +35,8 @@ public class ItemController {
     private final String xSharerUserId = "X-Sharer-User-Id";
 
     @PostMapping
-    //@Validated(Marker.OnCreate.class)
     @Operation(summary = "Добавление новой вещи", description = "Позволяет добавить новую вещь")
     public ResponseEntity<?> addNewItem(
-            //@Valid
             @RequestBody
             @Parameter(description = "Данные вещи")
             ItemDtoRequest item,
@@ -168,12 +166,10 @@ public class ItemController {
     }
 
     @PostMapping("{itemId}/comment")
-//    @Validated(Marker.OnCreate.class)
     public ResponseEntity<?> addComment(
             @PathVariable Long itemId,
             @RequestHeader(value = xSharerUserId) Long userId,
             @RequestBody
-//            @Valid
             CommentRequestDto text,
             TimeZone timeZone) {
         log.info("POST /items/{}/comment , header \"{}\" = {}", itemId, xSharerUserId, userId);

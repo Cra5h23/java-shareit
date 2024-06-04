@@ -84,64 +84,6 @@ class ItemControllerTest {
         Mockito.verify(itemService, Mockito.times(1)).addNewItem(Mockito.any(), Mockito.any());
     }
 
-//    @Test
-//    @DisplayName("POST /items не создаёт новую вещь если не указано имя вещи и создаёт форматированный ответ")
-//    void addNewItemTest_NotValidName() throws Exception {
-//        var request = MockMvcRequestBuilders
-//                .post("/items")
-//                .header(xSharerUserId, 1L)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content("{\"description\": \"testDescription1\"," +
-//                        "\"available\": true}");
-//
-//        this.mockMvc.perform(request).andExpectAll(
-//                status().isBadRequest(),
-//                jsonPath("$.timestamp").exists(),
-//                jsonPath("$.status").value(400),
-//                jsonPath("$.error").value("Ошибка ввода данных предмета: Название предмета не может быть пустым"),
-//                jsonPath("$.path").value("/items")
-//        );
-//    }
-
-//    @Test
-//    @DisplayName("POST /items не создаёт новую вещь если не указана доступность вещи для аренды и создаёт форматированный ответ")
-//    void addNewItemTest_NotValidAvailable() throws Exception {
-//        var request = MockMvcRequestBuilders
-//                .post("/items")
-//                .header(xSharerUserId, 1L)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content("{\"name\": \"testName1\"," +
-//                        "\"description\": \"testDescription1\"" +
-//                        "}");
-//
-//        this.mockMvc.perform(request).andExpectAll(
-//                status().isBadRequest(),
-//                jsonPath("$.timestamp").exists(),
-//                jsonPath("$.status").value(400),
-//                jsonPath("$.error").value("Ошибка ввода данных предмета: Возможность аренды должна быть указана"),
-//                jsonPath("$.path").value("/items")
-//        );
-//    }
-
-//    @Test
-//    @DisplayName("POST /items не создаёт новую вещь если не указано описание вещи и создаёт форматированный ответ")
-//    void addNewItemTest_NotValidDescription() throws Exception {
-//        var request = MockMvcRequestBuilders
-//                .post("/items")
-//                .header(xSharerUserId, 1L)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content("{\"name\": \"testName1\"," +
-//                        "\"available\": true}");
-//
-//        this.mockMvc.perform(request).andExpectAll(
-//                status().isBadRequest(),
-//                jsonPath("$.timestamp").exists(),
-//                jsonPath("$.status").value(400),
-//                jsonPath("$.error").value("Ошибка ввода данных предмета: Описание предмета не может быть пустым"),
-//                jsonPath("$.path").value("/items")
-//        );
-//    }
-
     @Test
     @DisplayName("POST /items не создаёт новую вещь если указан не существующий пользователь")
     void addNewItemTest_NotValidUserId() throws Exception {
@@ -634,42 +576,6 @@ class ItemControllerTest {
         );
         Mockito.verify(itemService, Mockito.times(1)).addComment(Mockito.anyLong(), Mockito.anyLong(), Mockito.any(TimeZone.class), Mockito.any(CommentRequestDto.class));
     }
-
-//    @Test
-//    @DisplayName("POST /items/1/comment не создаёт новый комментарий когда не указан текст комментария")
-//    void addCommentTestNotValidEmptyText() throws Exception {
-//        var request = MockMvcRequestBuilders
-//                .post("/items/1/comment")
-//                .header(xSharerUserId, 1)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content("{\"text\":\"\"}");
-//
-//        this.mockMvc.perform(request).andExpectAll(
-//                status().isBadRequest(),
-//                jsonPath("$.timestamp").exists(),
-//                jsonPath("$.status").value(400),
-//                jsonPath("$.error").value("Ошибка ввода данных предмета: must not be blank"),
-//                jsonPath("$.path").value("/items/1/comment")
-//        );
-//    }
-
-//    @Test
-//    @DisplayName("POST /items/1/comment не создаёт новый комментарий когда указан текст комментария более 512 символов")
-//    void addCommentTestNotValidText() throws Exception {
-//        var request = MockMvcRequestBuilders
-//                .post("/items/1/comment")
-//                .header(xSharerUserId, 1)
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content("{\"text\":\"Проснувшись однажды утром после беспокойного сна, Грегор Замза обнаружил, что он у себя в постели превратился в страшное насекомое. Лежа на панцирнотвердой спине, он видел, стоило ему приподнять голову, свой коричневый, выпуклый, разделенный дугообразными чешуйками живот, на верхушке которого еле держалось готовое вот-вот окончательно сползти одеяло. Его многочисленные, убого тонкие по сравнению с остальным телом ножки беспомощно копошились у него перед глазами. «Что со мной случилось?» – подумал он. Это не.\"}");
-//
-//        this.mockMvc.perform(request).andExpectAll(
-//                status().isBadRequest(),
-//                jsonPath("$.timestamp").exists(),
-//                jsonPath("$.status").value(400),
-//                jsonPath("$.error").value("Ошибка ввода данных предмета: size must be between 0 and 512"),
-//                jsonPath("$.path").value("/items/1/comment")
-//        );
-//    }
 
     @Test
     @DisplayName("POST /items/1/comment не создаёт новый комментарий когда пользователь не существует")
