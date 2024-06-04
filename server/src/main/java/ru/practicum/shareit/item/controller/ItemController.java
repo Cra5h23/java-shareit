@@ -35,16 +35,11 @@ public class ItemController {
     private final String xSharerUserId = "X-Sharer-User-Id";
 
     @PostMapping
-    //@Validated(Marker.OnCreate.class)
     @Operation(summary = "Добавление новой вещи", description = "Позволяет добавить новую вещь")
     public ResponseEntity<?> addNewItem(
-            //@Valid
-            @RequestBody
-            @Parameter(description = "Данные вещи")
-            ItemDtoRequest item,
+            @RequestBody @Parameter(description = "Данные вещи") ItemDtoRequest item,
             @RequestHeader(value = xSharerUserId)
-            @Parameter(description = "Идентификационный номер пользователя владельца вещи")
-            Long userId) {
+            @Parameter(description = "Идентификационный номер пользователя владельца вещи") Long userId) {
         log.info("POST /items , body = {}, header \"{}\" = {}", item, xSharerUserId, userId);
 
         return ResponseEntity
@@ -55,15 +50,10 @@ public class ItemController {
     @PatchMapping("/{itemId}")
     @Operation(summary = "Обновление вещи", description = "Позволяет обновить вещь (может обновить только владелец вещи)")
     public ResponseEntity<?> updateItem(
-            @RequestBody
-            @Parameter(description = "Данные вещи")
-            ItemDtoRequest item,
-            @PathVariable
-            @Parameter(description = "Идентификационный номер вещи")
-            Long itemId,
+            @RequestBody @Parameter(description = "Данные вещи") ItemDtoRequest item,
+            @PathVariable @Parameter(description = "Идентификационный номер вещи") Long itemId,
             @RequestHeader(value = xSharerUserId)
-            @Parameter(description = "Идентификационный номер пользователя владельца вещи")
-            Long userId) {
+            @Parameter(description = "Идентификационный номер пользователя владельца вещи") Long userId) {
         log.info("PATCH /items/{} , body = {}, header \"{}\" = {}", itemId, item, xSharerUserId, userId);
 
         return ResponseEntity
@@ -74,12 +64,9 @@ public class ItemController {
     @GetMapping("/{itemId}")
     @Operation(summary = "Получение вещи по id", description = "Просмотр информации о вещи может запросить любой пользователь")
     public ResponseEntity<?> getItemById(
-            @PathVariable
-            @Parameter(description = "Идентификационный номер вещи")
-            Long itemId,
+            @PathVariable @Parameter(description = "Идентификационный номер вещи") Long itemId,
             @RequestHeader(value = xSharerUserId, required = false)
-            @Parameter(description = "Идентификационный номер пользователя")
-            Long userId) {
+            @Parameter(description = "Идентификационный номер пользователя") Long userId) {
         log.info("GET /items/{} , header \"{}\" = {}", itemId, xSharerUserId, userId);
 
         return ResponseEntity
@@ -91,12 +78,9 @@ public class ItemController {
     @ResponseStatus(HttpStatus.OK)
     @Operation(summary = "Удаление вещи по id", description = "Удаление вещи (может удалить только пользователь владелец вещи")
     public void deleteItemByItemId(
-            @PathVariable
-            @Parameter(description = "Идентификационный номер вещи")
-            Long itemId,
+            @PathVariable @Parameter(description = "Идентификационный номер вещи") Long itemId,
             @RequestHeader(value = xSharerUserId)
-            @Parameter(description = "Идентификационный номер пользователя владельца вещи")
-            Long userId) {
+            @Parameter(description = "Идентификационный номер пользователя владельца вещи") Long userId) {
         log.info("DELETE /items/{} , header \"{}\" = {}", itemId, xSharerUserId, userId);
 
         itemService.deleteItemByItemId(itemId, userId);
@@ -108,8 +92,7 @@ public class ItemController {
             description = "Удаление всех вещей (Может удалить только пользователь владелец вещей)")
     public void deleteAllItemByUser(
             @RequestHeader(value = xSharerUserId)
-            @Parameter(description = "Идентификационный номер пользователя владельца вещи")
-            Long userId) {
+            @Parameter(description = "Идентификационный номер пользователя владельца вещи") Long userId) {
         log.info("DELETE /items , header \"{}\" = {}", xSharerUserId, userId);
 
         itemService.deleteAllItemByUser(userId);
@@ -168,13 +151,10 @@ public class ItemController {
     }
 
     @PostMapping("{itemId}/comment")
-//    @Validated(Marker.OnCreate.class)
     public ResponseEntity<?> addComment(
             @PathVariable Long itemId,
             @RequestHeader(value = xSharerUserId) Long userId,
-            @RequestBody
-//            @Valid
-            CommentRequestDto text,
+            @RequestBody CommentRequestDto text,
             TimeZone timeZone) {
         log.info("POST /items/{}/comment , header \"{}\" = {}", itemId, xSharerUserId, userId);
 
