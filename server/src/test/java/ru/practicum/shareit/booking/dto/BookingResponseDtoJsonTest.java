@@ -7,6 +7,7 @@ import org.springframework.boot.test.json.JacksonTester;
 import ru.practicum.shareit.booking.model.BookingStatus;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,7 +24,7 @@ class BookingResponseDtoJsonTest {
     void testSerialize() throws IOException {
         var booker = BookerDto.builder().id(1L).build();
         var item = ItemBookingDto.builder().id(2L).name("TestItem").build();
-        var dto = new BookingResponseDto(1L, "2023-06-10T15:23:00", "2023-06-10T18:23:00", BookingStatus.APPROVED, booker, item);
+        var dto = new BookingResponseDto(1L, LocalDateTime.parse("2023-06-10T15:23:00"), LocalDateTime.parse("2023-06-10T18:23:00"), BookingStatus.APPROVED, booker, item);
 
         var result = json.write(dto);
 
