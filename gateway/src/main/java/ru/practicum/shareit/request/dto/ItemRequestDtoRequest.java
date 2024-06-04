@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 /**
- * Dto для модели {@link ru.practicum.shareit.request.model.ItemRequest} использующееся для получения данных из запроса.
+ * Dto {@link ItemRequestDtoRequest} использующееся для получения данных из запроса.
  *
  * @author Nikolay Radzivon
  */
@@ -23,6 +23,6 @@ public class ItemRequestDtoRequest {
      * Описание вещи.
      */
     @NotBlank(groups = Marker.OnCreate.class, message = "Описание требуемой вещи не может быть пустым")
-    @Size(min = 1, max = 512, message = "Описание требуемой вещи не может быть меньше 1 и больше 512 символов")
+    @Size(groups = Marker.OnCreate.class, max = 512, message = "Описание требуемой вещи не может быть больше 512 символов")
     private String description;
 }
