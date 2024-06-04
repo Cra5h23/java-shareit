@@ -6,6 +6,7 @@ import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,7 +21,7 @@ class CommentResponseDtoJsonTest {
 
     @Test
     void testSerialize() throws IOException {
-        var dto = new CommentResponseDto(1L, "testText", "TestAuthor", "2023-06-10T18:23:00");
+        var dto = new CommentResponseDto(1L, "testText", "TestAuthor", LocalDateTime.parse("2023-06-10T18:23:00"));
 
         var result = json.write(dto);
 
