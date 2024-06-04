@@ -82,7 +82,7 @@ class CommentMapperTest {
         Assertions.assertNotNull(test);
         Assertions.assertEquals(1, test.getId());
         Assertions.assertEquals("TestUser", test.getAuthorName());
-        Assertions.assertEquals(LocalDateTime.of(2024, 3, 12, 10, 12, 13, 0).toString(), test.getCreated());
+        Assertions.assertEquals(LocalDateTime.of(2024, 3, 12, 10, 12, 13, 0), test.getCreated());
         Assertions.assertEquals("testText", test.getText());
     }
 }
