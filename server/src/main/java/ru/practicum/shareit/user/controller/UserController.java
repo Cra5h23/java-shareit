@@ -31,11 +31,9 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-//    @Validated(Marker.OnCreate.class)
     @Operation(summary = "Добавление нового пользователя", description = "Позволяет добавить нового пользователя")
     public ResponseEntity<?> addNewUser(
             @RequestBody @Parameter(description = "Данные пользователя")
-//            @Valid
             UserRequestDto user) {
         log.info("POST /users body = {}", user);
 
@@ -45,11 +43,9 @@ public class UserController {
     }
 
     @PatchMapping("/{userId}")
-//    @Validated({Marker.OnUpdate.class})
     @Operation(summary = "Обновление пользователя", description = "Позволяет обновить пользователя")
     public ResponseEntity<?> updateUser(
             @RequestBody @Parameter(description = "Данные пользователя")
-//            @Valid
             UserRequestDto user,
             @PathVariable @Parameter(description = "Идентификатор пользователя для обновления") long userId) {
         log.info("PATCH /users/{} body = {}", userId, user);

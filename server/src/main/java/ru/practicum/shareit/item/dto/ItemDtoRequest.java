@@ -21,21 +21,18 @@ public class ItemDtoRequest {
     /**
      * Название вещи.
      */
-//    @NotBlank(groups = Marker.OnCreate.class, message = "Название предмета не может быть пустым")
     @Schema(description = "Название вещи", example = "exampleName")
     private String name;
 
     /**
      * Описание вещи.
      */
-//    @NotBlank(groups = Marker.OnCreate.class, message = "Описание предмета не может быть пустым")
     @Schema(description = "Описание вещи", example = "exampleDescription")
     private String description;
 
     /**
      * Возможность аренды вещи.
      */
-//    @NotNull(groups = Marker.OnCreate.class, message = "Возможность аренды должна быть указана")
     @Schema(description = "Доступность для аренды", example = "true")
     private Boolean available;
 

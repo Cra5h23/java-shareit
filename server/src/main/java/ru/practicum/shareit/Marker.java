@@ -10,5 +10,4 @@ public interface Marker {
 
     interface OnUpdate {
     }
-    //todo класс уходит в модуль gateway
 }
