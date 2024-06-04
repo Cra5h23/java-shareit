@@ -11,7 +11,6 @@ services:
       - server
     environment:
       - SHAREIT_SERVER_URL=http://server:9090
-      - SERVER_PORT=8080
 
   server:
     build:
@@ -26,7 +25,6 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/shareit
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
-      - SERVER_PORT=9090
   db:
     image: postgres:13.7-alpine
     container_name: db
