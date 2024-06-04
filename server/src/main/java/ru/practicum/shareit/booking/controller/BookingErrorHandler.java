@@ -9,10 +9,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import ru.practicum.shareit.booking.exception.BookingServiceException;
-import ru.practicum.shareit.exception.BookingStateException;
-import ru.practicum.shareit.exception.NotFoundBookingException;
-import ru.practicum.shareit.exception.NotFoundItemException;
-import ru.practicum.shareit.exception.NotFoundUserException;
+import ru.practicum.shareit.exception.*;
 
 import javax.validation.ConstraintViolationException;
 
@@ -32,19 +29,19 @@ public class BookingErrorHandler {
     @ExceptionHandler
     public ResponseEntity<?> handlerBookingServiceException(final BookingServiceException e, WebRequest webRequest) {
         log.info("Ошибка работы с бронированиями", e);
-        return makeErrorResponse(webRequest, HttpStatus.BAD_REQUEST, "Ошибка работы с бронированиями: ");
+        return ErrorResponse.makeErrorResponse(webRequest, HttpStatus.BAD_REQUEST, "Ошибка работы с бронированиями: ");
     }
 
     @ExceptionHandler
     public ResponseEntity<?> handlerNotFoundUserException(final NotFoundUserException e, WebRequest webRequest) {
         log.info("Ошибка работы с бронированиями", e);
-        return makeErrorResponse(webRequest, HttpStatus.NOT_FOUND, "Ошибка работы с бронированиями: ");
+        return ErrorResponse.makeErrorResponse(webRequest, HttpStatus.NOT_FOUND, "Ошибка работы с бронированиями: ");
     }
 
     @ExceptionHandler
     public ResponseEntity<?> handlerNotFoundItemException(final NotFoundItemException e, WebRequest webRequest) {
         log.info("Ошибка работы с бронированиями", e);
-        return makeErrorResponse(webRequest, HttpStatus.NOT_FOUND, "Ошибка работы с бронированиями: ");
+        return ErrorResponse.makeErrorResponse(webRequest, HttpStatus.NOT_FOUND, "Ошибка работы с бронированиями: ");
     }
 
     @ExceptionHandler

@@ -36,7 +36,9 @@ public class ItemRequestController {
      * @return {@link ResponseEntity}
      */
     @PostMapping
+//    @Validated(Marker.OnCreate.class)
     public ResponseEntity<?> addNewRequest(
+//            @Valid
             @RequestBody ItemRequestDtoRequest request,
             @RequestHeader(value = xSharerUserId) Long userId,
             TimeZone timeZone) {

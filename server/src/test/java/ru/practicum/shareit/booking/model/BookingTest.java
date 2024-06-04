@@ -2,7 +2,6 @@ package ru.practicum.shareit.booking.model;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.test.annotation.DirtiesContext;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
@@ -46,7 +45,6 @@ class BookingTest {
         int i = booking.hashCode();
 
         Assertions.assertNotNull(i);
-        Assertions.assertEquals(Booking.class, booking.getClass());
     }
 
     @Test

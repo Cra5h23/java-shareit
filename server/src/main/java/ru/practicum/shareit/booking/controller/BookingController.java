@@ -37,7 +37,9 @@ public class BookingController {
      * @return {@link ResponseEntity}
      */
     @PostMapping
+    //@Validated(Marker.OnCreate.class) //todo убрать валидацию
     public ResponseEntity<?> addNewBooking(
+            //@Valid
             @RequestBody BookingRequestDto booking,
             @RequestHeader(value = xSharerUserId) Long userId,
             TimeZone timeZone) {
@@ -62,7 +64,7 @@ public class BookingController {
             @PathVariable Long bookingId,
             @RequestParam @NotNull Boolean approved,
             @RequestHeader(value = xSharerUserId) Long userId,
-            TimeZone timeZone) {
+             TimeZone timeZone) {
         log.info("PATCH /bookings/{}?approved={} , header \"{}\" = {}", bookingId, approved, xSharerUserId, userId);
 
         return ResponseEntity
@@ -82,7 +84,7 @@ public class BookingController {
     public ResponseEntity<?> getBooking(
             @PathVariable Long bookingId,
             @RequestHeader(value = xSharerUserId) Long userId,
-            TimeZone timeZone) {
+              TimeZone timeZone) {
         log.info("GET /bookings/{} , header \"{}\" = {}", bookingId, xSharerUserId, userId);
 
         return ResponseEntity
@@ -102,7 +104,7 @@ public class BookingController {
     public ResponseEntity<?> getBookingByUser(
             @RequestParam(required = false, name = "state", defaultValue = "ALL") BookingState state,
             @RequestHeader(value = xSharerUserId) Long userId,
-            TimeZone timeZone,
+              TimeZone timeZone,
             @RequestParam(required = false, name = "from", defaultValue = "0")
 
             @Min(value = 0, message = "Параметр from не может быть меньше 0.")
@@ -138,7 +140,7 @@ public class BookingController {
     public ResponseEntity<?> getBookingByOwner(
             @RequestParam(required = false, name = "state", defaultValue = "ALL") BookingState state,
             @RequestHeader(value = xSharerUserId) Long userId,
-            TimeZone timeZone,
+              TimeZone timeZone,
             @RequestParam(required = false, name = "from", defaultValue = "0")
             @Min(value = 0, message = "Параметр from не может быть меньше 0.")
             Integer from,

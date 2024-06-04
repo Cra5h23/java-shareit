@@ -122,6 +122,26 @@ class BookingRepositoryTest {
         Assertions.assertEquals(byBooker.getBooker(), booking.getBooker());
     }
 
+//    @Test
+//    public void findByItem_IdAndBooker_IdTest() {
+//        var booking = createBooking(booker, item, BookingStatus.APPROVED,
+//                ZonedDateTime.now().minusDays(4), ZonedDateTime.now().minusDays(3));
+//
+//        var bookings = bookingRepository.findByItem_IdAndBooker_Id(this.item.getId(),
+//                this.booker.getId(), ZonedDateTime.now());
+//
+//        var result = bookings.get(0);
+//
+//        Assertions.assertNotNull(bookings);
+//        Assertions.assertEquals(bookings.size(), 1);
+//        Assertions.assertEquals(booking.getId(), result.getId());
+//        Assertions.assertEquals(booking.getItem(), result.getItem());
+//        Assertions.assertEquals(booking.getBooker(), result.getBooker());
+//        Assertions.assertEquals(booking.getStart(), result.getStart());
+//        Assertions.assertEquals(booking.getEnd(), result.getEnd());
+//        Assertions.assertEquals(booking.getStatus(), result.getStatus());
+//    }
+
     @Test
     public void getBookingsTest() {
         var booking = createBooking(booker, item, BookingStatus.APPROVED,

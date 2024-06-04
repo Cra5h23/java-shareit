@@ -17,6 +17,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @Data
+//@EndDateBeforeStartDate(groups = Marker.OnCreate.class)
+//@StartDateEqualsEndDate(groups = Marker.OnCreate.class)
 public class BookingRequestDto {
     /**
      * Идентификационный номер вещи.
@@ -26,10 +28,14 @@ public class BookingRequestDto {
     /**
      * Дата и время начала бронирования.
      */
+//    @NotNull(groups = Marker.OnCreate.class, message = "Дата начала бронирования не может быть пустой")
+//    @Future(groups = Marker.OnCreate.class, message = "Дата начала бронирования не должна быть в прошлом")
     private LocalDateTime start;
 
     /**
      * Дата и время окончания бронирования.
      */
+//    @NotNull(groups = Marker.OnCreate.class, message = "Дата окончания бронирования не может быть пустой")
+//    @Future(groups = Marker.OnCreate.class, message = "Дата окончания бронирования не должна быть в прошлом")
     private LocalDateTime end;
 }
