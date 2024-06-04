@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.practicum.shareit.booking.model.BookingStatus;
 
+import java.time.LocalDateTime;
+
 /**
  * Класс {@link BookingResponseDto} для отдачи данных бронирования в качестве ответа.
  *
@@ -24,12 +26,12 @@ public class BookingResponseDto {
     /**
      * Дата и время начала бронирования.
      */
-    private String start;
+    private LocalDateTime start;
 
     /**
      * Дата и время окончания бронирования.
      */
-    private String end;
+    private LocalDateTime end;
 
     /**
      * Статус бронирования.
