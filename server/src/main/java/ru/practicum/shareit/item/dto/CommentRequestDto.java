@@ -4,10 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.Marker;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 /**
  * Dto для класса {@link ru.practicum.shareit.item.model.Comment} для данных комментариев получаемых из запроса.
@@ -23,7 +19,7 @@ public class CommentRequestDto {
     /**
      * Текст комментария.
      */
-    @NotBlank(groups = Marker.OnCreate.class)
-    @Size(max = 512, groups = Marker.OnCreate.class)
+//    @NotBlank(groups = Marker.OnCreate.class)
+//    @Size(max = 512, groups = Marker.OnCreate.class)
     private String text;
 }
