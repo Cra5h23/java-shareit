@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import ru.practicum.shareit.user.converter.StringToUserSortConverter;
 
+import javax.validation.ConstraintViolationException;
+
 import static ru.practicum.shareit.exception.ErrorResponse.makeErrorResponse;
 
 /**
@@ -22,5 +24,11 @@ public class UserErrorHandler {
     public ResponseEntity<?> handlerBookingStateException(final StringToUserSortConverter.UserSortException e, WebRequest webRequest) {
         log.warn("Ошибка ввода типа сортировки", e);
         return makeErrorResponse(webRequest, HttpStatus.BAD_REQUEST, "Unknown sort: ");
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<?> handlerConstraintViolationException(final ConstraintViolationException e, WebRequest webRequest) {
+        log.warn("Ошибка ввода данных пользователя", e);
+        return makeErrorResponse(webRequest, HttpStatus.BAD_REQUEST, "Ошибка ввода данных пользователя: ");
     }
 }
