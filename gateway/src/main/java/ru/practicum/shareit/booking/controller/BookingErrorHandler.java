@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import ru.practicum.shareit.booking.converter.StringToBookingStateConverter;
 
+import javax.validation.ConstraintViolationException;
+
 import static ru.practicum.shareit.exception.ErrorResponse.makeErrorResponse;
 
 /**
@@ -21,5 +23,11 @@ public class BookingErrorHandler {
     public ResponseEntity<?> handlerBookingStateException(final StringToBookingStateConverter.BookingStateException e, WebRequest webRequest) {
         log.warn("Ошибка ввода данных бронирования", e);
         return makeErrorResponse(webRequest, HttpStatus.BAD_REQUEST, "Unknown state: ");
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<?> handlerConstraintViolationException(final ConstraintViolationException e, WebRequest webRequest) {
+        log.warn("Ошибка ввода данных бронирования", e);
+        return makeErrorResponse(webRequest, HttpStatus.BAD_REQUEST, "Ошибка ввода данных бронирования: ");
     }
 }
