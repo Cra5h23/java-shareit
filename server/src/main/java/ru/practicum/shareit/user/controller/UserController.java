@@ -9,12 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.Marker;
 import ru.practicum.shareit.user.dto.UserRequestDto;
 import ru.practicum.shareit.user.model.UserSort;
 import ru.practicum.shareit.user.service.UserService;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
@@ -33,10 +31,12 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    @Validated(Marker.OnCreate.class)
+//    @Validated(Marker.OnCreate.class)
     @Operation(summary = "Добавление нового пользователя", description = "Позволяет добавить нового пользователя")
     public ResponseEntity<?> addNewUser(
-            @RequestBody @Parameter(description = "Данные пользователя") @Valid UserRequestDto user) {
+            @RequestBody @Parameter(description = "Данные пользователя")
+//            @Valid
+            UserRequestDto user) {
         log.info("POST /users body = {}", user);
 
         return ResponseEntity
@@ -45,10 +45,12 @@ public class UserController {
     }
 
     @PatchMapping("/{userId}")
-    @Validated({Marker.OnUpdate.class})
+//    @Validated({Marker.OnUpdate.class})
     @Operation(summary = "Обновление пользователя", description = "Позволяет обновить пользователя")
     public ResponseEntity<?> updateUser(
-            @RequestBody @Parameter(description = "Данные пользователя") @Valid UserRequestDto user,
+            @RequestBody @Parameter(description = "Данные пользователя")
+//            @Valid
+            UserRequestDto user,
             @PathVariable @Parameter(description = "Идентификатор пользователя для обновления") long userId) {
         log.info("PATCH /users/{} body = {}", userId, user);
 
