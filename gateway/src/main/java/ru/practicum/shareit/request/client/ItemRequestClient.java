@@ -10,6 +10,7 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 import ru.practicum.shareit.client.BaseClient;
 import ru.practicum.shareit.request.dto.ItemRequestDtoRequest;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,7 +19,7 @@ import java.util.Map;
  */
 @Service
 public class ItemRequestClient extends BaseClient {
-    private static final String API_PREFIX = "/items";
+    private static final String API_PREFIX = "/requests";
 
     @Autowired
     public ItemRequestClient(@Value("${shareit-server.url}") String serverUrl, RestTemplateBuilder builder) {
@@ -39,12 +40,14 @@ public class ItemRequestClient extends BaseClient {
     }
 
     public ResponseEntity<Object> getAllRequests(Long userId, Integer from, Integer size) {
+        if (from == null || size == null) return ResponseEntity.ok(List.of());
+
         Map<String, Object> parameters = Map.of(
                 "from", from,
                 "size", size
         );
 
-        return get("/all?from={from}&size={size}", userId);
+        return get("/all?from={from}&size={size}", userId, parameters);
     }
 
     public ResponseEntity<Object> getRequest(Long requestId, Long userId) {
