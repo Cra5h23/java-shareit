@@ -33,7 +33,7 @@ public class CommentMapper {
                 .id(comment.getId())
                 .text(comment.getText())
                 .authorName(comment.getAuthor().getName())
-                .created(comment.getCreated().toLocalDateTime().toString())
+                .created(comment.getCreated().toLocalDateTime())
                 .build();
     }
 }
