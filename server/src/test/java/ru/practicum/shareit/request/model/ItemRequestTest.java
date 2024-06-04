@@ -28,6 +28,7 @@ class ItemRequestTest {
         int i = test.hashCode();
 
         Assertions.assertNotNull(i);
+        Assertions.assertEquals(ItemRequest.class, test.getClass());
     }
 
     @Test
