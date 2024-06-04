@@ -37,6 +37,7 @@ class CommentTest {
 
         int i = comment.hashCode();
         Assertions.assertNotNull(i);
+        Assertions.assertEquals(Comment.class, comment.getClass());
     }
 
     @Test
