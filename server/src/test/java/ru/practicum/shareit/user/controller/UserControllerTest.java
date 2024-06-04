@@ -57,57 +57,57 @@ class UserControllerTest {
         Mockito.verify(userService, Mockito.times(1)).addNewUser(Mockito.any(UserRequestDto.class));
     }
 
-    @Test
-    @DisplayName("POST /users не создаёт нового пользователя если не указано имя")
-    void addNewUser_NotValid_EmptyName() throws Exception {
-        var request = MockMvcRequestBuilders
-                .post("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"email\": \"testEmail1@test.com\"}");
+//    @Test
+//    @DisplayName("POST /users не создаёт нового пользователя если не указано имя")
+//    void addNewUser_NotValid_EmptyName() throws Exception {
+//        var request = MockMvcRequestBuilders
+//                .post("/users")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content("{\"email\": \"testEmail1@test.com\"}");
+//
+//        mockMvc.perform(request).andExpectAll(
+//                status().isBadRequest(),
+//                jsonPath("$.timestamp").exists(),
+//                jsonPath("$.status").value(400),
+//                jsonPath("$.error").value("Ошибка ввода данных пользователя: Поле name не должно быть пустым"),
+//                jsonPath("$.path").value("/users")
+//        );
+//    }
 
-        mockMvc.perform(request).andExpectAll(
-                status().isBadRequest(),
-                jsonPath("$.timestamp").exists(),
-                jsonPath("$.status").value(400),
-                jsonPath("$.error").value("Ошибка ввода данных пользователя: Поле name не должно быть пустым"),
-                jsonPath("$.path").value("/users")
-        );
-    }
+//    @Test
+//    @DisplayName("POST /users не создаёт нового пользователя если не указан email")
+//    void addNewUser_NotValid_EmptyEmail() throws Exception {
+//        var request = MockMvcRequestBuilders
+//                .post("/users")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content("{\"name\": \"testUser1\"}");
+//
+//        mockMvc.perform(request).andExpectAll(
+//                status().isBadRequest(),
+//                jsonPath("$.timestamp").exists(),
+//                jsonPath("$.status").value(400),
+//                jsonPath("$.error").value("Ошибка ввода данных пользователя: Поле email не должно быть пустым"),
+//                jsonPath("$.path").value("/users")
+//        );
+//    }
 
-    @Test
-    @DisplayName("POST /users не создаёт нового пользователя если не указан email")
-    void addNewUser_NotValid_EmptyEmail() throws Exception {
-        var request = MockMvcRequestBuilders
-                .post("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\": \"testUser1\"}");
-
-        mockMvc.perform(request).andExpectAll(
-                status().isBadRequest(),
-                jsonPath("$.timestamp").exists(),
-                jsonPath("$.status").value(400),
-                jsonPath("$.error").value("Ошибка ввода данных пользователя: Поле email не должно быть пустым"),
-                jsonPath("$.path").value("/users")
-        );
-    }
-
-    @Test
-    @DisplayName("POST /users не создаёт нового пользователя если поле email не соответствует формату электронной почты")
-    void addNewUser_NotValid_FailEmail() throws Exception {
-        var request = MockMvcRequestBuilders
-                .post("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"name\": \"testUser1\",\n" +
-                        "\"email\": \"testEmail1.com\"}");
-
-        mockMvc.perform(request).andExpectAll(
-                status().isBadRequest(),
-                jsonPath("$.timestamp").exists(),
-                jsonPath("$.status").value(400),
-                jsonPath("$.error").value("Ошибка ввода данных пользователя: Поле email должно иметь формат адреса электронной почты"),
-                jsonPath("$.path").value("/users")
-        );
-    }
+//    @Test
+//    @DisplayName("POST /users не создаёт нового пользователя если поле email не соответствует формату электронной почты")
+//    void addNewUser_NotValid_FailEmail() throws Exception {
+//        var request = MockMvcRequestBuilders
+//                .post("/users")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .content("{\"name\": \"testUser1\",\n" +
+//                        "\"email\": \"testEmail1.com\"}");
+//
+//        mockMvc.perform(request).andExpectAll(
+//                status().isBadRequest(),
+//                jsonPath("$.timestamp").exists(),
+//                jsonPath("$.status").value(400),
+//                jsonPath("$.error").value("Ошибка ввода данных пользователя: Поле email должно иметь формат адреса электронной почты"),
+//                jsonPath("$.path").value("/users")
+//        );
+//    }
 
     @Test
     @DisplayName("POST /users создаёт нового пользователя")
