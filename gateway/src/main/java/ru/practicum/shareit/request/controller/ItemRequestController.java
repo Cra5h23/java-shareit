@@ -13,7 +13,6 @@ import ru.practicum.shareit.request.dto.ItemRequestDtoRequest;
 import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
-import java.util.TimeZone;
 
 /**
  * @author Nikolay Radzivon
@@ -28,26 +27,14 @@ public class ItemRequestController {
     private final ItemRequestClient itemRequestClient;
     private final String xSharerUserId = "X-Sharer-User-Id";
 
-    /**
-     * Метод создания нового запроса вещи.
-     *
-     * @param request  {@link ItemRequestDtoRequest} описание вещи которая требуется.
-     * @param userId   {@link Long} идентификационный номер пользователя создающего запрос.
-     * @param timeZone {@link TimeZone} часовой пояс пользователя.
-     * @return {@link ResponseEntity}
-     */
     @PostMapping
     @Validated(Marker.OnCreate.class)
     public ResponseEntity<?> addNewRequest(
             @Valid @RequestBody ItemRequestDtoRequest request,
-            @RequestHeader(value = xSharerUserId) Long userId,
-            TimeZone timeZone) {
+            @RequestHeader(value = xSharerUserId) Long userId) {
         log.info("POST /requests , body = {} , {} = {}", request, xSharerUserId, userId);
 
         return itemRequestClient.addItemRequest(userId, request);
-//        return ResponseEntity
-//                .status(HttpStatus.CREATED)
-//                .body(itemRequestService.addNewRequest(request, userId, timeZone));
     }
 
     @GetMapping
@@ -56,10 +43,6 @@ public class ItemRequestController {
         log.info("GET /requests , {} = {}", xSharerUserId, userId);
 
         return itemRequestClient.getUserRequests(userId);
-
-//        return ResponseEntity
-//                .status(HttpStatus.OK)
-//                .body(itemRequestService.getUserRequests(userId));
     }
 
     @GetMapping("/all")
@@ -75,9 +58,6 @@ public class ItemRequestController {
         log.info("GET /requests/all?from={}&size={} ,{} = {}", from, size, xSharerUserId, userId);
 
         return itemRequestClient.getAllRequests(userId, from, size);
-//        return ResponseEntity
-//                .status(HttpStatus.OK)
-//                .body(itemRequestService.getAllRequests(userId, from, size));
     }
 
     @GetMapping("/{requestId}")
@@ -87,8 +67,5 @@ public class ItemRequestController {
         log.info("GET /requests/{} ,{} = {}", requestId, xSharerUserId, userId);
 
         return itemRequestClient.getRequest(requestId, userId);
-//        return ResponseEntity
-//                .status(HttpStatus.OK)
-//                .body(itemRequestService.getRequestById(requestId, userId));
     }
 }
