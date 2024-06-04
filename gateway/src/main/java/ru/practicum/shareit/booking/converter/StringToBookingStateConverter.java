@@ -17,11 +17,10 @@ public class StringToBookingStateConverter implements Converter<String, BookingS
         } catch (IllegalArgumentException e) {
             var message = e.getMessage();
             var ex = message.substring(message.lastIndexOf(".") + 1);
-            throw new BookingStateException(ex); //todo если что ошибку вынести в отдельный класс
+            throw new BookingStateException(ex);
         }
     }
 
-    //todo попробую можно ли так
     public static class BookingStateException extends RuntimeException {
         public BookingStateException(String message) {
             super(message);
