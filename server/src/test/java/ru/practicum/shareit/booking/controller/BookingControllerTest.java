@@ -220,6 +220,135 @@ class BookingControllerTest {
         Mockito.verify(bookingService, Mockito.times(1)).addNewBooking(Mockito.any(BookingRequestDto.class), Mockito.anyLong(), Mockito.any(TimeZone.class));
     }
 
+//    @Test
+//    @DisplayName("POST /bookings  не создаёт новое бронирование если дата начала бронирования пуста")
+//    void addNewBookingTestNotValidStartTimeEmpty() throws Exception {
+//        LocalDateTime now = null;
+//        var end = LocalDateTime.now().plusDays(2);
+//        var s = objectMapper.writeValueAsString(BookingRequestDto.builder()
+//                .itemId(1L)
+//                .start(now)
+//                .end(end)
+//                .build());
+//
+//        var request = MockMvcRequestBuilders
+//                .post("/bookings")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .header(xSharerUserId, 1)
+//                .content(s);
+//
+//        this.mockMvc.perform(request).andExpectAll(
+//                status().isBadRequest(),
+//                jsonPath("$.timestamp").exists(),
+//                jsonPath("$.status").value(400),
+//                jsonPath("$.error").value("Ошибка ввода данных бронирования: Дата начала бронирования не может быть пустой"),
+//                jsonPath("$.path").value("/bookings")
+//        );
+//    }
+
+//    @Test
+//    @DisplayName("POST /bookings  не создаёт новое бронирование если дата окончания бронирования пуста")
+//    void addNewBookingTestNotValidEndTimeEmpty() throws Exception {
+//        var now = LocalDateTime.now().plusDays(1);
+//        LocalDateTime end = null;
+//        var s = objectMapper.writeValueAsString(BookingRequestDto.builder()
+//                .itemId(1L)
+//                .start(now)
+//                .end(end)
+//                .build());
+//
+//        var request = MockMvcRequestBuilders
+//                .post("/bookings")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .header(xSharerUserId, 1)
+//                .content(s);
+//
+//        this.mockMvc.perform(request).andExpectAll(
+//                status().isBadRequest(),
+//                jsonPath("$.timestamp").exists(),
+//                jsonPath("$.status").value(400),
+//                jsonPath("$.error").value("Ошибка ввода данных бронирования: Дата окончания бронирования не может быть пустой"),
+//                jsonPath("$.path").value("/bookings")
+//        );
+//    }
+
+//    @Test
+//    @DisplayName("POST /bookings  не создаёт новое бронирование если дата начала бронирования в прошлом")
+//    void addNewBookingTestNotValidStartTimeIsPast() throws Exception {
+//        var now = LocalDateTime.now().minusDays(1);
+//        var end = LocalDateTime.now().plusDays(2);
+//        var s = objectMapper.writeValueAsString(BookingRequestDto.builder()
+//                .itemId(1L)
+//                .start(now)
+//                .end(end)
+//                .build());
+//
+//        var request = MockMvcRequestBuilders
+//                .post("/bookings")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .header(xSharerUserId, 1)
+//                .content(s);
+//
+//        this.mockMvc.perform(request).andExpectAll(
+//                status().isBadRequest(),
+//                jsonPath("$.timestamp").exists(),
+//                jsonPath("$.status").value(400),
+//                jsonPath("$.error").value("Ошибка ввода данных бронирования: Дата начала бронирования не должна быть в прошлом"),
+//                jsonPath("$.path").value("/bookings")
+//        );
+//    }
+
+//    @Test
+//    @DisplayName("POST /bookings  не создаёт новое бронирование если дата окончания бронирования раньше времени окончания бронирования")
+//    void addNewBookingTestNotValidEndTimeIsBeforeStartTime() throws Exception {
+//        var now = LocalDateTime.now().plusDays(2);
+//        var end = LocalDateTime.now().plusDays(1);
+//        var s = objectMapper.writeValueAsString(BookingRequestDto.builder()
+//                .itemId(1L)
+//                .start(now)
+//                .end(end)
+//                .build());
+//
+//        var request = MockMvcRequestBuilders
+//                .post("/bookings")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .header(xSharerUserId, 1)
+//                .content(s);
+//
+//        this.mockMvc.perform(request).andExpectAll(
+//                status().isBadRequest(),
+//                jsonPath("$.timestamp").exists(),
+//                jsonPath("$.status").value(400),
+//                jsonPath("$.error").value("Ошибка ввода данных бронирования: Дата окончания бронирования не должна быть раньше даты начала бронирования"),
+//                jsonPath("$.path").value("/bookings")
+//        );
+//    }
+
+//    @Test
+//    @DisplayName("POST /bookings  не создаёт новое бронирование если дата окончания бронирования равна времени начала бронирования")
+//    void addNewBookingTestNotValidEndTimeEqualsStartTime() throws Exception {
+//        var now = LocalDateTime.now().plusDays(1);
+//        var s = objectMapper.writeValueAsString(BookingRequestDto.builder()
+//                .itemId(1L)
+//                .start(now)
+//                .end(now)
+//                .build());
+//
+//        var request = MockMvcRequestBuilders
+//                .post("/bookings")
+//                .contentType(MediaType.APPLICATION_JSON)
+//                .header(xSharerUserId, 1)
+//                .content(s);
+//
+//        this.mockMvc.perform(request).andExpectAll(
+//                status().isBadRequest(),
+//                jsonPath("$.timestamp").exists(),
+//                jsonPath("$.status").value(400),
+//                jsonPath("$.error").value("Ошибка ввода данных бронирования: Дата старта бронирования не должна совпадать с датой окончания бронирования"),
+//                jsonPath("$.path").value("/bookings")
+//        );
+//    }
+
     @Test
     @DisplayName("POST /bookings  не создаёт новое бронирование если не указан заголовок X-Sharer-User-Id")
     void addNewBookingTestNotValidXSharerUserIdNotExists() throws Exception {
