@@ -24,6 +24,7 @@ class ItemTest {
 
         int i = item.hashCode();
         Assertions.assertNotNull(i);
+        Assertions.assertEquals(Item.class, item.getClass());
     }
 
     @Test
