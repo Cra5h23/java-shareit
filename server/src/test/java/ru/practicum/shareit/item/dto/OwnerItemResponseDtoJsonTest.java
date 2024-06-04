@@ -6,6 +6,7 @@ import org.springframework.boot.test.autoconfigure.json.JsonTest;
 import org.springframework.boot.test.json.JacksonTester;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,7 +31,7 @@ class OwnerItemResponseDtoJsonTest {
                 .description("testDescription")
                 .comments(List.of(CommentResponseDto.builder()
                         .id(24L)
-                        .created("2024-05-06T:13:11:25")
+                        .created(LocalDateTime.parse("2024-05-06T13:11:25"))
                         .authorName("TestAuthor")
                         .text("testText")
                         .build()))
@@ -60,7 +61,7 @@ class OwnerItemResponseDtoJsonTest {
         assertThat(result).extractingJsonPathNumberValue("$.comments.[0].id").isEqualTo(24);
 
         assertThat(result).hasJsonPath("$.comments.[0].created");
-        assertThat(result).extractingJsonPathStringValue("$.comments.[0].created").isEqualTo("2024-05-06T:13:11:25");
+        assertThat(result).extractingJsonPathStringValue("$.comments.[0].created").isEqualTo("2024-05-06T13:11:25");
 
         assertThat(result).hasJsonPath("$.comments.[0].authorName");
         assertThat(result).extractingJsonPathStringValue("$.comments.[0].authorName").isEqualTo("TestAuthor");
@@ -87,7 +88,7 @@ class OwnerItemResponseDtoJsonTest {
                 "  \"comments\": [\n" +
                 "    {\n" +
                 "      \"id\": 24,\n" +
-                "      \"created\": \"2024-05-06T:13:11:25\",\n" +
+                "      \"created\": \"2024-05-06T13:11:25\",\n" +
                 "      \"authorName\": \"TestAuthor\",\n" +
                 "      \"text\": \"testText\"\n" +
                 "    }\n" +
@@ -104,7 +105,7 @@ class OwnerItemResponseDtoJsonTest {
         assertThat(dto.getLastBooking().getId()).isEqualTo(23);
         assertThat(dto.getLastBooking().getBookerId()).isEqualTo(12);
         assertThat(dto.getComments().size()).isEqualTo(1);
-        assertThat(dto.getComments().get(0).getCreated()).isEqualTo("2024-05-06T:13:11:25");
+        assertThat(dto.getComments().get(0).getCreated()).isEqualTo("2024-05-06T13:11:25");
         assertThat(dto.getComments().get(0).getText()).isEqualTo("testText");
         assertThat(dto.getComments().get(0).getAuthorName()).isEqualTo("TestAuthor");
         assertThat(dto.getComments().get(0).getId()).isEqualTo(24);
