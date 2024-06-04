@@ -3,6 +3,7 @@ package ru.practicum.shareit.item.client;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import ru.practicum.shareit.client.BaseClient;
 import ru.practicum.shareit.item.dto.CommentRequestDto;
 import ru.practicum.shareit.item.dto.ItemDtoRequest;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -61,17 +63,23 @@ public class ItemClient extends BaseClient {
     }
 
     public ResponseEntity<Object> searchItem(Long userId, String text, Integer from, Integer size) {
+        if (text.isBlank()) {
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(List.of());
+        }
+
         Map<String, Object> parameters = Map.of(
                 "text", text,
                 "from", from,
                 "size", size
         );
 
-        return get("/search?text={text}&from={from}&size={size}", userId);
+        return get("/search?text={text}&from={from}&size={size}", userId, parameters);
     }
 
     public ResponseEntity<Object> addComment(Long itemId, Long userId, CommentRequestDto text) {
-        return post(itemId + "/comment", userId, text);
+        return post(String.format("/%d/comment", itemId), userId, text);
     }
 
     public ResponseEntity<Object> updateComment(Long commentId, Long userId, CommentRequestDto comment) {
