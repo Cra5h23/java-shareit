@@ -90,8 +90,8 @@ class BookingMapperTest {
         assertEquals("Баржа", test.getItem().getName());
         assertEquals(22, test.getItem().getId());
         assertEquals(BookingStatus.WAITING, test.getStatus());
-        assertEquals(LocalDateTime.of(2024, 3, 15, 20, 15).toString(), test.getStart());
-        assertEquals(LocalDateTime.of(2024, 3, 16, 20, 15).toString(), test.getEnd());
+        assertEquals(LocalDateTime.of(2024, 3, 15, 20, 15), test.getStart());
+        assertEquals(LocalDateTime.of(2024, 3, 16, 20, 15), test.getEnd());
         assertEquals(33, test.getBooker().getId());
     }
 
