@@ -34,8 +34,7 @@ public class BookingController {
     @Validated(Marker.OnCreate.class)
     public ResponseEntity<?> addNewBooking(
             @Valid @RequestBody BookingRequestDto booking,
-            @RequestHeader(value = xSharerUserId) Long userId,
-            TimeZone timeZone) {
+            @RequestHeader(value = xSharerUserId) Long userId) {
         log.info("POST /bookings, body = {}, header \"{}\" = {}", booking, xSharerUserId, userId);
 
         return bookingClient.bookItem(userId, booking);
@@ -47,15 +46,13 @@ public class BookingController {
      * @param bookingId {@link Long} идентификационный номер блокирования.
      * @param approved  {@link Boolean} подтверждение бронирования.
      * @param userId    {@link Long} идентификационный номер пользователя владельца вещи.
-     * @param timeZone  {@link TimeZone} часовой пояс пользователя.
      * @return {@link ResponseEntity}
      */
     @PatchMapping("/{bookingId}")
     public ResponseEntity<?> bookingConfirmation(
             @PathVariable Long bookingId,
             @RequestParam @NotNull Boolean approved,
-            @RequestHeader(value = xSharerUserId) Long userId,
-            TimeZone timeZone) {
+            @RequestHeader(value = xSharerUserId) Long userId) {
         log.info("PATCH /bookings/{}?approved={} , header \"{}\" = {}", bookingId, approved, xSharerUserId, userId);
 
         return bookingClient.confirmationBooking(userId, approved, bookingId);
@@ -66,14 +63,12 @@ public class BookingController {
      *
      * @param bookingId {@link Long} идентификационный номер блокирования.
      * @param userId    {@link Long} идентификационный номер пользователя букера вещи.
-     * @param timeZone  {@link TimeZone} часовой пояс пользователя.
      * @return {@link ResponseEntity}
      */
     @GetMapping("/{bookingId}")
     public ResponseEntity<?> getBooking(
             @PathVariable Long bookingId,
-            @RequestHeader(value = xSharerUserId) Long userId,
-            TimeZone timeZone) {
+            @RequestHeader(value = xSharerUserId) Long userId) {
         log.info("GET /bookings/{} , header \"{}\" = {}", bookingId, xSharerUserId, userId);
 
         return bookingClient.getBooking(userId, bookingId);
@@ -82,16 +77,15 @@ public class BookingController {
     /**
      * Метод для эндпоинта GET /booking получение бронирования для пользователя букера.
      *
-     * @param state    {@link BookingState} параметр сортировки.
-     * @param userId   {@link Long} идентификационный номер пользователя букера вещей.
-     * @param timeZone {@link TimeZone} часовой пояс пользователя.
+     * @param state  {@link BookingState} параметр сортировки.
+     * @param userId {@link Long} идентификационный номер пользователя букера вещей.
+     * @param size
      * @return {@link ResponseEntity}
      */
     @GetMapping
     public ResponseEntity<?> getBookingByUser(
             @RequestParam(required = false, name = "state", defaultValue = "ALL") BookingState state,
             @RequestHeader(value = xSharerUserId) Long userId,
-            TimeZone timeZone,
             @RequestParam(required = false, name = "from", defaultValue = "0")
             @Min(value = 0, message = "Параметр from не может быть меньше 0.")
             Integer from,
@@ -107,16 +101,15 @@ public class BookingController {
     /**
      * Метод для эндпоинта GET /booking/owner получение бронирования для пользователя букера.
      *
-     * @param state    {@link BookingState} параметр сортировки.
-     * @param userId   {@link Long} идентификационный номер пользователя владельца вещей.
-     * @param timeZone {@link TimeZone} часовой пояс пользователя.
+     * @param state  {@link BookingState} параметр сортировки.
+     * @param userId {@link Long} идентификационный номер пользователя владельца вещей.
+     * @param size   {@link TimeZone} часовой пояс пользователя.
      * @return {@link ResponseEntity}
      */
     @GetMapping("/owner")
     public ResponseEntity<?> getBookingByOwner(
             @RequestParam(required = false, name = "state", defaultValue = "ALL") BookingState state,
             @RequestHeader(value = xSharerUserId) Long userId,
-            TimeZone timeZone,
             @RequestParam(required = false, name = "from", defaultValue = "0")
             @Min(value = 0, message = "Параметр from не может быть меньше 0.")
             Integer from,
