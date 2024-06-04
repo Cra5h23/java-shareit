@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 /**
  * Dto для класса {@link ru.practicum.shareit.item.model.Comment} используется в качестве ответа.
  *
@@ -34,5 +36,5 @@ public class CommentResponseDto {
     /**
      * Время создания комментария.
      */
-    private String created;
+    private LocalDateTime created;
 }
