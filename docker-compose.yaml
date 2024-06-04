@@ -1,10 +1,8 @@
 version: '3.8'
 services:
   gateway:
-    build:
-         context: .
-         dockerfile: /gateway/Dockerfile
-    image: amazoncorretto:11
+    build: /gateway
+
     container_name: s_gateway
     ports:
       - "8080:8080"
@@ -14,10 +12,8 @@ services:
       - SHAREIT_SERVER_URL=http://server:9090
 
   server:
-    build:
-      context: .
-      dockerfile: /server/Dockerfile
-    image: amazoncorretto:11
+    build: /server
+
     container_name: s_server
     ports:
       - "9090:9090"
