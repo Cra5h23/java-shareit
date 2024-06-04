@@ -267,17 +267,16 @@ public class ItemServiceImpl implements ItemService {
     @Transactional(readOnly = true)
     public List<ItemDtoResponse> searchItemByText(ItemSearchParams params) {
         var text = params.getText();
+        var from = params.getFrom();
+        var size = params.getSize();
 
-        if (text.isBlank()) {
+        if (text.isBlank() || from == null || size == null) {
             return List.of();
         }
 
         var userId = params.getUserId();
         userChecker.checkUser(userId, String.format(
                 "Нельзя найти список вещей для не существующего пользователя с id %d", userId));
-
-        var from = params.getFrom();
-        var size = params.getSize();
 
         log.info("Поиск вещей для пользователя с id {} с параметрами поиска text={}, from={}, size={}",
                 userId, text, from, size);
