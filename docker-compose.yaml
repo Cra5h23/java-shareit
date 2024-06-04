@@ -1,12 +1,8 @@
 version: '3.8'
 services:
   gateway:
-    build:
-      context:  .
-      dockerfile: /gateway/Dockerfile
-#    ./gateway
-
-
+    build: /gateway
+    image: amazoncorretto:11
     container_name: s_gateway
     ports:
       - "8080:8080"
@@ -16,11 +12,8 @@ services:
       - SHAREIT_SERVER_URL=http://server:9090
 
   server:
-    build:
-      context: .
-      dockerfile: /server/Dockerfile
-
-#    /server
+    build: /server
+    image: amazoncorretto:11
     container_name: s_server
     ports:
       - "9090:9090"
@@ -32,7 +25,7 @@ services:
     image: postgres:13.7-alpine
     container_name: db
     ports:
-      - "5432:5432"
+      - "6541:5432"
     environment:
       - POSTGRES_DB=shareit
       - POSTGRES_USER=root
