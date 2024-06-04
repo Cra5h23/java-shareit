@@ -4,12 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.Marker;
-import ru.practicum.shareit.validator.EndDateBeforeStartDate;
-import ru.practicum.shareit.validator.StartDateEqualsEndDate;
 
-import javax.validation.constraints.Future;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 /**
@@ -22,8 +17,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 @Data
-@EndDateBeforeStartDate(groups = Marker.OnCreate.class)
-@StartDateEqualsEndDate(groups = Marker.OnCreate.class)
+//@EndDateBeforeStartDate(groups = Marker.OnCreate.class)
+//@StartDateEqualsEndDate(groups = Marker.OnCreate.class)
 public class BookingRequestDto {
     /**
      * Идентификационный номер вещи.
@@ -33,14 +28,14 @@ public class BookingRequestDto {
     /**
      * Дата и время начала бронирования.
      */
-    @NotNull(groups = Marker.OnCreate.class, message = "Дата начала бронирования не может быть пустой")
-    @Future(groups = Marker.OnCreate.class, message = "Дата начала бронирования не должна быть в прошлом")
+//    @NotNull(groups = Marker.OnCreate.class, message = "Дата начала бронирования не может быть пустой")
+//    @Future(groups = Marker.OnCreate.class, message = "Дата начала бронирования не должна быть в прошлом")
     private LocalDateTime start;
 
     /**
      * Дата и время окончания бронирования.
      */
-    @NotNull(groups = Marker.OnCreate.class, message = "Дата окончания бронирования не может быть пустой")
-    @Future(groups = Marker.OnCreate.class, message = "Дата окончания бронирования не должна быть в прошлом")
+//    @NotNull(groups = Marker.OnCreate.class, message = "Дата окончания бронирования не может быть пустой")
+//    @Future(groups = Marker.OnCreate.class, message = "Дата окончания бронирования не должна быть в прошлом")
     private LocalDateTime end;
 }
