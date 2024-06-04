@@ -46,13 +46,10 @@ public class BookingMapper {
      * @return {@link BookingResponseDto}
      */
     public static BookingResponseDto toBookingResponseDto(Booking booking, TimeZone timeZone) {
-        String start = booking.getStart().withZoneSameInstant(timeZone.toZoneId()).toLocalDateTime().toString();
-        String end = booking.getEnd().withZoneSameInstant(timeZone.toZoneId()).toLocalDateTime().toString();
-
         return BookingResponseDto.builder()
                 .id(booking.getId())
-                .start(start)
-                .end(end)
+                .start(booking.getStart().toLocalDateTime())
+                .end(booking.getEnd().toLocalDateTime())
                 .booker(BookerDto.builder()
                         .id(booking.getBooker().getId())
                         .build())
