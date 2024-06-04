@@ -6,11 +6,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.Marker;
 import ru.practicum.shareit.request.dto.ItemRequestDtoRequest;
 import ru.practicum.shareit.request.service.ItemRequestService;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.TimeZone;
@@ -38,9 +36,10 @@ public class ItemRequestController {
      * @return {@link ResponseEntity}
      */
     @PostMapping
-    @Validated(Marker.OnCreate.class)
+//    @Validated(Marker.OnCreate.class)
     public ResponseEntity<?> addNewRequest(
-            @Valid @RequestBody ItemRequestDtoRequest request,
+//            @Valid
+            @RequestBody ItemRequestDtoRequest request,
             @RequestHeader(value = xSharerUserId) Long userId,
             TimeZone timeZone) {
         log.info("POST /requests , body = {} , {} = {}", request, xSharerUserId, userId);
