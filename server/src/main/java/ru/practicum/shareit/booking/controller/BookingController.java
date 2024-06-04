@@ -6,13 +6,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.Marker;
 import ru.practicum.shareit.booking.dto.BookingRequestDto;
 import ru.practicum.shareit.booking.model.BookingState;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.booking.service.GetBookingsParams;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -39,9 +37,9 @@ public class BookingController {
      * @return {@link ResponseEntity}
      */
     @PostMapping
-    @Validated(Marker.OnCreate.class) //todo убрать валидацию
+    //@Validated(Marker.OnCreate.class) //todo убрать валидацию
     public ResponseEntity<?> addNewBooking(
-            @Valid
+            //@Valid
             @RequestBody BookingRequestDto booking,
             @RequestHeader(value = xSharerUserId) Long userId,
             TimeZone timeZone) {
@@ -66,7 +64,7 @@ public class BookingController {
             @PathVariable Long bookingId,
             @RequestParam @NotNull Boolean approved,
             @RequestHeader(value = xSharerUserId) Long userId,
-            TimeZone timeZone) {
+             TimeZone timeZone) {
         log.info("PATCH /bookings/{}?approved={} , header \"{}\" = {}", bookingId, approved, xSharerUserId, userId);
 
         return ResponseEntity
@@ -86,7 +84,7 @@ public class BookingController {
     public ResponseEntity<?> getBooking(
             @PathVariable Long bookingId,
             @RequestHeader(value = xSharerUserId) Long userId,
-            TimeZone timeZone) {
+              TimeZone timeZone) {
         log.info("GET /bookings/{} , header \"{}\" = {}", bookingId, xSharerUserId, userId);
 
         return ResponseEntity
@@ -106,8 +104,9 @@ public class BookingController {
     public ResponseEntity<?> getBookingByUser(
             @RequestParam(required = false, name = "state", defaultValue = "ALL") BookingState state,
             @RequestHeader(value = xSharerUserId) Long userId,
-            TimeZone timeZone,
+              TimeZone timeZone,
             @RequestParam(required = false, name = "from", defaultValue = "0")
+
             @Min(value = 0, message = "Параметр from не может быть меньше 0.")
             Integer from,
             @RequestParam(required = false, name = "size", defaultValue = "10")
@@ -141,7 +140,7 @@ public class BookingController {
     public ResponseEntity<?> getBookingByOwner(
             @RequestParam(required = false, name = "state", defaultValue = "ALL") BookingState state,
             @RequestHeader(value = xSharerUserId) Long userId,
-            TimeZone timeZone,
+              TimeZone timeZone,
             @RequestParam(required = false, name = "from", defaultValue = "0")
             @Min(value = 0, message = "Параметр from не может быть меньше 0.")
             Integer from,
