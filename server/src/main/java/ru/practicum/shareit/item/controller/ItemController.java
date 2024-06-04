@@ -9,13 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.Marker;
 import ru.practicum.shareit.item.dto.CommentRequestDto;
 import ru.practicum.shareit.item.dto.ItemDtoRequest;
 import ru.practicum.shareit.item.service.ItemSearchParams;
 import ru.practicum.shareit.item.service.ItemService;
 
-import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import java.util.TimeZone;
@@ -37,10 +35,10 @@ public class ItemController {
     private final String xSharerUserId = "X-Sharer-User-Id";
 
     @PostMapping
-    @Validated(Marker.OnCreate.class)
+    //@Validated(Marker.OnCreate.class)
     @Operation(summary = "Добавление новой вещи", description = "Позволяет добавить новую вещь")
     public ResponseEntity<?> addNewItem(
-            @Valid
+            //@Valid
             @RequestBody
             @Parameter(description = "Данные вещи")
             ItemDtoRequest item,
@@ -170,11 +168,13 @@ public class ItemController {
     }
 
     @PostMapping("{itemId}/comment")
-    @Validated(Marker.OnCreate.class)
+//    @Validated(Marker.OnCreate.class)
     public ResponseEntity<?> addComment(
             @PathVariable Long itemId,
             @RequestHeader(value = xSharerUserId) Long userId,
-            @RequestBody @Valid CommentRequestDto text,
+            @RequestBody
+//            @Valid
+            CommentRequestDto text,
             TimeZone timeZone) {
         log.info("POST /items/{}/comment , header \"{}\" = {}", itemId, xSharerUserId, userId);
 
