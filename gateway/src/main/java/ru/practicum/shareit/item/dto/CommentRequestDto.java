@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 /**
- * Dto для класса {@link ru.practicum.shareit.item.model.Comment} для данных комментариев получаемых из запроса.
+ * Dto {@link CommentRequestDto} для получения данных комментария получаемых из запроса.
  *
  * @author Nikolay Radzivon
  * @Date 07.05.2024
@@ -23,7 +23,7 @@ public class CommentRequestDto {
     /**
      * Текст комментария.
      */
-    @NotBlank(/*groups = Marker.OnCreate.class*/)
-    @Size(max = 512, groups = Marker.OnCreate.class)
+    @NotBlank(groups = Marker.OnCreate.class, message = "Текст комментария не может быть пустым")
+    @Size(max = 512, groups = Marker.OnCreate.class, message = "Текст комментария не может быть больше 512 символов")
     private String text;
 }
