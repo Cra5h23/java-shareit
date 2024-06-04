@@ -29,6 +29,7 @@ class ItemResponseTest {
 
         int i = test.hashCode();
         Assertions.assertNotNull(i);
+        Assertions.assertEquals(ItemResponse.class, test.getClass());
     }
 
 
